@@ -83,6 +83,8 @@ The candidate is expected  to return any computer equipment to the supervision t
 
 ### Related reading
 
-3. Conesa A, Madrigal P, Tarazona S, et al. A survey of best practices for RNA-seq data analysis [published correction appears in Genome Biol. 2016;17(1):181]. Genome Biol. 2016;17:13. Published 2016 Jan 26. doi:10.1186/s13059-016-0881-8
+3. Tipney H, Hunter L. An introduction to effective use of enrichment analysis software. Hum Genomics. 2010;4(3):202-206. doi:10.1186/1479-7364-4-3-202
 
 4. Khatri P, Sirota M, Butte AJ. Ten years of pathway analysis: current approaches and outstanding challenges. PLoS Comput Biol. 2012;8(2):e1002375. doi:10.1371/journal.pcbi.1002375
+
+5. Conesa A, Madrigal P, Tarazona S, et al. A survey of best practices for RNA-seq data analysis [published correction appears in Genome Biol. 2016;17(1):181]. Genome Biol. 2016;17:13. Published 2016 Jan 26. doi:10.1186/s13059-016-0881-8
