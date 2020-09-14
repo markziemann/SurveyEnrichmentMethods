@@ -54,6 +54,8 @@ In the results section:
 
 * If particular gene sets are mentioned, it is important to provide data on their statistical significance as well as the degree of enrichment.
 
+* If multiple analyses are performed with different gene set libraries and analytical tools, it is important to state in the results or fgure legend which tool/database were used to generate the data.
+
 * Report adjusted p-values.
 
 ## Background list
@@ -74,6 +76,19 @@ This is why a statistical test of enrichment is required.
 ## Combining up and downregulated genes
 
 It is common that researchers merge these lists but there isn't much scientific basis for it.
+
+## Small RNA analysis
+
+A common analysis of miRNA-seq results in in a list of one or more DE miRs. 
+The targets are mined from Diana miRpath or similar and enrichment analysis can be performed but the background used is rarely appropriate for the test.
+
+## Epigenetics analysis
+
+Unlike gene expression analysis, epigenetics has some particular problems.
+
+* More than one location can regulate a gene, and genes have different sizes which causes a bias.
+
+* A particular genomic region may be assigned to more than one gene.
 
 ## Additional tips to boost reproducubility
 
