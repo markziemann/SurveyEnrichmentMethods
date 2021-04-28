@@ -1,0 +1,40 @@
+---
+title: "Fetch Citation Info"
+author: "Mark Ziemann"
+date: "28/04/2021"
+output: html_document
+---
+
+## Intro
+
+Here we are going to fetch the number of citations as well as the publication date for every PMCID.
+
+The code below fetches the number of times that A PMC has been cited.
+
+The output format is 
+
+1. PMCID
+
+2. PMID
+
+3. Number of cites
+
+```{r,reutils2}
+
+
+
+get_cites <- function(PMCID) {
+  mylink <- elink(uid=PMCID , dbFrom="pmc", dbTo = "pubmed")
+  PMID <- mylink[1]
+  CITES <- elink(uid = PMID , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" )
+  N_CITES <- length(CITES[1])
+  return(c(PMCID,PMID,N_CITES))
+}
+
+PMCID=3155154
+
+get_cites(PMCID = PMCID)
+
+
+```
+
