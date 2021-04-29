@@ -25,40 +25,80 @@ The output format is
 
 3. Number of cites
 
-```{r,reutils2}
+4. Pubdate
+
+```{r,library}
 
 library("reutils")
+library("XML")
+library("kableExtra")
+
+```
+
+Here are the functions.
+
+```{r,functions}
+
+get_pub_date <- function(PMCID) {
+  res2 <- esummary(uid=PMCID, db = "pmc")
+  res3 <- content(x=res2,as="text")
+  res5 <- xmlToList(res3)
+  d <- res5$DocumentSummarySet$DocumentSummary$EPubDate
+  d <- gsub(" Jan ","-1-",d)
+  d <- gsub(" Feb ","-2-",d)
+  d <- gsub(" Mar ","-3-",d)
+  d <- gsub(" Apr ","-4-",d)
+  d <- gsub(" May ","-5-",d)
+  d <- gsub(" Jun ","-6-",d)
+  d <- gsub(" Jul ","-7-",d)
+  d <- gsub(" Aug ","-8-",d)
+  d <- gsub(" Sep ","-9-",d)
+  d <- gsub(" Oct ","-10-",d)
+  d <- gsub(" Nov ","-11-",d)
+  d <- gsub(" Dec ","-12-",d)
+  return(as.Date(d))
+}
 
 get_cites <- function(PMCID) {
   mylink <- elink(uid=PMCID , dbFrom="pmc", dbTo = "pubmed")
   PMID <- mylink[1]
   CITES <- elink(uid = PMID , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" )
   N_CITES <- length(CITES[1])
-  return(c(PMCID,PMID,N_CITES))
+  PUBDATE <- get_pub_date(PMCID)
+  return(c(PMCID,PMID,N_CITES,PUBDATE))
 }
 
+# test the function
 PMCID=3155154
-
-get_cites(PMCID = PMCID)
-
+res <- get_cites(PMCID = PMCID)
+res
 
 ```
 
-## Try the following 
+## Get cites  and pu
 
 Now to get a bunch of these.
 
 ```{r,reutils3}
-
 
 PMCIDS <- c("PMC6317205", "PMC6317219", "PMC6318854", "PMC6318897", "PMC6322516", "PMC6323737", "PMC6323741", "PMC6325784", "PMC6325795", "PMC6325889", "PMC6326702", "PMC6327033",
             "PMC6327913", "PMC6328174", "PMC6328465", "PMC6328499", "PMC6329100", "PMC6329100", "PMC6329125", "PMC6329125", "PMC6329193", "PMC6329348")
 
 PMCIDS <- as.numeric(gsub("PMC","",PMCIDS))
 
-res <- sapply(X = PMCIDS, FUN = get_cites)
+res <- lapply(X = PMCIDS, FUN = get_cites)
+mx <- do.call(rbind,res)
+mx <- apply(X = mx, MARGIN = 2, FUN = as.numeric)
+df <- as.data.frame(mx)
+colnames(df) <- c("PMCID","PMID","NumCites","Pubdate")
 
-res
+df %>% kbl %>% kable_paper("hover", full_width = F)
+
+plot(df$Pubdate,df$NumCites)
+mylm <- lm(df$NumCites ~ df$Pubdate)
+
+mylm
+
 ```
 
 Looks like it works :)
