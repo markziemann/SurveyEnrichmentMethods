@@ -1,8 +1,14 @@
 ---
-title: "Fetch Citation Info"
+title: "Fetch PMC Citation Info"
 author: "Mark Ziemann"
-date: "28/04/2021"
-output: html_document
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    fig_width: 7
+    fig_height: 7
+theme: cosmo
 ---
 
 ## Intro
@@ -21,7 +27,7 @@ The output format is
 
 ```{r,reutils2}
 
-
+library("reutils")
 
 get_cites <- function(PMCID) {
   mylink <- elink(uid=PMCID , dbFrom="pmc", dbTo = "pubmed")
@@ -38,3 +44,29 @@ get_cites(PMCID = PMCID)
 
 ```
 
+## Try the following 
+
+Now to get a bunch of these.
+
+```{r,reutils3}
+
+
+PMCIDS <- c("PMC6317205", "PMC6317219", "PMC6318854", "PMC6318897", "PMC6322516", "PMC6323737", "PMC6323741", "PMC6325784", "PMC6325795", "PMC6325889", "PMC6326702", "PMC6327033",
+            "PMC6327913", "PMC6328174", "PMC6328465", "PMC6328499", "PMC6329100", "PMC6329100", "PMC6329125", "PMC6329125", "PMC6329193", "PMC6329348")
+
+PMCIDS <- as.numeric(gsub("PMC","",PMCIDS))
+
+res <- sapply(X = PMCIDS, FUN = get_cites)
+
+res
+```
+
+Looks like it works :)
+
+## Session information
+
+```{r,sessioninfo}
+
+sessionInfo()
+
+```
