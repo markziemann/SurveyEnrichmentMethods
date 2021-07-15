@@ -21,6 +21,7 @@ here is some background info blah blah
 x <- read.table("PMC 2019 - analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
 head(x)
 colnames(x)
+dim(x)
 
 # omics type
 omics <- x$Omics.type
@@ -35,3 +36,4 @@ org <- unlist(org_split)
 table(org)
 
 ```
+
