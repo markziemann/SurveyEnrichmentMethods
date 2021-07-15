@@ -1,0 +1,37 @@
+---
+title: "Cleaning Data"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    fig_width: 7
+    fig_height: 7
+theme: cosmo
+---
+
+## Intro
+
+here is some background info blah blah
+
+
+```{r,load data}
+
+x <- read.table("PMC 2019 - analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
+head(x)
+colnames(x)
+
+# omics type
+omics <- x$Omics.type
+omics_split <- strsplit(omics,", ")
+omics <- unlist(omics_split)
+table(omics)
+
+# organism
+org <- x$Organism
+org_split <- strsplit(org,", ")
+org <- unlist(org_split)
+table(org)
+
+```
