@@ -35,5 +35,12 @@ org_split <- strsplit(org,", ")
 org <- unlist(org_split)
 table(org)
 
+# Gene set library
+GSL <-x$Gene.set.library
+GSL_split <- strsplit(GSL,", ")
+GSL <- unlist(GSL_split)
+table(GSL)
+
+
 ```
 
