@@ -41,6 +41,13 @@ GSL_split <- strsplit(GSL,", ")
 GSL <- unlist(GSL_split)
 table(GSL)
 
+# App used
+App <-x$App.used
+App_split <- strsplit(App,", ")
+App <- unlist(App_split)
+table(App)
+
+
 
 ```
 
