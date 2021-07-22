@@ -47,6 +47,13 @@ App_split <- strsplit(App,", ")
 App <- unlist(App_split)
 table(App)
 
+# Gene set version
+GSV <-x$GS.version
+table(GSV)
+
+
+
+
 
 
 ```
