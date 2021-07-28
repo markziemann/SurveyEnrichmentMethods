@@ -15,6 +15,15 @@ theme: cosmo
 
 here is some background info blah blah
 
+```{r,begin}
+
+knitr::opts_chunk$set(fig.width=7, fig.height=7) 
+
+
+```
+
+
+
 
 ```{r,load data}
 
@@ -23,11 +32,26 @@ head(x)
 colnames(x)
 dim(x)
 
+```
+
+```{r,columns1}
+
+par(mar=c(5,12,3,1))
+
 # omics type
 omics <- x$Omics.type
 omics_split <- strsplit(omics,", ")
 omics <- unlist(omics_split)
-table(omics)
+res <- table(omics)
+res <- res[order(res)]
+res
+barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
+        main = "Omics type", xlim=c(0,600))
+grid()
+
+```
+
+```{r,columns2}
 
 # organism
 org <- x$Organism
@@ -46,14 +70,17 @@ App <-x$App.used
 App_split <- strsplit(App,", ")
 App <- unlist(App_split)
 table(App)
+```
 
+```{r,columnsX}
+par(mar=c(5,7,3,1))
 # Gene set version
 GSV <-x$GS.version
-table(GSV)
-
-
-
-
+res <- table(GSV)
+res
+barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Gene set version defined", xlim=c(0,1600))
+grid()
 
 ```
 
