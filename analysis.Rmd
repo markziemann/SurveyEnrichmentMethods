@@ -44,6 +44,40 @@ length(unique(x$Pubmed.Central.ID))
 
 ```
 
+## Journal 
+
+```{r,Journal1}
+
+journal <- x$Journal
+journal_split <- strsplit(journal,", ")
+journal <- unlist(journal_split)
+res <- table(journal)
+res <- res[order(res)]
+res
+
+par(mar=c(1,1,1,1))
+#names(res) <- gsub("Gene expression array","RNA array",names(res))
+wordcloud(words = names(res), freq = res, min.freq = 1, 
+    max.words=200, random.order=FALSE, rot.per=0.35, 
+    colors=brewer.pal(8, "Dark2"))
+
+par(mar=c(5,12,3,1))
+barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
+        main = "Journal", xlim=c(0,120))
+grid()
+
+other <- sum(res[1:(nrow(res)-10)])
+res2 <- c(other,tail(res,9))
+names(res2)[1] <- "Other"
+par(mar=c(5,12,3,1))
+barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
+        main = "Journal", xlim=c(0,1200))
+grid()
+
+```
+
+
+
 ## Omics type
 
 ```{r,omics1}
