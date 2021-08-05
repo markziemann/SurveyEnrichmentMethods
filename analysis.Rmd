@@ -22,6 +22,9 @@ knitr::opts_chunk$set(fig.width=7, fig.height=5)
 library("wordcloud")
 library("RColorBrewer")
 library("wordcloud2")
+library("reutils")
+library("XML")
+library("kableExtra")
 
 ```
 
@@ -388,7 +391,6 @@ jmetrics$Title <- toupper(jmetrics$Title)
 head(jmetrics)
 dim(jmetrics)
 
-
 nlmcat <- readLines("nlmcatalog_result.txt")
 journaltitle <- nlmcat[grep("Title\\(s\\):",nlmcat)]
 journaltitle <- gsub("Title\\(s\\): ","",journaltitle)
@@ -408,29 +410,62 @@ mjdf <- merge(jdf,jmetrics,by.x="journaltitle",by.y="Title")
 head(mjdf)
 dim(mjdf)
 
-```
-journalabbrev <- medline[grep("Title(s):",medline)]
-
-
-jdf <- data.frame(journaltitle,journalabbrev)
-
-m <- merge(jmetrics,jdf,by.x="Title",by.y="journaltitle")
-dim(m)
-mm <- m[,c("journalabbrev","SJR")]
-dim(mm)
-
-dim(x)
-xm <- merge(x,mm,by.x="Journal",by.y="journalabbrev")
+xm <- merge(x,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
 dim(xm)
 tail(xm)
 
-dim(x)
-length(which(x$Journal %in% mm$journalabbrev))
+```
 
-x[which(! x$Journal %in% mm$journalabbrev),"Journal"]
+## Article citations
 
-mm$journalabbrev
-head(x$Journal)
+```{r,cites}
+
+
+get_pub_date <- function(PMCID) {
+  res2 <- esummary(uid=PMCID, db = "pmc")
+  res3 <- content(x=res2,as="text")
+  res5 <- xmlToList(res3)
+  d <- res5$DocumentSummarySet$DocumentSummary$EPubDate
+  d <- gsub(" Jan ","-1-",d)
+  d <- gsub(" Feb ","-2-",d)
+  d <- gsub(" Mar ","-3-",d)
+  d <- gsub(" Apr ","-4-",d)
+  d <- gsub(" May ","-5-",d)
+  d <- gsub(" Jun ","-6-",d)
+  d <- gsub(" Jul ","-7-",d)
+  d <- gsub(" Aug ","-8-",d)
+  d <- gsub(" Sep ","-9-",d)
+  d <- gsub(" Oct ","-10-",d)
+  d <- gsub(" Nov ","-11-",d)
+  d <- gsub(" Dec ","-12-",d)
+  return(as.Date(d))
+}
+
+get_cites <- function(PMCID) {
+  mylink <- elink(uid=PMCID , dbFrom="pmc", dbTo = "pubmed")
+  PMID <- mylink[1]
+  CITES <- elink(uid = PMID , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" )
+  N_CITES <- length(CITES[1])
+  PUBDATE <- get_pub_date(PMCID)
+  return(c(PMCID,PMID,N_CITES,PUBDATE))
+}
+
+PMCIDS <- as.numeric(gsub("PMC","",x$Pubmed.Central.ID))
+
+# getcites needs to be fixed so that it can handle all the results
+PMCIDS <- head(PMCIDS,100)
+res <- lapply(X = PMCIDS, FUN = get_cites)
+mx <- do.call(rbind,res)
+mx <- apply(X = mx, MARGIN = 2, FUN = as.numeric)
+df <- as.data.frame(mx)
+colnames(df) <- c("PMCID","PMID","NumCites","Pubdate")
+
+df %>% kbl %>% kable_paper("hover", full_width = F)
+
+plot(df$Pubdate,df$NumCites)
+mylm <- lm(df$NumCites ~ df$Pubdate)
+
+mylm
 
 ```
 
