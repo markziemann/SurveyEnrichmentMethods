@@ -375,6 +375,7 @@ grid()
 
 ```
 
+
 ## Session information
 
 ```{r,session}
