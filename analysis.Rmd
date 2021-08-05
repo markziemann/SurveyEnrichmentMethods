@@ -53,6 +53,7 @@ journal_split <- strsplit(journal,", ")
 journal <- unlist(journal_split)
 res <- table(journal)
 res <- res[order(res)]
+length(res)
 res
 
 par(mar=c(1,1,1,1))
@@ -86,6 +87,7 @@ omics_split <- strsplit(omics,", ")
 omics <- unlist(omics_split)
 res <- table(omics)
 res <- res[order(res)]
+length(res)
 res
 
 par(mar=c(1,1,1,1))
@@ -118,6 +120,7 @@ org_split <- strsplit(org,", ")
 org <- unlist(org_split)
 res <- table(org)
 res <- res[order(res)]
+length(res)
 res
 
 par(mar=c(1,1,1,1))
@@ -152,6 +155,7 @@ GSL_split <- strsplit(GSL,", ")
 GSL <- unlist(GSL_split)
 res <- table(GSL)
 res <- res[order(res)]
+length(res)
 which(names(res)=="Not stated")/sum(res)*100
 res
 
@@ -171,7 +175,7 @@ res2 <- c(other,tail(res,9))
 names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
-        main = "Gene set library", xlim=c(0,1200))
+        main = "Gene set library", xlim=c(0,500))
 grid()
 
 ```
@@ -276,7 +280,7 @@ res2 <- c(other,tail(res,9))
 names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
-        main = "App used", xlim=c(0,1200))
+        main = "App used", xlim=c(0,500))
 grid()
 
 ```
@@ -374,7 +378,6 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 grid()
 
 ```
-
 
 ## Session information
 
