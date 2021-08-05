@@ -77,7 +77,6 @@ grid()
 ```
 
 
-
 ## Omics type
 
 ```{r,omics1}
