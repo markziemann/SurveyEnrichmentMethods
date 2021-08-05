@@ -21,7 +21,7 @@ knitr::opts_chunk$set(fig.width=7, fig.height=5)
 
 library("wordcloud")
 library("RColorBrewer")
-library("wordcloud")
+library("wordcloud2")
 
 ```
 
@@ -376,6 +376,61 @@ par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Assumptions violated", xlim=c(0,1400))
 grid()
+
+```
+
+## Journal rank
+
+```{r,journal rank}
+
+jmetrics <- read.table("scimagojr_2020.csv",sep=";",header=TRUE,dec = ",")
+jmetrics$Title <- toupper(jmetrics$Title)
+head(jmetrics)
+dim(jmetrics)
+
+
+nlmcat <- readLines("nlmcatalog_result.txt")
+journaltitle <- nlmcat[grep("Title\\(s\\):",nlmcat)]
+journaltitle <- gsub("Title\\(s\\): ","",journaltitle)
+journaltitle <- gsub("\\.$","",journaltitle)
+journaltitle <- toupper(journaltitle) 
+head(journaltitle)
+head(nlmcat)
+journalabbrev <- nlmcat[grep("Title Abbreviation:",nlmcat)]
+journalabbrev <- sapply(strsplit(journalabbrev,":"),"[[",2)
+journalabbrev <- gsub(" $","",journalabbrev)
+journalabbrev <- gsub("^ ","",journalabbrev)
+head(journalabbrev)
+jdf <- data.frame(journalabbrev,journaltitle)
+head(jdf)
+
+mjdf <- merge(jdf,jmetrics,by.x="journaltitle",by.y="Title")
+head(mjdf)
+dim(mjdf)
+
+```
+journalabbrev <- medline[grep("Title(s):",medline)]
+
+
+jdf <- data.frame(journaltitle,journalabbrev)
+
+m <- merge(jmetrics,jdf,by.x="Title",by.y="journaltitle")
+dim(m)
+mm <- m[,c("journalabbrev","SJR")]
+dim(mm)
+
+dim(x)
+xm <- merge(x,mm,by.x="Journal",by.y="journalabbrev")
+dim(xm)
+tail(xm)
+
+dim(x)
+length(which(x$Journal %in% mm$journalabbrev))
+
+x[which(! x$Journal %in% mm$journalabbrev),"Journal"]
+
+mm$journalabbrev
+head(x$Journal)
 
 ```
 
