@@ -382,6 +382,99 @@ grid()
 
 ```
 
+
+## Score
+
+Here I am proposing a scoring scheme.
+If there is information missing from the article, or basic mistakes are made, then a point is deducted.
+If the article goes over and above the basic reproducibility, then they are awarded a point.
+
+Gene set library origin not stated = -1
+
+Gene set library version not stated = -1
+
+Stat test not stated = -1
+
+No stat test conducted = -1
+
+No FDR correction conducted = -1
+
+App used not stated = -1
+
+App version not stated = -1
+
+Background list not defined = -1
+
+Inappropriate background list used = -1
+
+Code availability = +1
+
+Gene lists provided = +1
+
+```{r,score}
+
+head(x)
+x1 <- x[1,]
+x1
+
+score <- function(r){
+  r[is.na(r)] <- 0
+  SCORE=0
+  # gene set lib
+  if(r[7]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # GS version
+  if(r[8]=="No"){
+    SCORE=SCORE-1
+  }
+  # stat test
+  if(r[9]=="No test"){
+    SCORE=SCORE-1
+  }
+  if(r[9]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # FDR
+  if(r[10]!="Yes"){
+    SCORE=SCORE-1
+  }
+  # app used
+  if(r[11]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # App version
+  if(r[12]=="No"){
+    SCORE=SCORE-1
+  }
+  # Code availability
+  if(r[13]=="Yes"){
+    SCORE=SCORE+1
+  }
+  # Background
+  if(r[14]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  if(r[14]=="No"){
+    SCORE=SCORE-1
+  }
+  if(r[14]=="Stated, but incorrect"){
+    SCORE=SCORE-1
+  }
+  # gene list
+  # Code availability
+  if(r[16]=="Yes"){
+    SCORE=SCORE+1
+  }
+  return(SCORE)
+}
+
+scores <- apply(X = x,MARGIN = 1, FUN = score)
+hist(scores)
+x$scores <- scores
+
+```
+
 ## Journal rank
 
 ```{r,journal rank}
@@ -416,10 +509,80 @@ tail(xm)
 
 ```
 
+## Analysis scores vs Journal rank
+
+```{r,scoresvsjrank}
+
+colnames(xm)
+
+tail(xm$Journal)
+
+mylm1 <- lm (xm$scores ~ xm$SJR)
+plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis quality with journal metrics")
+abline(mylm1,col="red")
+
+cor.test(xm$scores,xm$SJR,method="pearson")
+
+cor.test(xm$scores,xm$SJR,method="spearman")
+```
+## Best and worst journals
+
+Minimum of 5 analyses.
+
+```{r,goodbadugly}
+
+colnames(xm)
+
+xmm <-xm[,c(1,17)]
+tail(xmm)
+tab <- table(xmm$Journal)
+tab <- tab[which(tab>5)]
+xmm <- xmm[which(xmm$Journal %in% names(tab)),]
+head(xmm)
+dim(xmm)
+jres <- aggregate(. ~ Journal, xmm ,mean)
+jres <- jres[order(jres$scores),]
+head(jres)
+dim(jres)
+
+par(mar=c(5,12,3,1))
+barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="scores",
+        main = "Best journals",xlim=c(-4,0))
+grid()
+
+par(mar=c(5,12,3,1))
+barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="scores",
+        main = "Best journals",xlim=c(-5,0))
+grid()
+
+```
+
+## Mean analysis scores vs Journal rank
+
+```{r,scoresvsjrank}
+
+head(jres)
+head(mjdf)
+
+jjres <- merge(jres,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
+
+head(jjres)
+
+mylm2 <- lm (jjres$scores ~ jjres$SJR)
+plot(jjres$SJR,jjres$scores,xlab="SJR",ylab="score",main="Association of mean analysis quality with journal metrics")
+abline(mylm2,col="red")
+
+cor.test(jjres$scores,jjres$SJR,method="pearson")
+
+cor.test(jjres$scores,jjres$SJR,method="spearman")
+
+```
+
+
+
 ## Article citations
 
 ```{r,cites}
-
 
 get_pub_date <- function(PMCID) {
   res2 <- esummary(uid=PMCID, db = "pmc")
@@ -446,15 +609,21 @@ get_cites <- function(PMCID) {
   PMID <- mylink[1]
   CITES <- elink(uid = PMID , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" )
   N_CITES <- length(CITES[1])
-  PUBDATE <- get_pub_date(PMCID)
-  return(c(PMCID,PMID,N_CITES,PUBDATE))
+  return(c(PMCID,PMID,N_CITES))
 }
 
-PMCIDS <- as.numeric(gsub("PMC","",x$Pubmed.Central.ID))
+```
 
-# getcites needs to be fixed so that it can handle all the results
-PMCIDS <- head(PMCIDS,100)
-res <- lapply(X = PMCIDS, FUN = get_cites)
+```{r,runcites}
+
+if (file.exists("cites_data.rds") ) {
+  res <- readRDS("cites_data.rds")
+} else {
+  PMCIDS <- as.numeric(gsub("PMC","",x$Pubmed.Central.ID))
+  res <- lapply(X = PMCIDS, FUN = get_cites)
+  saveRDS(res,file="cites_data.rds")
+}
+res
 mx <- do.call(rbind,res)
 mx <- apply(X = mx, MARGIN = 2, FUN = as.numeric)
 df <- as.data.frame(mx)
@@ -466,6 +635,15 @@ plot(df$Pubdate,df$NumCites)
 mylm <- lm(df$NumCites ~ df$Pubdate)
 
 mylm
+df$Pubmed.Central.ID <- gsub("^","PMC",df$PMCID)
+head(df)
+
+dfm <- merge(df,xm,by.x=,by.y="Pubmed.Central.ID")
+colnames(dfm)
+
+mylm2 <- lm (dfm$scores ~ dfm$NumCites)
+plot(dfm$NumCites,dfm$scores,xlab="Num cites",ylab="score",main="Association of citations with journal metrics")
+abline(mylm2,col="red")
 
 ```
 
