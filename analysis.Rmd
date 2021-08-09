@@ -511,7 +511,7 @@ tail(xm)
 
 ## Analysis scores vs Journal rank
 
-```{r,scoresvsjrank}
+```{r,scoresvsjrank1}
 
 colnames(xm)
 
@@ -559,7 +559,7 @@ grid()
 
 ## Mean analysis scores vs Journal rank
 
-```{r,scoresvsjrank}
+```{r,scoresvsjrank2}
 
 head(jres)
 head(mjdf)
@@ -582,69 +582,46 @@ cor.test(jjres$scores,jjres$SJR,method="spearman")
 
 ## Article citations
 
+Get the number of citations per article.
+
 ```{r,cites}
 
-get_pub_date <- function(PMCID) {
-  res2 <- esummary(uid=PMCID, db = "pmc")
-  res3 <- content(x=res2,as="text")
-  res5 <- xmlToList(res3)
-  d <- res5$DocumentSummarySet$DocumentSummary$EPubDate
-  d <- gsub(" Jan ","-1-",d)
-  d <- gsub(" Feb ","-2-",d)
-  d <- gsub(" Mar ","-3-",d)
-  d <- gsub(" Apr ","-4-",d)
-  d <- gsub(" May ","-5-",d)
-  d <- gsub(" Jun ","-6-",d)
-  d <- gsub(" Jul ","-7-",d)
-  d <- gsub(" Aug ","-8-",d)
-  d <- gsub(" Sep ","-9-",d)
-  d <- gsub(" Oct ","-10-",d)
-  d <- gsub(" Nov ","-11-",d)
-  d <- gsub(" Dec ","-12-",d)
-  return(as.Date(d))
-}
-
-get_cites <- function(PMCID) {
-  mylink <- elink(uid=PMCID , dbFrom="pmc", dbTo = "pubmed")
-  PMID <- mylink[1]
-  CITES <- elink(uid = PMID , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" )
-  N_CITES <- length(CITES[1])
-  return(c(PMCID,PMID,N_CITES))
-}
-
-```
-
-```{r,runcites}
-
 if (file.exists("cites_data.rds") ) {
-  res <- readRDS("cites_data.rds")
+  cites <- readRDS("cites_data.rds")
 } else {
-  PMCIDS <- as.numeric(gsub("PMC","",x$Pubmed.Central.ID))
-  res <- lapply(X = PMCIDS, FUN = get_cites)
-  saveRDS(res,file="cites_data.rds")
+  PMCIDS <- as.numeric(gsub("PMC","",x$Pubmed.Central.ID ))
+  mylink <- elink(uid=PMCIDS , dbFrom="pmc", dbTo = "pubmed")
+  PMID <- mylink[1]
+  #writeLines(PMID,"pubmedids.txt")
+  res <- sapply(X=PMID,FUN=function(x){
+      Sys.sleep(1)
+      CITES <- elink(uid = x , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" ) 
+      CITES=length(CITES[1])
+      return(CITES)
+   })
+  mylink2 <- elink(uid=PMID , dbFrom="pubmed", dbTo = "pmc")
+  cites <- data.frame(mylink2[1],PMID,res)
+  colnames(cites) <- c("PMCID","PMID","cites")
+  saveRDS(cites,file="cites_data.rds")
 }
-res
-mx <- do.call(rbind,res)
-mx <- apply(X = mx, MARGIN = 2, FUN = as.numeric)
-df <- as.data.frame(mx)
-colnames(df) <- c("PMCID","PMID","NumCites","Pubdate")
 
-df %>% kbl %>% kable_paper("hover", full_width = F)
+cites$PMCID <- gsub("^","PMC",cites$PMCID)
+cites$PMID <- gsub("^","PMID",cites$PMID)
+head(cites)
+xm <- merge(x,cites,by.x="Pubmed.Central.ID",by.y="PMCID")
+head(xm)
+dim(xm)
+```
+Plot the number of citations against analysis scores
 
-plot(df$Pubdate,df$NumCites)
-mylm <- lm(df$NumCites ~ df$Pubdate)
+```{r,citesplot}
 
-mylm
-df$Pubmed.Central.ID <- gsub("^","PMC",df$PMCID)
-head(df)
-
-dfm <- merge(df,xm,by.x=,by.y="Pubmed.Central.ID")
-colnames(dfm)
-
-mylm2 <- lm (dfm$scores ~ dfm$NumCites)
-plot(dfm$NumCites,dfm$scores,xlab="Num cites",ylab="score",main="Association of citations with journal metrics")
+colnames(xm)
+mylm2 <- lm (xm$scores ~ xm$cites)
+plot(xm$cites,xm$scores,xlab="Num cites",ylab="score",main="Association of citations with journal metrics")
 abline(mylm2,col="red")
 
+cor.test(xm$scores , xm$cites)
 ```
 
 ## Session information
