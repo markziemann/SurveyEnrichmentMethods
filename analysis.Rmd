@@ -11,6 +11,8 @@ output:
 theme: cosmo
 ---
 
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
 ## Intro
 
 Here we are performing an analysis of the ways enrichment analysis has been done in a sample of 1500 PMC articles from 2019.
@@ -25,6 +27,7 @@ library("wordcloud2")
 library("reutils")
 library("XML")
 library("kableExtra")
+library("vioplot")
 
 ```
 
@@ -67,7 +70,7 @@ wordcloud(words = names(res), freq = res, min.freq = 1,
 
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
-        main = "Journal", xlim=c(0,120))
+        main = "Journal", xlim=c(0,100))
 grid()
 
 other <- sum(res[1:(nrow(res)-10)])
@@ -413,10 +416,6 @@ Gene lists provided = +1
 
 ```{r,score}
 
-head(x)
-x1 <- x[1,]
-x1
-
 score <- function(r){
   r[is.na(r)] <- 0
   SCORE=0
@@ -462,7 +461,6 @@ score <- function(r){
     SCORE=SCORE-1
   }
   # gene list
-  # Code availability
   if(r[16]=="Yes"){
     SCORE=SCORE+1
   }
@@ -481,7 +479,7 @@ x$scores <- scores
 
 jmetrics <- read.table("scimagojr_2020.csv",sep=";",header=TRUE,dec = ",")
 jmetrics$Title <- toupper(jmetrics$Title)
-head(jmetrics)
+head(jmetrics,3)
 dim(jmetrics)
 
 nlmcat <- readLines("nlmcatalog_result.txt")
@@ -489,23 +487,15 @@ journaltitle <- nlmcat[grep("Title\\(s\\):",nlmcat)]
 journaltitle <- gsub("Title\\(s\\): ","",journaltitle)
 journaltitle <- gsub("\\.$","",journaltitle)
 journaltitle <- toupper(journaltitle) 
-head(journaltitle)
-head(nlmcat)
 journalabbrev <- nlmcat[grep("Title Abbreviation:",nlmcat)]
 journalabbrev <- sapply(strsplit(journalabbrev,":"),"[[",2)
 journalabbrev <- gsub(" $","",journalabbrev)
 journalabbrev <- gsub("^ ","",journalabbrev)
-head(journalabbrev)
 jdf <- data.frame(journalabbrev,journaltitle)
-head(jdf)
 
 mjdf <- merge(jdf,jmetrics,by.x="journaltitle",by.y="Title")
-head(mjdf)
-dim(mjdf)
 
 xm <- merge(x,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
-dim(xm)
-tail(xm)
 
 ```
 
@@ -513,17 +503,16 @@ tail(xm)
 
 ```{r,scoresvsjrank1}
 
-colnames(xm)
-
 tail(xm$Journal)
 
 mylm1 <- lm (xm$scores ~ xm$SJR)
-plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis quality with journal metrics")
+plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
 abline(mylm1,col="red")
 
 cor.test(xm$scores,xm$SJR,method="pearson")
 
 cor.test(xm$scores,xm$SJR,method="spearman")
+
 ```
 ## Best and worst journals
 
@@ -531,45 +520,52 @@ Minimum of 5 analyses.
 
 ```{r,goodbadugly}
 
-colnames(xm)
-
 xmm <-xm[,c(1,17)]
-tail(xmm)
 tab <- table(xmm$Journal)
 tab <- tab[which(tab>5)]
 xmm <- xmm[which(xmm$Journal %in% names(tab)),]
-head(xmm)
 dim(xmm)
 jres <- aggregate(. ~ Journal, xmm ,mean)
+jsd <- aggregate(. ~ Journal, xmm ,sd)
+jres$sd <- jsd$scores
 jres <- jres[order(jres$scores),]
-head(jres)
 dim(jres)
+head(jres)
 
 par(mar=c(5,12,3,1))
-barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="scores",
-        main = "Best journals",xlim=c(-4,0))
+barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Highest scoring journals",xlim=c(-4,0))
 grid()
 
 par(mar=c(5,12,3,1))
-barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="scores",
-        main = "Best journals",xlim=c(-5,0))
+barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Lowest scoring journals",xlim=c(-5,0))
 grid()
+
+j <- unique(xmm$Journal)
+jscores <- sapply(j,function(jj) {
+ xmm[which(xmm$Journal == jj ),2]  
+})
+
+jscores <- jscores[order(unlist(lapply(jscores,mean)))]
+
+par(mar=c(5,12,3,1))
+vioplot(tail(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Highest scoring journals")
+
+par(mar=c(5,12,3,1))
+vioplot(head(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Lowest scoring journals")
 
 ```
+
 
 ## Mean analysis scores vs Journal rank
 
 ```{r,scoresvsjrank2}
 
-head(jres)
-head(mjdf)
-
 jjres <- merge(jres,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
 
-head(jjres)
-
 mylm2 <- lm (jjres$scores ~ jjres$SJR)
-plot(jjres$SJR,jjres$scores,xlab="SJR",ylab="score",main="Association of mean analysis quality with journal metrics")
+plot(jjres$SJR,jjres$scores,xlab="SJR",ylab="score",main="Association of mean analysis score with journal metrics")
 abline(mylm2,col="red")
 
 cor.test(jjres$scores,jjres$SJR,method="pearson")
@@ -577,8 +573,6 @@ cor.test(jjres$scores,jjres$SJR,method="pearson")
 cor.test(jjres$scores,jjres$SJR,method="spearman")
 
 ```
-
-
 
 ## Article citations
 
@@ -607,21 +601,30 @@ if (file.exists("cites_data.rds") ) {
 
 cites$PMCID <- gsub("^","PMC",cites$PMCID)
 cites$PMID <- gsub("^","PMID",cites$PMID)
-head(cites)
 xm <- merge(x,cites,by.x="Pubmed.Central.ID",by.y="PMCID")
-head(xm)
 dim(xm)
+
 ```
+
 Plot the number of citations against analysis scores
 
 ```{r,citesplot}
 
-colnames(xm)
 mylm2 <- lm (xm$scores ~ xm$cites)
-plot(xm$cites,xm$scores,xlab="Num cites",ylab="score",main="Association of citations with journal metrics")
+plot(xm$cites,xm$scores,xlab="Num cites",ylab="score",main="Association of analysis scores with number of citations")
 abline(mylm2,col="red")
 
-cor.test(xm$scores , xm$cites)
+cor.test(xm$scores , xm$cites, method="pearson")
+
+cor.test(xm$scores , xm$cites, method="spearman")
+
+mylm2 <- lm (xm$scores ~ log2(xm$cites))
+plot(log2(xm$cites),xm$scores,xlab="log2(citations)",ylab="score",main="Association of analysis scores with log2(citations)")
+abline(mylm2,col="red")
+
+cor.test(xm$scores , xm$cites, method="pearson")
+
+cor.test(xm$scores , xm$cites, method="spearman")
 ```
 
 ## Session information
