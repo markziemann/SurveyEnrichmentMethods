@@ -81,6 +81,12 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "Journal", xlim=c(0,1200))
 grid()
 
+png("images/journals1.png")
+par(mar=c(5,8,3,1))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Journal", xlim=c(0,1200))
+grid()
+dev.off()
 ```
 
 
@@ -115,6 +121,13 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "Omics type", xlim=c(0,600))
 grid()
 
+png("images/omics1.png")
+par(mar=c(5,10,3,1))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Omics type", xlim=c(0,600))
+grid()
+dev.off()
+
 ```
 
 ## Organism
@@ -135,7 +148,6 @@ wordcloud(words = names(res), freq = res, min.freq = 1,
     max.words=200, random.order=FALSE, rot.per=0.35, 
     colors=brewer.pal(8, "Dark2"), scale=c(4,.5))
 
-
 par(mar=c(5,12,3,1))
 names(res) <- gsub("human","Homo sapiens",names(res))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
@@ -149,6 +161,13 @@ par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "Organism", xlim=c(0,1200))
 grid()
+
+png("images/organisms1.png")
+par(mar=c(5,10,3,1))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Organism", xlim=c(0,1200))
+grid()
+dev.off()
 
 ```
 
@@ -181,9 +200,15 @@ res2 <- c(other,tail(res,9))
 names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
-        main = "Gene set library", xlim=c(0,500))
+        main = "Gene set library", xlim=c(0,1000))
 grid()
 
+png("images/genesetlib1.png")
+par(mar=c(5,12,3,1))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Gene set library", xlim=c(0,1000))
+grid()
+dev.off()
 ```
 
 ## Gene set version
@@ -200,6 +225,12 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene set version defined", xlim=c(0,1600))
 grid()
 
+png("images/genesetvers1.png",width = 260, height = 260)
+par(mar=c(5,7,3,1))
+barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Gene set version defined", xlim=c(0,1600))
+grid()
+dev.off()
 ```
 
 ## Statistical test used
@@ -232,6 +263,12 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "Test used", xlim=c(0,1200))
 grid()
 
+png("images/stattest1.png")
+par(mar=c(5,10,3,1))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Test used", xlim=c(0,1200))
+grid()
+dev.off()
 ```
 
 ## FDR Correction
@@ -256,6 +293,13 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "FDR", xlim=c(0,800))
 grid()
 
+png("images/fdr1.png",width = 260, height = 260)
+par(mar=c(5,7,3,1))
+barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "FDR", xlim=c(0,800))
+grid()
+dev.off()
+
 ```
 
 
@@ -269,6 +313,7 @@ App <- unlist(App_split)
 res <- table(App)
 res <- res[order(res)]
 res[which(names(res)=="Not stated")]/sum(res)*100
+length(res)
 res
 
 par(mar=c(1,1,1,1))
@@ -289,6 +334,12 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "App used", xlim=c(0,500))
 grid()
 
+png("images/app1.png")
+par(mar=c(5,12,3,1))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "App used", xlim=c(0,500))
+grid()
+dev.off()
 ```
 
 ## App version

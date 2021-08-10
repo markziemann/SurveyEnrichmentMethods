@@ -1,0 +1,162 @@
+---
+title: "A survey of rigour and reporting standards for gene set enrichment tests"
+author: "Kaumadi Wijesooriya, Sameer A Jadaan, Tanuveer Kaur, Kaushalya L Perera, Mark Ziemann"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+Target Journal: Briefings in Bioinformatics (JIF=9.0)
+
+* Affiliations *
+
+1. Deakin University, Geelong, Australia, School of Life and Environmental Sciences
+
+2. Sameer to provide affiliation information
+
+## Abstract
+
+Gene set enrichment tests (aka functional enrichment analysis) are amongst the most frequently used methods in computational biology.
+Despite this popularity, there are concerns that these methods are being applied incorrectly and the results of some peer-reviewed publications are unreliable.
+To ascertain the frequency of these errors, we performed a screen of ~1300-1500 articles describing gene set test results.
+We find that XX% of articles using over-representation tests implemented the reference gene list incorrectly or did not describe this in the methods.
+Failure to perform correction for multiple tests was identified in XX% of studies.
+Many studies lacked detail in the methods section about the tools and gene sets used.
+Only XX% of studies achieved the satisfactory standard of reporting and rigour.
+This highlights the poor state of enrichment test reporting and rigour standards in the recent literature.
+We provide a set of minimum standards that should act as a checklist for researchers and peer-reviewers.
+
+## Introduction
+
+Since the turn of the millennium, high throughput omics techniques like gene expression microarrays and next generation sequencing have brought with them a deluge of data. They have revealed how genes are regulated in development and many different diseases.
+These experiments involve the measurement of thousands of genes simultaneously, and can identify hundreds or even thousands of genes’ expression being associated with a disease.
+Interpreting such data is extraordinarily challenging, as the sheer number of associations can be difficult to investigate in a gene-by-gene manner.
+Instead, many different tools have been developed in an effort to summarise gene profiles into simplified functional categories.
+These functional categories typically represent signaling or biochemical pathways, curated from information present in the literature, hence the name functional enrichment.
+
+Widely used functional enrichment tools can be classified into two main categories; (i) overrepresentation analysis (ORA) and (ii) functional class scoring (FCS).
+In ORA, differentially expressed genes (DEGs) meeting a significance and/or fold change threshold are queried against curated gene sets.
+A statistical test is performed to ascertain whether the number of DEGs in a particular gene set is higher than that expected by random chance.
+ORA tools can be stand alone software packages or web services, and they use one or more statistical tests (Fisher’s Exact test, hypergeometric test, binomial test, χ2 test, etc) (Draghici et al, 2003; Hosack et al, 2003).
+FCS tools involve giving each detected gene a differential expression score and then evaluating whether the scores are more positive or negative than expected by chance for each set of genes.
+The popular Gene Set Enrichment Analysis (GSEA) tool uses permutation approaches to establish whether a gene set is associated with higher or lower scores, either by permuting sample labels or by permuting genes in the differential expression profile (Subramanian et al, 2005).
+From the user’s perspective, ORA is easier to conduct because it is as simple as pasting a list of gene names into a text box on a website, on the other hand FCS tools are more difficult to use but are more sensitive at detecting subtle associations (Kaspi and Ziemann 2020).
+
+Although these are powerful tools to summarise complex genomics data, there are concerns that they are not being correctly used.
+Timmons et al (2015) highlight instances where a failure to account for sampling bias in ORA leads to biased results and likely invalidated conclusions in published work.
+Many times as a peer reviewer, we have had to request authors include details about what reference or background gene list was used to account for sampling bias.
+In other cases we have requested authors to correct their p-values to account for the possibility of false positives when performing hundreds to thousands of tests in parallel.
+The purpose of this work is to determine how frequent errors like lack of a background gene set, lack of adjusting for multiple comparisons and lack of essential methodological details required for reproducibility.
+By performing a screen of published articles we will identify the most frequent error modes, and assist in developing a set of minimum standards for functional enrichment analysis (MSFEA).
+
+## Methods
+
+We have collated a list of 2941 articles in PubMed Central published in 2019 that have “enrichment analysis” and related keyword terms. We sampled 1500 of these articles and collected the following information from the article, searching the methods sections and other parts of the article including the supplement.
+
+* Journal name
+
+* Type of omics data
+
+* Gene set library used, and whether a version was reported
+
+* Statistical test used
+
+* Whether p-values were corrected for multiple comparisons
+
+* Software package used, and whether a version was reported
+
+* Whether a background gene set was used
+
+* Code availability
+
+* Whether gene profile is provided in the supplement
+
+* Whether assumptions are correctly applied
+
+Some articles presented the results of >1 enrichment analysis, so additional rows were added to accommodate them. 
+These data were entered into a Google Spreadsheet by a team of five researchers.
+For quality control, 200 randomly selected assessed articles were cross-checked by two senior team members to ensure consistency across the five team members.
+Data were then cleaned of spelling mistakes and other irregularities by loading them into R and tabulating the common occurrences, then fixing the original spreadsheet.
+Cleaned data were then loaded into R v4.1 for downstream analysis. 
+We rated each analysis with a simple approach that deducted points for missing methodological details and awarding points for including extra information (Table 1). 
+
+| 1 point deducted | 1 point awarded |
+| --- | --- |
+| Gene set library origin not stated | Code made available |
+| Gene set library version not stated | Gene lists provided |
+| Stat test not stated | |
+| No stat test conducted | |
+| No FDR correction conducted | |
+| App used not stated | |
+| App version not stated | |
+| Background list not defined | |
+| Inappropriate background list used | |
+
+Scimago Journal Ranks were downloaded from the Scimago website (https://www.scimagojr.com/journalrank.php) and used to rank journals by their citation metrics.
+Using NCBI’s Eutils API, we collected the number of citations each article accrued since publication.
+We used Spearman and Pearson correlation tests to determine any association with the analysis scores we generated.
+All data analyses were conducted in R v4.1 and the analysis scripts are available at GitHub (https://github.com/markziemann/SurveyEnrichmentMethods).
+
+## Results
+
+### Dataset overview
+
+A search of PubMed Central showed 2941 articles published in 2019 with the keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
+From these, 1500 articles were screened for methodological errors.
+We excluded 133 articles from the screen because they did not present any enrichment analysis. 
+Those excluded articles included articles describing novel enrichment analysis techniques or tools, review articles or conference abstracts.
+As some articles included more than one enrichment analysis, the final dataset included 1624 analyses from 1363 articles.
+There were articles from 330 journals in the screen, with *Scientific Reports*, *Oncology Letters* and *International Journal of Molecular Science* being the biggest contributors (Figure 1).
+In the analyses, there were 35 different omics types, with RNA-seq and gene expression microarray being the most popular(Figure 2).
+There were 175 different species under study, but human was the most common with 1104 analyses (Figure 3).
+We recorded the use of 101 different gene set libraries, with GO and KEGG being the most frequently used (Figure 4).
+There were 85 studies where the gene set libraries used were not defined in the article.
+Only 108 analyses reported the version of the gene set library used (Figure 5).
+There were XX different statistical tests used, and the most common reported tests were Fisher's Exact, GSEA and hypergeometric tests; but the statistical test used was not reported for the majority of analyses (Figure 6).
+Only 754 of 1594 studies described performing FDR or other p-value correction for multiple testing (Figure 7).
+There were 145 different tools used to perform enrichment analysis, with DAVID and GSEA being the most common; while 174 analyses (XX%) did not state what tool was used (Figure 8).
+
+![Figure 1. Representation of journals in the data set.](images/journals1.png "Journals")
+
+![Figure 2. Representation of different omics types in the data set.](images/omics1.png "Omics")
+
+![Figure 3. Representation of different organisms in the data set.](images/organisms1.png "Organisms")
+
+![Figure 4. Representation of different gene set libraries in the data set.](images/genesetlib1.png "Geneset libraries")
+
+![Figure 5. Proportion of analyses that reported version information for gene sets used.](images/genesetvers1.png "Geneset version")
+
+![Figure 6. Representation of different statistical tests in the data set.](images/stattest1.png "Geneset libraries")
+
+![Figure 7. Recognition of p-value correction for multiple testing in the data set.](images/fdr1.png "FDR")
+
+![Figure 8. Representation of different software tools for enrichment analysis in the data set.](images/app1.png "Software used")
+
+app1.png
+
+## Discussion
+
+
+
+## References
+
+Draghici, S., Khatri, P., Martins, R. P., Ostermeier, G. C., & Krawetz, S. A. (2003). Global functional profiling of gene expression. Genomics, 81(2), 98–104.
+
+Hosack, D. A., Dennis, G., Jr, Sherman, B. T., Lane, H. C., & Lempicki, R. A. (2003). Identifying biological themes within lists of genes with EASE. Genome Biology, 4(10), R70.
+
+Huang, D. W., Sherman, B. T., & Lempicki, R. A. (2009). Bioinformatics enrichment tools: paths toward the comprehensive functional analysis of large gene lists. Nucleic Acids Research, 37(1), 1–13.
+
+Kaspi, A., & Ziemann, M. (2020). Mitch: Multi-contrast pathway enrichment for multi-omics and single-cell profiling data. BMC Genomics, 21(1), 447.
+
+Subramanian, A., Tamayo, P., Mootha, V. K., Mukherjee, S., Ebert, B. L., Gillette, M. A., … Mesirov, J. P. (2005). Gene set enrichment analysis: a knowledge-based approach for interpreting genome-wide expression profiles. Proceedings of the National Academy of Sciences of the United States of America, 102(43), 15545–15550.
+
+Timmons, J. A., Szkop, K. J., & Gallagher, I. J. (2015). Multiple sources of bias confound functional enrichment analysis of global -omics data. Genome Biology, 16(1), 186.
+
+Xie, C., Jauhari, S., & Mora, A. (2021). Popularity and performance of bioinformatics software: the case of gene set analysis. BMC Bioinformatics, 22(1), 191.
