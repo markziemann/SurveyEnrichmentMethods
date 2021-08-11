@@ -188,7 +188,7 @@ After log transforming the citation data, there was no association between citat
 While there have been several articles evaluating the performance of functional enrichment tools, there has been relatively little interest in how existing tools are (mis)used. 
 A recent study looked at the the popularity of frequently used tools and their performance (Xie et al, 2021), but this assumes that the tools were properly used.
 In this sample of open access research articles, there appears to be a bias toward tools that are easy to use.
-ORA tools that only require pasting lists of gene identifiers into a webpage (ie: DAVID, IPA, KOBAS and PANTHER) are collectively more popular than other solutions like GSEA (a standalone graphical user interface software for FCS) or any command line tool. 
+ORA tools that only require pasting lists of gene identifiers into a webpage (ie: DAVID, IPA, KOBAS and PANTHER) are collectively more popular than other solutions like GSEA (a standalone graphical user interface software for FCS) or any command line tool.
 This is despite the fact that ORA tools perform worse than FCS and new generation pathway topology tools (Kaspi & Ziemann 2020; Maleki et al, 2020; Xie et al, 2021).
 
 The lack of methodological details regarding enrichment analysis in some articles was disturbing.
@@ -228,30 +228,31 @@ This is especially relevant for tools that report the results of different stati
 This will reduce the chance of false positives when performing many tests simultaneously.
 Bonferonni, FDR and FWER are examples.
 
-6. If ORA is used, it is vital to use a background list consisting of all detected genes.
-Do not use tools that cannot accept a background list.
+6. If ORA is used, it is vital to use a background list consisting of all detected genes, and report this in the methods section.
+Avoid tools that cannot accept a background list.
 
 7. Criteria and parameters matter.
 If performing ORA, then the inclusion thresholds need to be mentioned.
-Moreover it needs to be mentioned whether up- and down-regulated genes are combined or separated into different tests.
-If using GSEA, parameters around gene weighting and type of test need to be disclosed (eg: permuting sample labels or gene labels).
+If using GSEA or another FCS tool, parameters around ranking, gene weighting and type of test need to be disclosed (eg: permuting sample labels or gene labels).
+
+8. If using ORA, it needs to be mentioned whether up- and down-regulated genes are separated into different tests as recommended by Hong et al (2014) or combined.
 
 ### Additional recommendations for enhanced reproducibility 
 
 The following guidelines are directed at going over and above the minimum standards towards a gold standard of reliability and reproducibility.
 
-8. Preference FCS and pathway topology tools over ORA tools.
+9. Preference FCS and pathway topology tools over ORA tools.
 ORA tools have a lower sensitivity. 
 In practice, they are rarely used properly.
 FCS tests distinguish between up- and down-regulated gene sets by default.
 
-9. Include the gene profile data (including any background lists) in the supplementary data in TSV or CSV formats.
+10. Include the gene profile data (including any background lists) in the supplementary data in TSV or CSV formats.
 Excel spreadsheets are not recommended for genomics work (Ziemann et al, 2016)
 
-10. Scripted analysis workflows are preferred over analysis involving graphical user interfaces because they can attain a higher degree of computational reproducibility, so consider investing in upgrading your analysis.
+11. Scripted analysis workflows are preferred over analysis involving graphical user interfaces because they can attain a higher degree of computational reproducibility, so consider investing in upgrading your analysis.
 Similarly, free and open source software tools are preferred over proprietary software.
 
-11. If using a scripted analysis, provide code by depositing it to a repository like GitHub or Zenodo.
+12. If using a scripted analysis, provide code by depositing it to a repository like GitHub or Zenodo.
 Link the data to the code, so anyone can download and reproduce your analysis (Peng 2011).
 
 <hr>
