@@ -1,18 +1,19 @@
 ---
-  title: "PMC Survey QC Analysis"
+title: "PMC Survey QC Analysis"
 author: "Mark Ziemann & Kaumadi Wijesooriya"
 date: "`r Sys.Date()`"
 output:
   html_document:
-  toc: true
-toc_float: true
-fig_width: 7
-fig_height: 5
+    toc: true
+    toc_float: true
+    fig_width: 7
+    fig_height: 5
 theme: cosmo
 ---
   
-  ## Intro
-  Here we are performing an analysis of 200 articles which is randomly selected from 1500 PMC articles. 
+## Intro
+
+Here we are performing an analysis of 200 articles which is randomly selected from 1500 PMC articles. 
 
 ```{r,begin}
 
