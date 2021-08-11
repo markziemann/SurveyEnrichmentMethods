@@ -35,26 +35,28 @@ We provide a set of minimum standards that should act as a checklist for researc
 
 ## Introduction
 
-Since the turn of the millennium, high throughput omics techniques like gene expression microarrays and next generation sequencing have brought with them a deluge of data. They have revealed how genes are regulated in development and many different diseases.
-These experiments involve the measurement of thousands of genes simultaneously, and can identify hundreds or even thousands of genes’ expression being associated with a disease.
+Since the turn of the millennium, high throughput omics techniques like microarrays and next generation sequencing have brought with them a deluge of data.
+They have revealed how genes are regulated in development and many different diseases.
+These experiments involve the measurement of thousands of genes simultaneously, and can identify hundreds or even thousands of significant associations.
 Interpreting such data is extraordinarily challenging, as the sheer number of associations can be difficult to investigate in a gene-by-gene manner.
 Instead, many different tools have been developed in an effort to summarise gene profiles into simplified functional categories.
 These functional categories typically represent signaling or biochemical pathways, curated from information present in the literature, hence the name functional enrichment.
 
-Widely used functional enrichment tools can be classified into two main categories; (i) overrepresentation analysis (ORA) and (ii) functional class scoring (FCS).
+Widely used functional enrichment tools can be classified into two main categories; (i) over-representation analysis (ORA) and (ii) functional class scoring (FCS), and the most common application is in differential expression analysis.
 In ORA, differentially expressed genes (DEGs) meeting a significance and/or fold change threshold are queried against curated gene sets.
 A statistical test is performed to ascertain whether the number of DEGs in a particular gene set is higher than that expected by random chance.
 ORA tools can be stand alone software packages or web services, and they use one or more statistical tests (Fisher’s Exact test, hypergeometric test, binomial test, χ2 test, etc) (Draghici et al, 2003; Hosack et al, 2003).
 FCS tools involve giving each detected gene a differential expression score and then evaluating whether the scores are more positive or negative than expected by chance for each set of genes.
 The popular Gene Set Enrichment Analysis (GSEA) tool uses permutation approaches to establish whether a gene set is associated with higher or lower scores, either by permuting sample labels or by permuting genes in the differential expression profile (Subramanian et al, 2005).
-From the user’s perspective, ORA is easier to conduct because it is as simple as pasting a list of gene names into a text box on a website, on the other hand FCS tools are more difficult to use but are more sensitive at detecting subtle associations (Kaspi and Ziemann 2020).
+From a user's perspective, ORA is easier to conduct because it is as simple as pasting a list of gene names into a text box on a website.
+On the other hand FCS tools are more difficult to use but are more sensitive at detecting subtle associations (Kaspi and Ziemann 2020; Maleki et al, 2020; Xie et al, 2021).
 
 Although these are powerful tools to summarise complex genomics data, there are concerns that they are not being correctly used.
-Timmons et al (2015) highlight instances where a failure to account for sampling bias in ORA leads to biased results and likely invalidated conclusions in published work.
+Timmons et al (2015) highlight instances where a failure to account for sampling bias in ORA leads to biased results and invalidated conclusions in published work.
 Many times as peer reviewers, we have had to request authors include details about what reference or background gene list was used to account for sampling bias.
-In other cases we have requested authors to correct their p-values to account for the possibility of false positives when performing hundreds to thousands of tests in parallel.
+In other cases we have requested authors to correct their p-values to account for the possibility of false positives when performing hundreds to thousands of gene set tests in parallel.
 The purpose of this work is to determine how frequent methodological issues in functional enrichment are, including lack of a background gene set, lack of adjustment for multiple comparisons and lack of essential methodological details.
-By performing a screen of published articles we will identify the most frequent error modes, and use this to assist in developing a set of minimum standards for functional enrichment analysis (MSFEA).
+By performing a screen of published articles we will identify the most frequent error modes, and use this to inform us to develop a set of minimum standards for functional enrichment analysis (MSFEA).
 
 ## Methods
 
