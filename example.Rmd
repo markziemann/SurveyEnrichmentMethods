@@ -1,5 +1,5 @@
 ---
-title: "PMC Survey Data Analysis"
+title: "Example gene set analysis"
 author: "Mark Ziemann & Kaumadi Wijesooriya"
 date: "`r Sys.Date()`"
 output:
@@ -19,12 +19,14 @@ Here we are performing an analysis of some gene expression data to demonstrate t
 
 ```{r,begin}
 
+suppressPackageStartupMessages({
 library("getDEE2") 
 library("DESeq2")
 library("clusterProfiler")
 library("mitch")
 library("kableExtra")
 library("eulerr")
+})
 
 ```
 
@@ -32,18 +34,13 @@ library("eulerr")
 
 I'm using some RNA-seq data looking at the effect of hyperglycemia on hepatocytes.
 
-```{r,getdata}
+```{r,getdata,fig.width=7,fig.height=7}
 
 mdat<-getDEE2Metadata("hsapiens")
-
-#SRP128998
-#samplesheet<-mdat[which(mdat$GEO_series=="GSE109140"),]
 samplesheet <- mdat[grep("SRP128998",mdat$SRP_accession),]
 samplesheet<-samplesheet[order(samplesheet$SRR_accession),]
 samplesheet$HG<-as.factor(c(1,1,1,1,1,1,0,0,0,0,0,0))
 samplesheet$VPA<-as.factor(c(0,0,0,1,1,1,0,0,0,1,1,1))
-
-# samplesheets
 s1 <- subset(samplesheet,VPA==0)
 
 w<-getDEE2("hsapiens",samplesheet$SRR_accession,metadata=mdat,legacy = TRUE)
@@ -61,13 +58,55 @@ x1<-x[,which(colnames(x) %in% s1$SRR_accession)]
 # filter out lowly expressed genes
 x1<-x1[which(rowSums(x1)/ncol(x1)>=(10)),]
 
+# MDS plot
+plot(cmdscale(dist(t(x1))), xlab="Coordinate 1", ylab="Coordinate 2", pch=19, col=s1$HG, main="MDS")
+
 #run DESeq2 for LG vs HG
 y <- DESeqDataSetFromMatrix(countData = round(x1), colData = s1, design = ~ HG)
 y <- DESeq(y)
 LGvHG <- results(y)
 LGvHG<-as.data.frame(LGvHG[order(LGvHG$pvalue),])
 rownames(LGvHG)<-sapply(strsplit(rownames(LGvHG),"\\."),"[[",1)
-head(LGvHG)
+head(LGvHG) 
+
+```
+
+```{r,deplots,fig.width=7,fig.height=7}
+
+maplot <- function(de,contrast_name) {
+  sig <-subset(de, padj < 0.05 )
+  up <-rownames(subset(de, padj < 0.05 & log2FoldChange > 0))
+  dn <-rownames(subset(de, padj < 0.05 & log2FoldChange < 0))
+  GENESUP <- length(up)
+  GENESDN <- length(dn)
+  DET=nrow(de)
+  SUBHEADER = paste(GENESUP, "up, ", GENESDN, "down", DET, "detected")
+  ns <-subset(de, padj > 0.05 )
+  plot(log2(de$baseMean),de$log2FoldChange, 
+       xlab="log2 basemean", ylab="log2 foldchange",
+       pch=19, cex=0.5, col="dark gray",
+       main=contrast_name, cex.main=0.7)
+  points(log2(sig$baseMean),sig$log2FoldChange,
+         pch=19, cex=0.5, col="red")
+  mtext(SUBHEADER,cex = 0.7)
+}
+
+make_volcano <- function(de,name) {
+    sig <- subset(de,padj<0.05)
+    N_SIG=nrow(sig)
+    N_UP=nrow(subset(sig,log2FoldChange>0))
+    N_DN=nrow(subset(sig,log2FoldChange<0))
+    DET=nrow(de)
+    HEADER=paste(N_SIG,"@5%FDR,", N_UP, "up", N_DN, "dn", DET, "detected")
+    plot(de$log2FoldChange,-log10(de$padj),cex=0.5,pch=19,col="darkgray",
+        main=name, xlab="log2 FC", ylab="-log10 pval", xlim=c(-6,6))
+    mtext(HEADER)
+    grid()
+    points(sig$log2FoldChange,-log10(sig$padj),cex=0.5,pch=19,col="red")
+}
+
+maplot(LGvHG,"LG v HG")
+make_volcano(LGvHG,"LG v HG")
 
 ```
 
@@ -75,9 +114,11 @@ head(LGvHG)
 
 ```{r,reactome}
 
-download.file("https://reactome.org/download/current/ReactomePathways.gmt.zip", 
+if (! file.exists("ReactomePathways.gmt")) {
+  download.file("https://reactome.org/download/current/ReactomePathways.gmt.zip", 
     destfile="ReactomePathways.gmt.zip")
-unzip("ReactomePathways.gmt.zip")
+  unzip("ReactomePathways.gmt.zip")
+}
 genesets<-gmt_import("ReactomePathways.gmt")
 
 ```
@@ -85,12 +126,11 @@ genesets<-gmt_import("ReactomePathways.gmt")
 ## FCS with Mitch
 
 ```{r,mitch1}
-library(kableExtra)
 
 m <- mitch_import(LGvHG,DEtype = "DEseq2", geneTable = gt)
 head(m)
 mres <- mitch_calc(m,genesets = genesets)
-head(mres$enrichment_result,50)
+head(mres$enrichment_result) 
 m_up <- subset(mres$enrichment_result,p.adjustANOVA<0.05 & s.dist > 0)[,1]
 m_dn <- subset(mres$enrichment_result,p.adjustANOVA<0.05 & s.dist < 0)[,1]
 length(m_up)
@@ -102,11 +142,8 @@ length(m_dn)
 
 ```{r,cp1}
 
-
 genesets2 <- read.gmt("ReactomePathways.gmt")
 head(genesets2)
-
-head(LGvHG)
 
 LGvHG_up <- rownames(subset(LGvHG,log2FoldChange>0,padj<0.05))
 LGvHG_up <- unique(gt[which(rownames(gt) %in% LGvHG_up),1])
@@ -123,19 +160,34 @@ head(LGvHG_bg)
 
 c_up <- enricher(gene = LGvHG_up, universe = LGvHG_bg, TERM2GENE = genesets2)
 c_up <- head(c_up,1000)
-head(c_up,20)
+head(c_up)
 c_up <- rownames(subset(c_up, p.adjust < 0.05))
        
 c_dn <- enricher(gene = LGvHG_dn, universe = LGvHG_bg, TERM2GENE = genesets2)
 c_dn <- head(c_dn,1000)
-head(c_up,20)
+head(c_dn)
 c_dn <- rownames(subset(c_dn, p.adjust < 0.05))
+
+```
+
+## ORA with clusterprofiler combining up and down
+
+```{r,cp2}
+
+LGvHG_de <- rownames(subset(LGvHG,padj<0.05))
+LGvHG_de <- unique(gt[which(rownames(gt) %in% LGvHG_de),1])
+head(LGvHG_de)
+
+d_de <- enricher(gene = LGvHG_de, universe = LGvHG_bg, TERM2GENE = genesets2)
+d_de <- head(d_de,1000)
+d_de <- rownames(subset(d_de, p.adjust < 0.05))
+head(d_de)
 
 ```
 
 ## ORA with clusterprofiler with whole genome background list
 
-```{r,cp1}
+```{r,cp3}
 
 LGvHG_bg <- w$GeneInfo$GeneSymbol
 length(LGvHG_bg)
@@ -143,38 +195,103 @@ head(LGvHG_bg)
 
 f_up <- enricher(gene = LGvHG_up, universe = LGvHG_bg, TERM2GENE = genesets2)
 f_up <- head(f_up,1000)
-head(f_up,20)
+head(f_up)
 f_up <- rownames(subset(f_up, p.adjust < 0.05))
        
 f_dn <- enricher(gene = LGvHG_dn, universe = LGvHG_bg, TERM2GENE = genesets2)
 f_dn <- head(f_dn,1000)
-head(f_up,20)
+head(f_dn)
 f_dn <- rownames(subset(f_dn, p.adjust < 0.05))
 
 ```
+
+
+## ORA combined with clusterprofiler with whole genome background list
+
+```{r,cp4}
+
+e_de <- enricher(gene = LGvHG_de, universe = LGvHG_bg, TERM2GENE = genesets2)
+e_de <- head(e_de,1000)
+head(e_de)
+e_de <- rownames(subset(e_de, p.adjust < 0.05))
+
+```
+
 ## Venn diagram comparison
 
 ```{r,venn1}
 
+par(cex.main=0.5)
+
+par(mar=c(2,2,2,2))
+
+v0 <- list("ORA up"=c_up,"ORA dn"=c_dn,
+           "ORA comb" = d_de)
+
+plot(euler(v0),quantities = TRUE,main="effect of combining up and down regulated genes")
+
 v1 <- list("FCS up"=m_up, "FCS dn"=m_dn,
            "ORA up"=c_up,"ORA dn"=c_dn)
   
-plot(euler(v1),quantities = TRUE)
+plot(euler(v1),quantities = TRUE, main="FCS compared to ORA")
 
 v2 <- list("ORA up"=c_up,"ORA dn"=c_dn, 
            "ORA* up"=f_up,"ORA* dn"=f_dn )
 
-plot(euler(v2),quantities = TRUE)
+plot(euler(v2),quantities = TRUE, main="Effect of inappropriate background* (whole genome)")
 
-v3 <- list("FCS up"=m_up, "FCS dn"=m_dn,
-           "ORA up"=c_up,"ORA dn"=c_dn, 
-           "ORA* up"=f_up,"ORA* dn"=f_dn )
+vx <- list("ORA up"=c_up,"ORA dn"=c_dn,
+           "ORA comb" = d_de, "ORA* comb" = e_de)
 
-plot(euler(v3),quantities = TRUE)
+plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole genome bg*")
+
+v3 <- list("ORA up"=c_up,"ORA dn"=c_dn, 
+           "ORA* up"=f_up,"ORA* dn"=f_dn ,
+           "FCS up"=m_up, "FCS dn"=m_dn)
+
+plot(euler(v3),quantities = TRUE, main="all sets")
 
 ```
 
+## Jaccard calculation
 
+```{r,jacc1}
+
+# ORA vs ORA combined
+dc <- length(intersect(d_de, c(c_up,c_dn))) / length(union(d_de, c(c_up,c_dn)))
+dc
+
+# FCS vs ORA
+cm <- length(intersect(c(c_up,c_dn), c(m_up,m_dn))) / length(union(c(c_up,c_dn), c(m_up,m_dn)))
+cm
+
+m_up <- gsub("^","up ",m_up)
+m_dn <- gsub("^","dn ",m_dn)
+m_de <- union(m_up,m_dn)
+
+c_up <- gsub("^","up ",c_up)
+c_dn <- gsub("^","dn ",c_dn)
+c_de <- union(c_up,c_dn)
+
+f_up <- gsub("^","up ",f_up)
+f_dn <- gsub("^","dn ",f_dn)
+f_de <- union(f_up,f_dn)
+
+# ORA vs ORA*
+cf <- length(intersect(c_de, f_de )) / length(union(c_de, f_de))
+cf
+
+# FCS vs ORA*
+mf <- length(intersect(m_de, f_de )) / length(union(m_de, f_de))
+mf
+
+dat <- c("ORA vs ORA comb"=dc,"FCS vs ORA"=cm,"ORA vs ORA*"=cf,"FCS vs ORA*"=mf)
+
+dat
+
+barplot(dat,ylab="jaccard metric")
+
+```
 
 ## Session information
 

@@ -197,6 +197,12 @@ The lack of methodological details regarding enrichment analysis in some article
 To illustrate this, many articles mention prominently in the abstract the results of the functional enrichment analysis yet not detail in their methods sections any detail whatsoever about what type of enrichment analysis was actually conducted.
 This is not limited to a few obscure journals; there were 88 journals that published articles where the tool used for enrichment analysis was not defined.
 
+As we screened these articles, we observed other types of details lacking.
+For example GSEA has different options that impact the results including the ranking metric, gene weighting method and the permutation type (on samples or genes), which were not regularly reported in articles.
+For ORA, in some instances it was unclear whether up- and down-regulated gene lists were combined before analysis.
+For differential expression analysis, combining up- and down-regulated gene lists for ORA is considered poor practice (Hong et al, 2014).
+Our own tests indicate that combining up- and down-regulated gene lists prior to ORA dramatically reduces the statistical strength when the proportion of differentially expressed genes is high.
+
 Surprisingly, the analysis scores we generated did not correlate with a journal level bibliographic metric, nor accrued citations of individual articles.
 This suggests no association between methodological rigour and "impact" in this sample.
 
