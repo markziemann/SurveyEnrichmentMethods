@@ -264,8 +264,9 @@ Functional enrichment analysis is best used as a hypothesis generating procedure
 
 ## References
 
-References
 Draghici, S., Khatri, P., Martins, R. P., Ostermeier, G. C., & Krawetz, S. A. (2003). Global functional profiling of gene expression. Genomics, 81(2), 98–104.
+
+Hong, G., Zhang, W., Li, H., Shen, X., & Guo, Z. (2014). Separate enrichment analysis of pathways for up- and downregulated genes. Journal of the Royal Society, Interface, 11(92), 20130950.
 
 Hosack, D. A., Dennis, G., Jr, Sherman, B. T., Lane, H. C., & Lempicki, R. A. (2003). Identifying biological themes within lists of genes with EASE. Genome Biology, 4(10), R70.
 
