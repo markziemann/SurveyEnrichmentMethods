@@ -5,7 +5,7 @@ PMC6384238	213	Kaumadi	Front Oncol	Gene expression array	Homo sapiens	GO, KEGG	N
 PMC6594459	1172	Kaumadi	Ann Oncol	Database	Homo sapiens	MSigDB	No	GSEA	No	GSEA	Yes	NA	NA	FDR	No
 PMC6649552	1407	Kaumadi	Cell Cycle	RNA-seq	Mus musculus	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	No
 PMC6478283	637	Kaumadi	PLoS One	Database	Homo sapiens	KEGG, Reactome, PID, DisGeNET, GO	No	Not stated	No	ToppGene	No	NA	Not stated	Background, FDR	Yes
-PMC6413274	342	Kaumadi	Am J Transl Res	RNA-seq	Mus musculus	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6413274	342	Kaumadi	Am J Transl Res	RNA-seq	Mus musculus	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6413274	342	Kaumadi	Am J Transl Res	RNA-seq	Mus musculus	KEGG	No	Not stated	Yes	WebGestalt	Yes	NA	Not stated	Background	No
 PMC6572139	1054	Kaumadi	Metabolites	Metabolomics	Homo sapiens	HMDB	Yes	Fisher	Yes	MetaboAnalyst	Yes	NA	Not stated	Background	Yes
 PMC6626515	1328	Kaumadi	PeerJ	RNA-seq, Proteomics	Ananas comosus	GO, KEGG	No	Hypergeometric	No	Blast2GO	No	NA	Not stated	Background, FDR	No
@@ -15,12 +15,12 @@ PMC6557607	982	Kaumadi	Epigenetics	DNA methylation sequencing	Homo sapiens	GO, R
 PMC6507312	729	Kaumadi	Oncol Lett	Gene expression array	Homo sapiens	GO, KEGG	No	Fisher	No	DAVID	No	NA	Not stated	Background, FDR	No
 PMC6372980	179	Kaumadi	ACS Comb Sci	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE
 PMC6584587	1113	Kaumadi	Sci Rep	Database	Homo sapiens	MetaCore/MetaBase	Yes	Hypergeometric	Yes	MetaCore/MetaBase (GeneGo)	Yes	No	Not stated	Background	Yes
-PMC6355180	88	Kaumadi	Oncotarget	Gene expression array	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	No	Background, FDR	Yes
+PMC6355180	88	Kaumadi	Oncotarget	Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	No	Background, FDR	Yes
 PMC6356810	94	Kaumadi	Genes (Basel)	Gene expression array	Homo sapiens	KEGG	No	Not stated	No	KOBAS	Yes	NA	No	Background, FDR	No
 PMC6461035	557	Kaumadi	Peer J	RNA-seq	Rattus norvegicus	KEGG, GO	No	Not stated	Yes	clusterProfiler	No	No	Not stated	Background	Yes
 PMC6586291	1121	Kaumadi	PLoS One	Metabolomics, Lipidomics	Homo sapiens	KEGG	No	MSEA	Yes	MetaboAnalyst	Yes	NA	NA	No	No
 PMC6504884	723	Kaumadi	Sci Rep	Metabolomics	Mus musculus	Not stated	No	Not stated	No	MetaboAnalyst	Yes	NA	Not stated	Background, FDR	No
-PMC6504884	723	Kaumadi	Sci Rep	Metabolomics	Mus musculus	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6504884	723	Kaumadi	Sci Rep	Metabolomics	Mus musculus	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6567466	1034	Kaumadi	J Biomed Semantics	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE
 PMC6676190	1481	Kaumadi	Exp Ther Med	Gene expression array	Homo sapiens	KEGG	No	Fisher	Yes	Not stated	No	No	NA	No	No
 PMC6465396	572	Kaumadi	Sci Rep	Metabolomics	Acropora cervicornis	Not stated	No	EASE	No	Mummichog	No	NA	NA	FDR	No
@@ -41,7 +41,7 @@ PMC6367803	156	Kaumadi	J Hematol Oncol	Gene expression array, RNA-seq	Homo sapie
 PMC6367803	156	Kaumadi	J Hematol Oncol	Gene expression array, RNA-seq	Homo sapiens	Not stated	No	GSEA	No	GSEA	Yes	NA	NA	FDR	No
 PMC6614665	1276	Kaumadi	Oncol Lett	DNA methylation array	Homo sapiens	GO, KEGG, Reactome	No	Not stated	No	Not stated	No	No	Not stated	Background, FDR	No
 PMC6405989	304	Kaumadi	Sci Rep	Gene expression array	Homo sapiens	Reactome	No	GSEA	Yes	GSEA	Yes	NA	NA	No	No
-PMC6544406	902	Kaumadi	Oncotarget	Protein array	Homo sapiens	Ingenuity Pathway Analysis	No	Fisher	No	Ingenuity Pathway Analysis	No	NA	Yes	FDR	Yes
+PMC6544406	902	Kaumadi	Oncotarget	Protein array	Homo sapiens	Ingenuity Knowledge base	No	Fisher	No	Ingenuity Pathway Analysis	No	NA	Yes	FDR	Yes
 PMC6544406	902	Kaumadi	Oncotarget	Protein array	Homo sapiens	Pathway commons, KEGG, Reactome	No	Hypergeometric	Yes	WebGestalt	No	No	Yes	No	Yes
 PMC6544406	902	Kaumadi	Oncotarget	Protein array	Homo sapiens	MSigDB	No	GSEA	Yes	GSEA	No	NA	NA	No	Yes
 PMC6383095	207	Kaumadi	Cancer Control	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	Yes	DAVID	No	NA	No	Background	Yes
@@ -61,17 +61,17 @@ PMC6342918	55	Kaumadi	Transl Psychiatry	Gene expression array, DNA methylation a
 PMC6463127	564	Kaumadi	J Clin Med	RNA-seq	Homo sapiens	KEGG, GO	No	Fisher	No	DAVID	No	NA	Not stated	Background, FDR	Yes
 PMC6400810	280	Kaumadi	J Cancer	Gene expression array, DNA methylation array	Homo sapiens	KEGG, GO	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	No
 PMC6543588	897	Kaumadi	Clin Epigenetics. 	DNA methylation array	Homo sapiens	GO	No	Fisher	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
-PMC6438477	449	Kaumadi	Plos One	Genome sequencing	Coturnix japonica	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	No	Not stated	Background, FDR	No
-PMC6651993	1420	Kaumadi	J Immunother Cancer	Genome sequencing	Homo sapiens	KEGG	No	Kruskal-Wallis rank sum test	No	Not stated	No	No	Not stated	Background, FDR	No
+PMC6438477	449	Kaumadi	Plos One	Genome sequencing	Coturnix japonica	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	No	Not stated	Background, FDR	No
+PMC6651993	1420	Kaumadi	J Immunother Cancer	Genome sequencing	Homo sapiens	KEGG	No	Kruskal-Wallis	No	Not stated	No	No	Not stated	Background, FDR	No
 PMC6529576	822	Kaumadi	Front Genet 	Genome sequencing	Homo sapiens	Jensen Diseases database	No	Fisher	No	Enrichr	No	NA	Not stated	Background, FDR	Yes
 PMC6533725	839	Kaumadi	BMC Musculoskelet Disord	Proteomics	Homo sapiens	GO	No	Not stated	No	PANTHER	Yes	NA	Not stated	Background, FDR	No
 PMC6459497	552	Kaumadi	Plos One	Genome sequencing	Bos taurus	GO	Yes	Binomial	Yes	PANTHER	No	NA	Not stated	Background	Yes
 PMC6459497	552	Kaumadi	Plos One	Genome sequencing	Bos taurus	KEGG	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	Yes
-PMC6525806	805	Kaumadi	Stem Cells Int	Gene expression array	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
+PMC6525806	805	Kaumadi	Stem Cells Int	Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
 PMC6432904	420	Kaumadi	PeerJ	Gene expression array	Homo sapiens	KEGG, GO	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	Yes
 PMC6381748	203	Kaumadi	Cell Commun Signal	Proteomics	Rattus norvegicus	GO	No	Hypergeometric	Yes	MetaCore	No	NA	Not stated	Background	Yes
 PMC6381748	203	Kaumadi	Cell Commun Signal	Proteomics	Rattus norvegicus	Signor	Yes	Not stated	Not stated	KSEA	No	NA	NA	FDR	Yes
-PMC6599637	1191	Kaumadi	Radiat Res	Proteomics	Mus musculus	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6599637	1191	Kaumadi	Radiat Res	Proteomics	Mus musculus	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6387703	224	Kaumadi	Evid Based Complement Alternat Med	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE
 PMC6435965	436	Kaumadi	Front Genet	RNA-seq	Oreochromis niloticus	GO	No	No test	No	Blast2GO	No	No	Not stated	Inference without test	No
 PMC6468359	580	Kaumadi	Metabolites	Metabolomics	Homo sapiens	KEGG	No	Fisher, Hypergeometric	No	MSEA	No	NA	NA	FDR	No
@@ -81,9 +81,9 @@ PMC6446359	490	Kaumadi	Respir Res	RNA-seq	Homo sapiens	KEGG, Reactome	No	GSEA	Ye
 PMC6377737	187	Kaumadi	BMC Genomics	miRNA-seq	Rattus norvegicus	KEGG	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	Yes
 PMC6520261	779	Kaumadi	Int J Ophthalmol	miRNA array	Mus musculus	GO, KEGG	No	Not stated	No	Not stated	No	NA	Not stated	Background, FDR	No
 PMC6466271	573	Kaumadi	Animals (Basel	Genome sequencing	Canis lupus familiaris	GO, KEGG	No	Not stated	Yes	g:GOSt	No	No	Not stated	Background	No
-PMC6627192	1334	Kaumadi	Cancers (Basel)	miRNA array	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	No
+PMC6627192	1334	Kaumadi	Cancers (Basel)	miRNA array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	No
 PMC6363745	127	Kaumadi	Sci Rep	RNA-seq	Homo sapiens	GO	No	No test	No	DAVID	Yes	NA	Not stated	Inference without test	Yes
-PMC6425643	394	Kaumadi	Chin Med	Gene expression array	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6425643	394	Kaumadi	Chin Med	Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6595412	1175	Kaumadi	Mol Ther Nucleic Acids	RNA-seq	Rattus norvegicus	GO, KEGG	No	Not stated	Yes	KOBAS	No	NA	Not stated	Background	Yes
 PMC6518761	775	Kaumadi	BMC Bioinformatics.	Gene expression array	Homo sapiens, Mus musculus	KEGG, Reactome, BioCarta	No	Hypergeometric	No	anamiR	No	Yes	Not stated	Background, FDR	No
 PMC6549101	933	Kaumadi	Oncol Rep	Gene expression array	Homo sapiens	GO, KEGG, Reactome, BioCarta	No	Not stated	Yes	DAVID	Yes	NA	Not stated	Background	No
@@ -95,7 +95,7 @@ PMC6480898	646	Kaumadi	BMC Cancer	Protein array	Homo sapiens	KEGG	No	Not stated	
 PMC6598377	1184	Kaumadi	BMC Genomics	RNA-seq	Salvelinus alpinus	GO	No	Fisher	No	topGO	Yes	No	Not stated	Background, FDR	No
 PMC6647481	1405	Kaumadi	Mol Breed	RNA-seq	Brassica napus	GO, InterPro	No	Not stated	No	Not stated	No	NA	Not stated	No data shown	Yes
 PMC6347630	64	Kaumadi	Cell Death Dis	RNA-seq	Homo sapiens, Mus musculus	GO	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	No
-PMC6328465	15	Kaumadi	Front Oncol	Gene expression array	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6328465	15	Kaumadi	Front Oncol	Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6450037	523	Kaumadi	Genome Biol Evol	Genome sequencing	Moschus berezovskii	KEGG, GO	No	Not stated	Yes	KOBAS	No	NA	Not stated	Background	No
 PMC6457337	547	Kaumadi	Front Physiol	RNA-seq	Bemisia tabaci	GO	No	No test	No	GOseq	No	No	Not stated	Inference without test, Background	No
 PMC6457337	547	Kaumadi	Front Physiol	RNA-seq	Bemisia tabaci	KEGG	No	No test	No	KOBAS	No	NA	Not stated	Inference without test, Background	No
@@ -105,10 +105,10 @@ PMC6593161	1163	Kaumadi	Front Pharmacol	Database	Homo sapiens	GO, KEGG	No	Not st
 PMC6447890	500	Kaumadi	Exp Ther Med	Gene expression array	Homo sapiens	KEGG, GO	No	Not stated	No	GENCLIP	No	NA	Not stated	Background, FDR	No
 PMC6371578	175	Kaumadi	Clin Epigenetics	Gene expression array, DNA methylation array	Homo sapiens	KEGG, GO	No	Not stated	Yes	clusterProfiler	No	No	Not stated	Background	Yes
 PMC6455524	538	Kaumadi	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE
-PMC6657577	1432	Kaumadi	Toxicol Sci	NanoString gene expression	Mus musculus	Ingenuity Pathway Analysis	No	Fisher	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
+PMC6657577	1432	Kaumadi	Toxicol Sci	NanoString gene expression	Mus musculus	Ingenuity Knowledge Base	No	Fisher	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
 PMC6591379	1147	Kaumadi	Sci Rep	Gene expression array	Homo sapiens	GO, KEGG	No	Fisher	Yes	Not stated	No	NA	Not stated	Background	Yes
 PMC6580485	1090	Kaumadi	BMC Bioinformatics	RNA-seq	Homo sapiens	GO	No	Not stated	No	PANTHER	No	No	Not stated	Background, FDR	No
-PMC6599230	1187	Kaumadi	BMC Med Genet	DNA methylation sequencing	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6599230	1187	Kaumadi	BMC Med Genet	DNA methylation sequencing	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6498668	702	Kaumadi	BMC Bioinformatics	Database	Homo sapiens	MSigDB	No	Fisher	Yes	GSEA	No	NA	NA	No	No
 PMC6526173	807	Kaumadi	Onco Targets Ther	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	No
 PMC6645034	1395	Kaumadi	PeerJ	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	No
@@ -131,7 +131,7 @@ PMC6572715	1058	Mark	Metabolites	RNA-seq	Homo sapiens	MSigDB	Yes	GSEA	Yes	GSEA	Y
 PMC6572715	1058	Mark	Metabolites	RNA-seq	Homo sapiens	ChemRICH	Yes	Chemical similarity set enrichment analysis	Yes	ChemRICH	Yes	NA	NA	No	No
 PMC6377753	188	Mark	BMC Genomics	RNA-seq	Oryctolagus cuniculus	GO	No	Not stated	Yes	http://geneontology.org/ web app	No	NA	Not stated	Background	Yes
 PMC6522869	793	Mark	Mol Med Rep	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	No	DAVID	Yes	NA	Not stated	Background, FDR	No
-PMC6370189	168	Mark	PLoS One	RNA-seq	Mus musculus	GO	No	Not stated	Yes	GOrilla	No	NA	Yes, but incorrect	Background	Yes
+PMC6370189	168	Mark	PLoS One	RNA-seq	Mus musculus	GO	No	Not stated	Yes	GOrilla	No	NA	Stated, but incorrect	Background	Yes
 PMC6530124	825	Mark	Cancer Cell Int	Gene expression array	Homo sapiens	GO	No	Not stated	No	DAVID	Yes	NA	Not stated	Background, FDR	Yes
 PMC6530124	825	Mark	Cancer Cell Int	Gene expression array	Homo sapiens	KEGG	Yes	Not stated	No	Funrich	Yes	NA	Not stated	Background, FDR	Yes
 PMC6676399	1482	Mark	Oncol Lett	RNA-seq	Homo sapiens	MSigDB	Yes	GSEA	NA	GSEA	Yes	NA	NA	No	No
@@ -142,36 +142,36 @@ PMC6509566	741	Mark	Front Genet	Gene expression array, RNA-seq	Homo sapiens	GO, 
 PMC6568258	1040	Mark	Metabolomics	Metabolomics	Homo sapiens	MetaboAnalyst	Yes	Not stated	No	MetaboAnalyst	Yes	NA	Not stated	Background, FDR	Yes
 PMC6580234	1089	Mark	Heliyon	Proteomics	Candida albicans	GO	No	Hypergeometric	Yes	ClueGO/Cytoscape	No	NA	Not stated	Background	No
 PMC6626902	1330	Mark	Cancer Manag Res	Database	Homo sapiens	GO	No	Not stated	Yes	Not stated	No	NA	Not stated	Background	No
-PMC6463024	562	Mark	J Cardiovasc Dev Dis	Gene expression array	Rattus norvegicus	Ingenuity Pathway Analysis	Yes	Fisher	No	Ingenuity Pathway Analysis	Yes	NA	Not stated	Background, FDR	Yes
+PMC6463024	562	Mark	J Cardiovasc Dev Dis	Gene expression array	Rattus norvegicus	Ingenuity Knowledge Base	Yes	Fisher	No	Ingenuity Pathway Analysis	Yes	NA	Not stated	Background, FDR	Yes
 PMC6482152	651	Mark	Sci Rep	RNA-seq, ATAC-seq	Homo sapiens	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE
 PMC6399257	269	Mark	Commun Biol	GWAS	Homo sapiens	Not stated	No	Not stated	No	PASCAL	No	NA	Not stated	Background, FDR	Yes
 PMC6585899	1120	Mark	PeerJ	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	Yes
 PMC6317205	1	Mark	J Transl Med	PCR Array	Homo sapiens	Not stated	No	No test	No	DAVID	No	NA	Not stated	Inference without test, Background	Yes
-PMC6405138	300	Mark	PLoS One	Gene expression array	Homo sapiens	Not stated	No	Not stated	No	DAVID	No	NA	Yes, but incorrect	Background, FDR	Yes
-PMC6405138	300	Mark	PLoS One	Gene expression array	Homo sapiens	GO, KEGG, Reactome	No	Hypergeometric	Not stated	ClueGO/Cytoscape	Yes	NA	Yes, but incorrect	No data shown, FDR	Yes
+PMC6405138	300	Mark	PLoS One	Gene expression array	Homo sapiens	Not stated	No	Not stated	No	DAVID	No	NA	Stated, but incorrect	Background, FDR	Yes
+PMC6405138	300	Mark	PLoS One	Gene expression array	Homo sapiens	GO, KEGG, Reactome	No	Hypergeometric	Not stated	ClueGO/Cytoscape	Yes	NA	Stated, but incorrect	No data shown, FDR	Yes
 PMC6489013	677	Mark	Oncol Rep	Database	Homo sapiens	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR, No data shown	No
 PMC6528264	817	Mark	Cancer Cell Int	Gene expression array	Homo sapiens	KEGG	No	GSEA	Yes	GSEA	No	NA	NA	No	No
 PMC6607081	1226	Mark	Oncol Lett	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	No	clusterProfiler	No	NA	Not stated	Background, FDR	Yes
 PMC6341096	49	Mark	Transl Psychiatry	RNA-seq	Homo sapiens	GO	No	Not stated	Yes	clusterProfiler	No	Yes	Not stated	Background	Yes
 PMC6468815	586	Mark	Cells	Proteomics	Homo sapiens	GO, KEGG	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	Yes
-PMC6364390	132	Mark	Clin Proteomics	Proteomics	Homo sapiens	GO, KEGG	No	Not stated	Yes	Not stated	No	NA	Not stated	Background, Misinterpreted significance values	Yes
+PMC6364390	132	Mark	Clin Proteomics	Proteomics	Homo sapiens	GO, KEGG	No	Not stated	Yes	Not stated	No	NA	Not stated	Background, Misinterpreted FDR values	Yes
 PMC6571061	1048	Mark	Clin Cancer Res	Metabolomics	Homo sapiens	KEGG	No	Hypergeometric	Yes	Not stated	No	No	Not stated	Background, FDR	Yes
 PMC6571061	1048	Mark	Clin Cancer Res	Gene expression array	Homo sapiens	MSigDB	No	GSEA	Yes	GSEA	No	No	NA	No	No
 PMC6365689	138	Mark	Oncol Rep	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	No
-PMC6445295	486	Mark	Front Neurosci	Proteomics, Gene expression array	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	Not stated	Ingenuity Pathway Analysis	No	NA	Not stated	No data shown	No
+PMC6445295	486	Mark	Front Neurosci	Proteomics, Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	Not stated	Ingenuity Pathway Analysis	No	NA	Not stated	No data shown	No
 PMC6460585	555	Mark	Eur J Hum Genet	Whole exome sequencing	Homo sapiens	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE
-PMC6619257	1297	Mark	Hepatology	Metgenomics	Mus musculus	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6619257	1297	Mark	Hepatology	Metgenomics	Mus musculus	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6572621	1057	Mark	J Clin Med	Gene expression array, RNA-seq	Homo sapiens	GO	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	Yes
-PMC6463198	565	Mark	J Clin Med	Genotype array	Homo sapiens	Ingenuity Pathway Analysis	No	Fisher	Not stated	Ingenuity Pathway Analysis	No	NA	Not stated	No data shown, Background	Yes
-PMC6441198	456	Mark	Clin Proteomics	Proteomics	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	Yes
+PMC6463198	565	Mark	J Clin Med	Genotype array	Homo sapiens	Ingenuity Knowledge Base	No	Fisher	Not stated	Ingenuity Pathway Analysis	No	NA	Not stated	No data shown, Background	Yes
+PMC6441198	456	Mark	Clin Proteomics	Proteomics	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	Yes
 PMC6489005	676	Mark	Exp Ther Med	RNA-seq	Homo sapiens	Not stated	No	Not stated	No	webMeV	Yes	NA	Not stated	Background, FDR	No
 PMC6653643	1422	Mark	Front Oncol	Metabolomics	Homo sapiens	KEGG	Yes	Not stated	No	MetaboAnalyst/Mummichog	Yes	NA	Not stated	Background, FDR	No
-PMC6480502	643	Mark	Int J Mol Sci	RNA-seq	Oryza sativa	GO, KEGG	No	Hypergeometric	Yes	Not stated	No	No	Yes, but incorrect	Background	Yes
+PMC6480502	643	Mark	Int J Mol Sci	RNA-seq	Oryza sativa	GO, KEGG	No	Hypergeometric	Yes	Not stated	No	No	Stated, but incorrect	Background	Yes
 PMC6574935	1071	Mark	Curr Dev Nutr	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE
 PMC6585500	1119	Mark	Appl Environ Microbiol	RNA-seq	Clostridium scindens	COG	No	No test	NA	EggNOG	No	NA	Not stated	Inference without test, Background	Yes
 PMC6542760	893	Mark	Biosci Rep	Database	Homo sapiens	GO	No	Not stated	No	DAVID	No	No	Not stated	Background, FDR	Yes
 PMC6459169	550	Mark	Genomics Inform	RNA-seq	Pygoscelis antarcticus, Pygoscelis papua	GO, KEGG	No	No test	NA	Blast2GO	Yes	NA	Not stated	Inference without test, Background	No
-PMC6609559	1239	Mark	FEBS Open Bio	Gene expression array	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6609559	1239	Mark	FEBS Open Bio	Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6519025	777	Mark	Int J Nanomedicine	Gene expression array	Homo sapiens	GO, KEGG, Pfam, InterPro	No	Hypergeometric	No	Not stated	NA	No	Not stated	Background, FDR	No
 PMC6549663	937	Mark	Onco Targets Ther	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	Yes
 PMC6466436	574	Mark	Viruses	RNA-seq	Sclerotinia sclerotiorum	GO	No	Not stated	No	Blast2GO	No	NA	Not stated	Background, FDR	No
@@ -188,14 +188,14 @@ PMC6556043	973	Mark	J Ovarian Res	RNA-seq	Mus musculus	GO, KEGG	No	Not stated	Ye
 PMC6591352	1146	Mark	Rice (N Y)	RNA-seq	Oryza sativa	GO	No	Not stated	Yes	agriGO	No	NA	Not stated	Background	Yes
 PMC6591352	1146	Mark	Rice (N Y)	RNA-seq	Oryza sativa	KEGG	No	Not stated	No	Not stated	No	NA	Not stated	Background, FDR	Yes
 PMC6504007	717	Mark	Biol Open	RNA-seq	Sus scrofa	GO	No	Not stated	Yes	GOseq	Yes	No	Not stated	Background	Yes
-PMC6504007	717	Mark	Biol Open	RNA-seq	Sus scrofa	Ingenuity Pathway Analysis	No	Fisher	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
+PMC6504007	717	Mark	Biol Open	RNA-seq	Sus scrofa	Ingenuity Knowledge Base	No	Fisher	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
 PMC6345189	59	Mark	Onco Targets Ther	Gene expression array	Homo sapiens	Metascape	No	Not stated	No	Metascape	No	NA	Not stated	Background, FDR	Yes
 PMC6345189	59	Mark	Onco Targets Ther	Gene expression array	Homo sapiens	MSigDB	Yes	GSEA	Yes	GSEA	Yes	NA	NA	No	No
 PMC6676637	1487	Mark	Mol Med	Gene expression array	Homo sapiens	GO	No	Not stated	Yes	BiNGO	No	NA	Not stated	Background	Yes
 PMC6676637	1487	Mark	Mol Med	Gene expression array	Homo sapiens	KEGG, Reactome	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	Yes
 PMC6536036	855	Mark	Med Sci Monit	Gene expression array	Homo sapiens	GO, KEGG	No	GSEA	Yes	GSEA	No	NA	NA	No	No
 PMC6536036	855	Mark	Med Sci Monit	Gene expression array	Homo sapiens	GO, KEGG	No	GSVA	Yes	GSVA	No	No	NA	No	No
-PMC6333785	34	Mark	Sci Rep	EST sequencing	Triticum aestivum	GO, KEGG	No	Hypergeometric	Yes	R custom script	No	No	Not stated	Background	No
+PMC6333785	34	Mark	Sci Rep	EST sequencing	Triticum aestivum	GO, KEGG	No	Hypergeometric	Yes	Custom R script	No	No	Not stated	Background	No
 PMC6433918	421	Mark	Cell Death Dis	Gene expression array	Homo sapiens	MSigDB	No	GSEA	Yes	GSEA	No	NA	NA	No	No
 PMC6454734	532	Mark	Mol Autism	Gene expression array	Homo sapiens	MSigDB	No	GSEA	Yes	GSEA	No	NA	NA	No	Yes
 PMC6454734	532	Mark	Mol Autism	Gene expression array	Homo sapiens	MSigDB	No	GSEA	Yes	fgsea	No	No	NA	No	Yes
@@ -213,14 +213,14 @@ PMC6435236	435	Mark	PLoS One	Gene expression array	Mus musculus	MSigDB	No	GSEA	Y
 PMC6435236	435	Mark	PLoS One	Gene expression array	Mus musculus	GO	No	Hypergeometric	Yes	BiNGO	Yes	NA	Not stated	Background	Yes
 PMC6492420	687	Mark	BMC Infect Dis	Database, protein interaction	Homo sapiens	KEGG	No	Not stated	No	Enrichr	No	NA	Not stated	No data shown, Background	No
 PMC6507394	734	Mark	Oncol Lett	RNA-seq	Homo sapiens	GO	Yes	Not stated	Yes	http://geneontology.org/ web app	Yes	NA	Not stated	Background	No
-PMC6412147	336	Mark	Oncol Rep	RNA-seq	Homo sapiens	Ingenuity Pathway Analysis, KEGG	No	Not stated	Not stated	Ingenuity Pathway Analysis	No	NA	Not stated	No data shown, Background	No
+PMC6412147	336	Mark	Oncol Rep	RNA-seq	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	Not stated	Ingenuity Pathway Analysis	No	NA	Not stated	No data shown, Background	No
 PMC6637470	1376	Mark	BMC Res Notes	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE
 PMC6557548	979	Mark	Epigenetics	DNA methylation array	Homo sapiens	KEGG	No	Not stated	No	DAVID	Yes	NA	Not stated	Background, FDR	Yes
 PMC6546408	913	Mark	RNA Biol	Gene expression array	Homo sapiens	GO	No	No test	NA	WebGestalt	No	NA	Not stated	Inference without test, Background	No
 PMC6546408	913	Mark	RNA Biol	Gene expression array	Homo sapiens	Not stated	No	Not stated	Not stated	Enrichr	No	NA	Not stated	No data shown, Background	No
 PMC6546408	913	Mark	RNA Biol	Gene expression array	Homo sapiens	Not stated	No	Not stated	Not stated	DAVID	Yes	NA	Not stated	No data shown, Background	No
 PMC6614983	1283	Mark	Biomed Res Int	RNA-seq	Sus scrofa	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	Yes
-PMC6538180	866	Mark	PLoS One	Gene expression array	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
+PMC6538180	866	Mark	PLoS One	Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No
 PMC6582507	1102	Mark	BMC Genomics	RNA-seq	Sus scrofa	GO, KEGG	No	Fisher	Yes	Phyper	No	No	Not stated	Background	No
 PMC6318854	3	Mark	BMC Med Genomics	DNA methylation array	Homo sapiens	GO	No	Not stated	Yes	PANTHER	Yes	NA	Not stated	Background	No
 PMC6406182	307	Mark	World J Gastrointest Oncol	Gene expression array	Homo sapiens	KEGG, GO	No	Not stated	No	DAVID	Yes	NA	Not stated	Background, FDR	No
@@ -236,11 +236,11 @@ PMC6591089	1141	Mark	J Invest Dermatol	RNA-seq	Mus musculus	Not stated	No	GSEA	N
 PMC6472139	610	Mark	Mol Med Rep	Gene expression array	Homo sapiens	GO	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	No
 PMC6677090	1500	Mark	Front Genet	RNA-seq	Sus scrofa	KEGG, GO	No	Hypergeometric	Yes	GO::TermFinder	No	No	Not stated	Background	No
 PMC6475113	617	Mark	Endocrinology	Gene expression array	Mus musculus	KEGG	No	Not stated	Yes	Enrichr	No	No	Not stated	Background	No
-PMC6379932	194	Mark	BMC Genomics	RNA-seq	Mus musculus	Ingenuity Pathway Analysis	Yes	Fisher	Yes	Ingenuity Pathway Analysis	Yes	NA	Not stated	Background	No
+PMC6379932	194	Mark	BMC Genomics	RNA-seq	Mus musculus	Ingenuity Knowledge Base	Yes	Fisher	Yes	Ingenuity Pathway Analysis	Yes	NA	Not stated	Background	No
 PMC6388971	230	Mark	Cancer Manag Res	Database	Homo sapiens	KEGG, GO	No	Not stated	No	DAVID	No	NA	Yes	FDR	No
 PMC6369488	164	Mark	Biomed Res Int	Gene expression array	Homo sapiens	KEGG, GO	No	Not stated	Yes	GeneCodis	No	No	Not stated	Background	No
 PMC6503205	713	Mark	Cancer Manag Res	Gene expression array	Homo sapiens	MSigDB, KEGG	No	GSEA	Yes	GSEA	Yes	NA	NA	No	No
 PMC6389004	231	Mark	Onco Targets Ther	Database	Homo sapiens	GO	No	Not stated	Yes	GOseq	No	No	Not stated	Background	No
 PMC6389004	231	Mark	Onco Targets Ther	Database	Homo sapiens	KEGG	No	Not stated	Yes	KOBAS	No	NA	Not stated	Background	No
-PMC6486412	668	Mark	Virology	Gene expression array, Metabolomics	Homo sapiens	Ingenuity Pathway Analysis	No	Not stated	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
+PMC6486412	668	Mark	Virology	Gene expression array, Metabolomics	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes
 PMC6370049	167	Mark	Medicine (Baltimore)	Gene expression array	Homo sapiens	GO, KEGG, OMIM	No	EASE	Yes	DAVID	Yes	NA	Not stated	Background	No
