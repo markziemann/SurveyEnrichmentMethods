@@ -57,6 +57,8 @@ x1<-x[,which(colnames(x) %in% s1$SRR_accession)]
 
 # filter out lowly expressed genes
 x1<-x1[which(rowSums(x1)/ncol(x1)>=(10)),]
+nrow(x)
+nrow(x1)
 
 # MDS plot
 plot(cmdscale(dist(t(x1))), xlab="Coordinate 1", ylab="Coordinate 2", pch=19, col=s1$HG, main="MDS")
@@ -158,12 +160,12 @@ LGvHG_bg <- unique(gt[which(rownames(gt) %in% LGvHG_bg),1])
 length(LGvHG_bg)
 head(LGvHG_bg)
 
-c_up <- enricher(gene = LGvHG_up, universe = LGvHG_bg, TERM2GENE = genesets2)
+c_up <- enricher(gene = LGvHG_up, universe = LGvHG_bg,  maxGSSize = 5000, TERM2GENE = genesets2)
 c_up <- head(c_up,1000)
 head(c_up)
 c_up <- rownames(subset(c_up, p.adjust < 0.05))
        
-c_dn <- enricher(gene = LGvHG_dn, universe = LGvHG_bg, TERM2GENE = genesets2)
+c_dn <- enricher(gene = LGvHG_dn, universe = LGvHG_bg,  maxGSSize = 5000, TERM2GENE = genesets2)
 c_dn <- head(c_dn,1000)
 head(c_dn)
 c_dn <- rownames(subset(c_dn, p.adjust < 0.05))
@@ -178,7 +180,7 @@ LGvHG_de <- rownames(subset(LGvHG,padj<0.05))
 LGvHG_de <- unique(gt[which(rownames(gt) %in% LGvHG_de),1])
 head(LGvHG_de)
 
-d_de <- enricher(gene = LGvHG_de, universe = LGvHG_bg, TERM2GENE = genesets2)
+d_de <- enricher(gene = LGvHG_de, universe = LGvHG_bg,  maxGSSize = 5000, TERM2GENE = genesets2)
 d_de <- head(d_de,1000)
 d_de <- rownames(subset(d_de, p.adjust < 0.05))
 head(d_de)
@@ -193,12 +195,12 @@ LGvHG_bg <- w$GeneInfo$GeneSymbol
 length(LGvHG_bg)
 head(LGvHG_bg)
 
-f_up <- enricher(gene = LGvHG_up, universe = LGvHG_bg, TERM2GENE = genesets2)
+f_up <- enricher(gene = LGvHG_up, universe = LGvHG_bg,  maxGSSize = 5000, TERM2GENE = genesets2)
 f_up <- head(f_up,1000)
 head(f_up)
 f_up <- rownames(subset(f_up, p.adjust < 0.05))
        
-f_dn <- enricher(gene = LGvHG_dn, universe = LGvHG_bg, TERM2GENE = genesets2)
+f_dn <- enricher(gene = LGvHG_dn, universe = LGvHG_bg, maxGSSize = 5000, TERM2GENE = genesets2)
 f_dn <- head(f_dn,1000)
 head(f_dn)
 f_dn <- rownames(subset(f_dn, p.adjust < 0.05))
@@ -210,7 +212,7 @@ f_dn <- rownames(subset(f_dn, p.adjust < 0.05))
 
 ```{r,cp4}
 
-e_de <- enricher(gene = LGvHG_de, universe = LGvHG_bg, TERM2GENE = genesets2)
+e_de <- enricher(gene = LGvHG_de, universe = LGvHG_bg, maxGSSize = 5000, TERM2GENE = genesets2)
 e_de <- head(e_de,1000)
 head(e_de)
 e_de <- rownames(subset(e_de, p.adjust < 0.05))
@@ -251,6 +253,19 @@ v3 <- list("ORA up"=c_up,"ORA dn"=c_dn,
 
 plot(euler(v3),quantities = TRUE, main="all sets")
 
+
+png("images/fcs_ora1.png")
+plot(euler(v1),quantities = TRUE, main="FCS vs ORA")
+dev.off()
+
+png("images/orabg1.png")
+plot(euler(v2),quantities = TRUE, main="Effect of inappropriate background* (whole genome)")
+dev.off()
+
+png("images/oracomb1.png")
+plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole genome bg*")
+dev.off()
+
 ```
 
 ## Jaccard calculation
@@ -260,6 +275,11 @@ plot(euler(v3),quantities = TRUE, main="all sets")
 # ORA vs ORA combined
 dc <- length(intersect(d_de, c(c_up,c_dn))) / length(union(d_de, c(c_up,c_dn)))
 dc
+
+# ORA vs ORA* combined
+ec <- length(intersect(e_de, c(c_up,c_dn))) / length(union(e_de, c(c_up,c_dn)))
+ec
+
 
 # FCS vs ORA
 cm <- length(intersect(c(c_up,c_dn), c(m_up,m_dn))) / length(union(c(c_up,c_dn), c(m_up,m_dn)))
@@ -285,7 +305,7 @@ cf
 mf <- length(intersect(m_de, f_de )) / length(union(m_de, f_de))
 mf
 
-dat <- c("ORA vs ORA comb"=dc,"FCS vs ORA"=cm,"ORA vs ORA*"=cf,"FCS vs ORA*"=mf)
+dat <- c("FCS vs ORA"=cm,"ORA vs ORA*"=cf,"FCS vs ORA*"=mf, "ORA vs ORA comb"=dc, "ORA vs ORA* comb"=ec)
 
 dat
 
