@@ -1,6 +1,6 @@
 ---
 title: "Guidelines for reliable and reproducible functional enrichment analysis"
-author: "Kaumadi Wijesooriya, Sameer A Jadaan, Tanuveer Kaur, Kaushalya L Perera, Mark Ziemann"
+author: "Kaumadi Wijesooriya1, Sameer A Jadaan2, Tanuveer Kaur1, Kaushalya L Perera1, Mark Ziemann1"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -17,9 +17,9 @@ Target Journal: Briefings in Bioinformatics (JIF=9.0)
 
 **Affiliations**
 
-1. Deakin University, Geelong, Australia, School of Life and Environmental Sciences
+1. Deakin University, Geelong, Australia, School of Life and Environmental Sciences.
 
-2. Sameer to provide affiliation information
+2. College of Health and Medical Technology, Middle Technical University, Baghdad, Iraq.
 
 ## Abstract
 
