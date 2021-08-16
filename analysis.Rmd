@@ -79,12 +79,14 @@ names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "Journal", xlim=c(0,1200))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2+50, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/journals1.png")
 par(mar=c(5,8,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Journal", xlim=c(0,1200))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2+50, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -119,12 +121,14 @@ names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "Omics type", xlim=c(0,600))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2-20, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/omics1.png")
 par(mar=c(5,10,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Omics type", xlim=c(0,600))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2-20, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -159,13 +163,15 @@ res2 <- c(other,tail(res,9))
 names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
-        main = "Organism", xlim=c(0,1200))
+        main = "Organism", xlim=c(0,1300))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/organisms1.png")
 par(mar=c(5,10,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Organism", xlim=c(0,1200))
+        main = "Organism", xlim=c(0,1300))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -200,13 +206,15 @@ res2 <- c(other,tail(res,9))
 names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
-        main = "Gene set library", xlim=c(0,1000))
+        main = "Gene set library", xlim=c(0,1100))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/genesetlib1.png")
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Gene set library", xlim=c(0,1000))
+        main = "Gene set library", xlim=c(0,1100))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -223,12 +231,14 @@ res[1]/sum(res)*100
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene set version defined", xlim=c(0,1600))
+text(y = (1:length(res)*1.2) - 0.6 , x = res-65, label = res, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/genesetvers1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene set version defined", xlim=c(0,1600))
+text(y = (1:length(res)*1.2) - 0.6 , x = res-65, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -261,12 +271,14 @@ names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "Test used", xlim=c(0,1200))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/stattest1.png")
 par(mar=c(5,10,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Test used", xlim=c(0,1200))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -289,14 +301,16 @@ wordcloud(words = names(res), freq = res, min.freq = 1,
     colors=brewer.pal(8, "Dark2"))
 
 par(mar=c(5,12,3,1))
-barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
-        main = "FDR", xlim=c(0,800))
+barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "FDR", xlim=c(0,900))
+text(y = (1:length(res)*1.2)-0.7  , x = res-30, label = res, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/fdr1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "FDR", xlim=c(0,800))
+        main = "FDR", xlim=c(0,900))
+text(y = (1:length(res)*1.2)-0.7  , x = res-30, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -334,12 +348,14 @@ names(res2)[1] <- "Other"
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "App used", xlim=c(0,500))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2-20, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/app1.png")
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App used", xlim=c(0,500))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2-20, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -359,12 +375,14 @@ res[1]/sum(res)*100
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App version defined", xlim=c(0,1600))
+text(y = (1:length(res)*1.2) - 0.6 , x = res-70, label = res, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/appvers1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App version defined", xlim=c(0,1600))
+text(y = (1:length(res)*1.2) - 0.6 , x = res-70, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -381,13 +399,15 @@ res[1]/sum(res)*100
 
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Code availability", xlim=c(0,300))
+        main = "Code availability", xlim=c(0,330))
+text(y = (1:length(res)*1.2) - 0.6 , x = res+15, label = res, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/code1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Code availability", xlim=c(0,300))
+        main = "Code availability", xlim=c(0,330))
+text(y = (1:length(res)*1.2) - 0.6 , x = res+15, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -404,13 +424,15 @@ sum(res[which(names(res)!="Yes")])/sum(res)*100
 
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Background list defined", xlim=c(0,1200))
+        main = "Background list defined", xlim=c(0,1300))
+text(y = (1:length(res)*1.2)-0.7  , x = res+60, label = res, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/bg1.png")
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Background list defined", xlim=c(0,1200))
+        main = "Background list defined", xlim=c(0,1300))
+text(y = (1:length(res)*1.2)-0.7  , x = res+60, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -427,6 +449,7 @@ sum(res[which(names(res)!="Yes")])/sum(res)*100
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene lists provided", xlim=c(0,1200))
+text(y = (1:length(res)*1.2) - 0.6 , x = res-70, label = res, pos = 3, cex = 1, col = "black")
 grid()
 colnames(x)
 
@@ -434,6 +457,7 @@ png("images/genelists1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene lists provided", xlim=c(0,1200))
+text(y = (1:length(res)*1.2) - 0.6 , x = res-70, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -463,13 +487,15 @@ wordcloud(words = names(res), freq = res, min.freq = 1,
 
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Assumptions violated", xlim=c(0,1400))
+        main = "Assumptions violated", xlim=c(0,1500))
+text(y = (1:length(res)*1.2)-0.75  , x = res+60, label = res, pos = 3, cex = 1, col = "black")
 grid()
 
 png("images/assumptions1.png")
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Assumptions violated", xlim=c(0,1400))
+        main = "Assumptions violated", xlim=c(0,1500))
+text(y = (1:length(res)*1.2)-0.75  , x = res+60, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -510,48 +536,48 @@ score <- function(r){
   r[is.na(r)] <- 0
   SCORE=0
   # gene set lib
-  if(r[7]=="Not stated"){
+  if(r["Gene.set.library"]=="Not stated"){
     SCORE=SCORE-1
   }
   # GS version
-  if(r[8]=="No"){
+  if(r["GS.version"]=="No"){
     SCORE=SCORE-1
   }
   # stat test
-  if(r[9]=="No test"){
+  if(r["Statistical.test.used"]=="No test"){
     SCORE=SCORE-1
   }
-  if(r[9]=="Not stated"){
+  if(r["Statistical.test.used"]=="Not stated"){
     SCORE=SCORE-1
   }
   # FDR
-  if(r[10]!="Yes"){
+  if(r["FDR.Correction"]!="Yes"){
     SCORE=SCORE-1
   }
   # app used
-  if(r[11]=="Not stated"){
+  if(r["App.used"]=="Not stated"){
     SCORE=SCORE-1
   }
   # App version
-  if(r[12]=="No"){
+  if(r["App.Version"]=="No"){
     SCORE=SCORE-1
   }
   # Code availability
-  if(r[13]=="Yes"){
+  if(r["Code.availability"]=="Yes"){
     SCORE=SCORE+1
   }
   # Background
-  if(r[14]=="Not stated"){
+  if(r["Background.gene.set"]=="Not stated"){
     SCORE=SCORE-1
   }
-  if(r[14]=="No"){
+  if(r["Background.gene.set"]=="No"){
     SCORE=SCORE-1
   }
-  if(r[14]=="Stated, but incorrect"){
+  if(r["Background.gene.set"]=="Stated, but incorrect"){
     SCORE=SCORE-1
   }
   # gene list
-  if(r[16]=="Yes"){
+  if(r["Gene.lists.provided"]=="Yes"){
     SCORE=SCORE+1
   }
   return(SCORE)
@@ -560,6 +586,7 @@ score <- function(r){
 scores <- apply(X = x,MARGIN = 1, FUN = score)
 hist(scores)
 x$scores <- scores
+length(which(scores>0))
 
 mean(x$scores)
 sd(x$scores)
@@ -627,7 +654,7 @@ Minimum of 5 analyses.
 
 ```{r,goodbadugly}
 
-xmm <-xm[,c(1,17)]
+xmm <-xm[,c("Journal","scores")]
 tab <- table(xmm$Journal)
 tab <- tab[which(tab>5)]
 xmm <- xmm[which(xmm$Journal %in% names(tab)),]

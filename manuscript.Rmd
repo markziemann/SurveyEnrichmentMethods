@@ -47,7 +47,7 @@ In ORA, differentially expressed genes (DEGs) meeting a significance and/or fold
 A statistical test is performed to ascertain whether the number of DEGs in a particular gene set is higher than that expected by random chance.
 ORA tools can be stand alone software packages or web services, and they use one or more statistical tests (Fisher’s Exact test, hypergeometric test, binomial test, χ2 test, etc) (Draghici et al, 2003; Hosack et al, 2003).
 FCS tools involve giving each detected gene a differential expression score and then evaluating whether the scores are more positive or negative than expected by chance for each set of genes.
-The popular Gene Set Enrichment Analysis (GSEA) tool uses permutation approaches to establish whether a gene set is associated with higher or lower scores, either by permuting sample labels or by permuting genes in the differential expression profile (Subramanian et al, 2005).
+The popular Gene Set Enrichment Analysis (GSEA) tool uses permutation approaches to establish whether a gene set is significantly associated with higher or lower scores, either by permuting sample labels or by permuting genes in the differential expression profile (Subramanian et al, 2005).
 From a user's perspective, ORA is easier to conduct because it is as simple as pasting a list of gene names into a text box on a website.
 On the other hand FCS tools are more difficult to use but are more sensitive at detecting subtle associations (Kaspi and Ziemann 2020; Maleki et al, 2020; Xie et al, 2021).
 
@@ -65,21 +65,22 @@ By performing a screen of published articles we will identify the most frequent 
 
 ### An example gene set analysis
 
-To demonstrate the effect of misusing gene set analysis, a publicly available RNA-seq dataset (accession SRP128998) was downloaded from DEE2 (Ziemann et al, 2019).
-This data consists of hepatocytes grown in culture with and without glucose first described by Felisbino et al (2021) and here we are using the comparison of cells grown in low glucose control condition compared to high glucose as an example.
-Transcript level counts were aggregated to genes using the getDEE2 R package. 
+To demonstrate the effect of misusing gene set analysis, a publicly available RNA-seq dataset (accession SRP128998) was downloaded from DEE2 on 13th August 2021 (Ziemann et al, 2019).
+This data consists of immortalised human hepatocytes cultured in standard or high glucose, first described by Felisbino et al (2021).
+Transcript level counts were aggregated to genes using the getDEE2 R package v1.2.0. 
 Next, genes with an average of 10 reads per sample were discarded.
-Differential expression statistical analysis was conducted with DESeq2 (Love et al, 2014).
+Differential expression statistical analysis was conducted with DESeq2 v1.32.0 (Love et al, 2014) to identify genes altered by high glucose exposure.
 For gene set analysis, Reactome gene sets (Jassal et al, 2020) were downloaded (URL: https://reactome.org/download/current/ReactomePathways.gmt.zip , accessed 13th August 2021).
-FCS was performed using the mitch R package, which uses a rank-ANOVA statistical test (Kaspi and Ziemann 2020).
-ORA analysis was performed using the clusterProfiler R package enricher function that implements a hypergeometric test (Yu et al, 2012).
+FCS was performed using the mitch R package v1.4.0 with default settings, which uses a rank-ANOVA statistical test (Kaspi and Ziemann 2020).
+ORA analysis was performed using the clusterProfiler R package (v4.0.2) enricher function that implements a hypergeometric test (Yu et al, 2012).
 For ORA, two types of background gene sets were used (i) all detected genes, or (ii) all genes in the annotation set.
 For genes and gene sets, a false discovery rate adjusted p-value (FDR) of 0.05 was considered significant.
-Analyses were conducted in R version 4.1.
+Analyses were conducted in R version 4.1.0.
 
 ### Survey of enrichment analysis 
 
-We have collated a list of 2941 articles in PubMed Central published in 2019 that have “enrichment analysis” and related keyword terms. We sampled 1500 of these articles and collected the following information from the article, searching the methods sections and other parts of the article including the supplement.
+We have collated a list of 2941 articles in PubMed Central published in 2019 that have “enrichment analysis” and related keyword terms.
+We sampled 1500 of these articles and collected the following information from the article, searching the methods sections and other parts of the article including the supplement.
 
 * Journal name
 
@@ -97,10 +98,11 @@ We have collated a list of 2941 articles in PubMed Central published in 2019 tha
 
 * Code availability
 
-* Whether gene profile is provided in the supplement
+* Whether gene profile was provided in the supplement
 
-* Whether assumptions are correctly applied
+* Whether assumptions was correctly applied
 
+We excluded articles describing novel enrichment analysis techniques/tools, review articles and conference abstracts.
 Some articles presented the results of >1 enrichment analysis, so additional rows were added to accommodate them. 
 These data were entered into a Google Spreadsheet by a team of five researchers.
 For quality control, 200 randomly selected assessed articles were cross-checked by two senior team members to ensure consistency across the five team members.
@@ -130,17 +132,17 @@ All data analyses were conducted in R v4.1 and the analysis scripts are availabl
 ### An example of gene set analysis misuse
 
 In order to demonstrate the effect of gene set test misuse, we used an example RNA-seq dataset examining the effect of high glucose exposure on hepatocytes.
-Out of 39297 genes in the annotation set, 15635 were above the detection threshold.
-Statistical analysis revealed 3472 differentially expressed genes with 1560 up-regulated and 1912 down-regulated (FDR<0.05) due to glucose exposure.
+Out of 39,297 genes in the annotation set, 15,635 were above the detection threshold (>10 reads per sample on average).
+Statistical analysis revealed 3,472 differentially expressed genes with 1,560 up-regulated and 1,912 down-regulated (FDR<0.05) due to glucose exposure.
 FCS revealed 95 up and 316 downregulated pathways (FDR<0.05).
 ORA with a background gene list consisting of detected genes revealed 55 upregulated and 238 downregulated gene sets (FDR<0.05).
 There was a strong overlap between FCS and ORA results with a Jaccard statistic of 0.66 (Figure 1A).
-We then performed ORA using the whole genome gene list (indicated as ORA*), which resulted in 147 up and 530 down regulated gene sets (FDR<0.05),
-The overlap of ORA with ORA* was relatively smaller, with a Jaccard statistic of 0.41 (Figure 1B).
+We then performed ORA using the whole genome gene list (indicated as ORA\*), which resulted in 147 up and 530 down regulated gene sets (FDR<0.05),
+The overlap of ORA with ORA\* was relatively smaller, with a Jaccard statistic of 0.41 (Figure 1B).
 Interestingly, 26 gene sets were simultaneously up and downregulated with this approach.
-Then we performed ORA analysis after combining up and downregulated genes as sometimes observed in the literature (indicated as ORA comb) with the standard background and again with a whole genome background (indicated as ORA* comb).
+Then we performed ORA analysis after combining up and downregulated genes as sometimes observed in the literature (indicated as ORA comb) with the standard background and again with a whole genome background (indicated as ORA\* comb).
 ORA comb revealed only 22 differentially regulated gene sets with a Jaccard similarity to ORA of only 0.04 (Figure 1C). 
-ORA* comb yielded 64 differentially regulated gene sets with a Jaccard similarity to ORA of only 0.08.
+ORA\* comb yielded 64 differentially regulated gene sets with a Jaccard similarity to ORA of only 0.08.
 These results demonstrate that commonly observed practices of combining the up and downregulated gene lists and using the whole genome background gene list severely distort ORA results.
 
 ![Figure 1A. Comparison of FCS and ORA methods.](images/fcs_ora1.png "FCS vs ORA")
@@ -157,51 +159,52 @@ From these, 1500 articles were screened for methodological errors; data supplied
 We excluded 133 articles from the screen because they did not present any enrichment analysis. 
 Those excluded articles included articles describing novel enrichment analysis techniques or tools, review articles or conference abstracts.
 As some articles included more than one enrichment analysis, the final dataset included 1624 analyses from 1363 articles.
-There were articles from 330 journals in the screen, with *Scientific Reports*, *Oncology Letters* and *International Journal of Molecular Science* being the biggest contributors (Figure 1).
-There were 35 different omics types, with RNA-seq and gene expression microarray being the most popular (Figure 2).
-There were 175 different species under study, but human was the most common with 1104 analyses (Figure 3).
-We recorded the use of 101 different gene set libraries, with GO and KEGG being the most frequently used (Figure 4).
+There were articles from 330 journals in the screen, with *Scientific Reports*, *Oncology Letters* and *International Journal of Molecular Science* being the biggest contributors (Figure S1A).
+There were 35 different omics types, with RNA-seq and gene expression microarray being the most popular (Figure S1B).
+There were 175 different species under study, but human was the most common with 1104 analyses (Figure S1C).
+We recorded the use of 101 different gene set libraries, with GO and KEGG being the most frequently used (Figure 2A).
 There were 85 studies where the gene set libraries used were not defined in the article.
-Only 108 analyses reported the version of the gene set library used (Figure 5).
-There were XX different statistical tests used, and the most common reported tests were Fisher's Exact, GSEA and hypergeometric tests; but the statistical test used was not reported for the majority of analyses (Figure 6).
-Only 754 of 1594 studies described performing FDR or other p-value correction for multiple testing (Figure 7).
-There were 145 different tools used to perform enrichment analysis, with DAVID and GSEA being the most common; while 174 analyses (XX%) did not state what tool was used (Figure 8).
-The version of the software used was provided in only 421 of 1611 analyses (26%) (Figure 9).
-Of the 293 analyses which used a scripted computer language, only 10 provided links to the code used for enrichment analysis (3.4%) (Figure 10).
-For analyses using ORA methods, we studied what background gene set was used (Figure 11). 
+Only 108 analyses reported the version of the gene set library used (Figure 2B).
+There were XX different statistical tests used, and the most common reported tests were Fisher's Exact, GSEA and hypergeometric tests; but the statistical test used was not reported for the majority of analyses (Figure 2C).
+Only 754 of 1594 studies described performing FDR or other p-value correction for multiple testing (Figure 2D).
+There were 145 different tools used to perform enrichment analysis, with DAVID and GSEA being the most common; while 174 analyses (XX%) did not state what tool was used (Figure 2E).
+The version of the software used was provided in only 421 of 1611 analyses (26%) (Figure 2F).
+For analyses using ORA methods, we studied what background gene set was used (Figure 2G). 
 This revealed that in most cases, the background list was not stated or it was clear from the article methods section that no background list was used.
 In a few cases, background list was mentioned but was inappropriate, for example using a whole genome background for an assay like RNA-seq.
 In only 67/1460 of cases (4.6%), the appropriate background list was described in the article.
-For 579 of 1618 analyses, the corresponding gene lists/profiles were provided either in the supplement or in the article itself (Figure 12).
-Next, we quantified the frequency of methodological issues that would undermine the conclusions (Figure 13).
+Of the 293 analyses which used a scripted computer language, only 10 provided links to the code used for enrichment analysis (3.4%) (Figure 2H).
+For 579 of 1618 analyses, the corresponding gene lists/profiles were provided either in the supplement or in the article itself (Figure 2I).
+Next, we quantified the frequency of methodological issues that would undermine the conclusions (Figure 2J).
 Lack of appropriate background was the most common issue (1361 cases), followed by FDR (761 cases), then inference without test (61 cases), inference without data shown (32 cases) and misinterpreted FDR values (3 cases).
 Only 160 analyses did not exhibit any of these major methodological issues.
+Taken together, these data suggest methodological and reporting deficiencies are widespread in published functional enrichment analyses.
 
-![Figure 1. Representation of journals in the data set.](images/journals1.png "Journals")
+![Figure S1a. Representation of journals in the data set.](images/journals1.png "Journals")
 
-![Figure 2. Representation of different omics types in the data set.](images/omics1.png "Omics")
+![Figure S1B. Representation of different omics types in the data set.](images/omics1.png "Omics")
 
-![Figure 3. Representation of different organisms in the data set.](images/organisms1.png "Organisms")
+![Figure S1C. Representation of different organisms in the data set.](images/organisms1.png "Organisms")
 
-![Figure 4. Representation of different gene set libraries in the data set.](images/genesetlib1.png "Geneset libraries")
+![Figure 2A. Representation of different gene set libraries in the data set.](images/genesetlib1.png "Geneset libraries")
 
-![Figure 5. Proportion of analyses that reported version information for gene sets used.](images/genesetvers1.png "Geneset version")
+![Figure 2B. Proportion of analyses that reported version information for gene sets used.](images/genesetvers1.png "Geneset version")
 
-![Figure 6. Representation of different statistical tests in the data set.](images/stattest1.png "Geneset libraries")
+![Figure 2C. Representation of different statistical tests in the data set.](images/stattest1.png "Geneset libraries")
 
-![Figure 7. Recognition of p-value correction for multiple testing in the data set.](images/fdr1.png "FDR")
+![Figure 2D. Recognition of p-value correction for multiple testing in the data set.](images/fdr1.png "FDR")
 
-![Figure 8. Representation of different software tools for enrichment analysis in the data set.](images/app1.png "Software used")
+![Figure 2E. Representation of different software tools for enrichment analysis in the data set.](images/app1.png "Software used")
 
-![Figure 9. Proportion of analyses that reported version information for software used.](images/appvers1.png "Software version")
+![Figure 2F. Proportion of analyses that reported version information for software used.](images/appvers1.png "Software version")
 
-![Figure 10. Proportion of scripted analyses that provided software code.](images/code1.png "Code available")
+![Figure 2G. Background gene set usage and reporting in the dataset.](images/bg1.png "Background gene list used")
 
-![Figure 11. Background gene set usage and reporting in the dataset.](images/bg1.png "Background gene list used")
+![Figure 2H. Proportion of scripted analyses that provided software code.](images/code1.png "Code available")
 
-![Figure 12. Proportion of scripted analyses that provided gene profiles.](images/genelists1.png "Gene lists provided")
+![Figure 2I. Proportion of scripted analyses that provided gene profiles.](images/genelists1.png "Gene lists provided")
 
-![Figure 13. Proportion of analyses with different methodological problems.](images/assumptions1.png "Assumptions violated")
+![Figure 2J. Proportion of analyses with different methodological problems.](images/assumptions1.png "Assumptions violated")
 
 ### Analysis scores
 
@@ -217,15 +220,15 @@ Again, there was a slightly positive association that wasn't statistically signi
 Next we assessed whether there was any association between analysis scores and the number of citations received by the articles.
 After log transforming the citation data, there was no association between citations and analysis scores (Pearson r=0.002, p=0.94).
 
-![Figure 14. Distribution of analysis scores.](images/hist1.png "Analysis scores")
+![Figure 3A. Distribution of analysis scores.](images/hist1.png "Analysis scores")
 
-![Figure 15. Association of analysis scores with journal rank.](images/score_sjr1.png "Analysis scores versus journal rank")
+![Figure 3B. Association of analysis scores with journal rank.](images/score_sjr1.png "Analysis scores versus journal rank")
 
-![Figure 16. Journals with highest analysis scores.](images/score_highest1.png "Highest analysis scores")
+![Figure 3C. Journals with highest analysis scores.](images/score_highest1.png "Highest analysis scores")
 
-![Figure 17. Journals with Lowest analysis scores.](images/score_lowest1.png "Lowest analysis scores")
+![Figure 3D. Journals with Lowest analysis scores.](images/score_lowest1.png "Lowest analysis scores")
 
-![Figure 18. Association between SJR and mean analysis score for journals with >=5 analyses.](images/mean_sjr1.png "Mean score vs SJR")
+![Figure 3E. Association between SJR and mean analysis score for journals with >=5 analyses.](images/mean_sjr1.png "Mean score vs SJR")
 
 ## Discussion
 
@@ -236,23 +239,28 @@ ORA tools that only require pasting lists of gene identifiers into a webpage (ie
 This is despite the fact that ORA tools perform worse than FCS and new generation pathway topology tools (Kaspi & Ziemann 2020; Maleki et al, 2020; Xie et al, 2021).
 
 The lack of methodological details regarding enrichment analysis in some articles was disturbing.
-To illustrate this, many articles mention prominently in the abstract the results of the functional enrichment analysis yet not detail in their methods sections any detail whatsoever about what type of enrichment analysis was actually conducted.
+To illustrate this, many articles mention prominently in the abstract the functional enrichment results but do not detail in their methods sections anything about what type of enrichment analysis was actually conducted.
 This is not limited to a few obscure journals; there were 88 journals that published articles where the tool used for enrichment analysis was not defined.
 
 As we screened these articles, we observed other types of details lacking.
 For example GSEA has different options that impact the results including the ranking metric, gene weighting method and the permutation type (on samples or genes), which were not regularly reported in articles.
 For ORA, in some instances it was unclear whether up- and down-regulated gene lists were combined before analysis.
-For differential expression analysis, combining up- and down-regulated gene lists for ORA is considered poor practice (Hong et al, 2014).
-Our own tests indicate that combining up- and down-regulated gene lists prior to ORA dramatically reduces the statistical strength when the proportion of differentially expressed genes is high.
+When applying ORA to differential expression, combining up- and down-regulated gene lists is considered poor practice (Hong et al, 2014).
+Our own tests indicate that combining up- and down-regulated gene lists prior to ORA results in a dramatic loss of sensitivity when the proportion of differentially expressed genes is high.
+Using an inappropriate background list resulted in substantially altered results (Figure 1B).
+In the example here, using the inappropriate background resulted in 2.3 fold more differentially regulated gene sets.
+Thus if there are few or no significant results using a correct background list, there may be a temptation may be to use an inappropriate background.
+Results here indicate most ORA articles do not report using a background gene list, suggesting that inappropriate ORA use is common.
 
+We scored each of the analyses included in the screen which revealed only 30 articles scored a satisfactory score of zero or higher.
 Surprisingly, the analysis scores we generated did not correlate with a journal level bibliographic metric, nor accrued citations of individual articles.
-This suggests no association between methodological rigour and "impact" in this sample.
+This suggests no association between methodological rigour and traditional research impact metrics in this sample.
 
 Still there are some limitations that need to be recognised.
 Many open access articles examined here are from journals not considered to be highly prestigious, and the distribution of analysis scores might be different for closed access articles.
 The articles included in this study contained keywords related to functional enrichment in the abstract, and it is plausible that articles in more prestigious journals contain such details in the abstract at lower rates.
 
-Nevertheless, these results are a wake up call for reproducibility and highlight the urgent need for minimum standards for functional enrichment analysis (MSFEA). 
+Nevertheless, these results are a wake up call for reproducibility and highlight the urgent need for minimum standards for functional enrichment analysis. 
 To address this, we provide a set of minimum standards for functional enrichment analysis, as well as additional recommendations to achieve gold standard reliability and reproducibility (Box 1).
 
 <hr>
@@ -276,16 +284,17 @@ This is especially relevant for tools that report the results of different stati
 
 5. Always report FDR or q-values (p-values that have been corrected for multiple tests).
 This will reduce the chance of false positives when performing many tests simultaneously.
-Bonferonni, FDR and FWER are examples.
+Report what method was used for p-value adjustment; Bonferonni, FDR and FWER are examples.
 
 6. If ORA is used, it is vital to use a background list consisting of all detected genes, and report this in the methods section.
-Avoid tools that cannot accept a background list.
+Avoid tools that don't accept a background list.
 
-7. Criteria and parameters matter.
+7. Report selection criteria and parameters.
 If performing ORA, then the inclusion thresholds need to be mentioned.
 If using GSEA or another FCS tool, parameters around ranking, gene weighting and type of test need to be disclosed (eg: permuting sample labels or gene labels).
+Any parameters that are vary from the defaults should be reported.
 
-8. If using ORA, it needs to be mentioned whether up- and down-regulated genes are separated into different tests as recommended by Hong et al (2014) or combined.
+8. If using ORA for gene expression analysis, refrain from combining up- and down-regulated genes before analysis.
 
 ### Additional recommendations for enhanced reproducibility 
 
@@ -294,7 +303,6 @@ The following guidelines are directed at going over and above the minimum standa
 9. Preference FCS and pathway topology tools over ORA tools.
 ORA tools have a lower sensitivity. 
 In practice, they are rarely used properly.
-FCS tests distinguish between up- and down-regulated gene sets by default.
 
 10. Include the gene profile data (including any background lists) in the supplementary data in TSV or CSV formats.
 Excel spreadsheets are not recommended for genomics work (Ziemann et al, 2016)
