@@ -25,6 +25,8 @@ library("wordcloud2")
 library("reutils")
 library("XML")
 library("kableExtra")
+library("Biobase")
+library("vioplot")
 
 ```
 
@@ -383,20 +385,80 @@ grid()
 
 ## Cross check
 
-```{R,crosscheck}
+```{R,crosscheck,fig.height=8,fig.width=8}
+
 y <- read.table("PMC_2019-analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
-myqc<-x[1,,drop=TRUE]
-head(myqc)
-mypmc<-myqc[[1]]
-str(myqc)
+y <- y[which(isUnique(y$Pubmed.Central.ID)),]
+x <- x[which(isUnique(x$Pubmed.Central.ID)),]
+yunique <- y[which(isUnique(y$Pubmed.Central.ID)),"Pubmed.Central.ID"]
+xunique <- x[which(isUnique(x$Pubmed.Central.ID)),"Pubmed.Central.ID"]
+xyunique <- intersect(yunique,xunique)
+head(xyunique)
 
-ydat<-y[which(y$Pubmed.Central.ID==mypmc),,drop=TRUE]
-str(ydat)
+res <- sapply(xyunique,function(myid){
+  myqc <- x[which(x$Pubmed.Central.ID==myid),,drop=TRUE]
+  ydat <- y[which(y$Pubmed.Central.ID==myid),,drop=TRUE]
+  qcres <- sapply(5:16, function(m) {
+    mqc <- myqc[[m]]
+    mqc <- unlist(strsplit(mqc,", "))
+    myy <- ydat[[m]]
+    myy <- unlist(strsplit(myy,", "))
+  length(intersect(mqc,myy)) / length(union(mqc,myy))
+  })
+  return(qcres)
+})
 
+rownames(res) <- colnames(x)[5:16]
+categoryMeans <- rowMeans(res)
+categoryMeans
 
+tres <- t(res)
+head(tres)
+par(mar=c(5,12,3,1))
+vioplot(tres,horizontal=TRUE,las=1,xlab="mean Jaccard score")
+par(mar=c(5,12,3,1))
+barplot(categoryMeans,horiz=TRUE,las=1,xlim=c(0,1),xlab="mean Jaccard score")
 
-
-
+articleMeans <- colMeans(res)
+hist(articleMeans)
 
 ```
 
+
+
+
+```{r,qcfunc}
+
+ppl <- sapply(xyunique,function(myid){
+  myqc <- x[which(x$Pubmed.Central.ID==myid),,drop=TRUE]
+  ydat <- y[which(y$Pubmed.Central.ID==myid),,drop=TRUE]
+  px <- myqc[[3]]
+  py <- ydat[[3]]
+  return(c(py,px))
+})
+
+tppl <- t(ppl)
+
+tppl_comb <- paste(tppl[,1],tppl[,2])
+tppl_combs <- unique(tppl_comb)
+cres <- lapply(tppl_combs,function(comb){
+ combres <- tres[which(tppl_comb %in% comb),]
+})
+
+names(cres) <- tppl_combs
+str(cres)
+
+cres2 <- lapply(cres,mean)
+cres2
+par(mar=c(5,12,3,1))
+barplot(unlist(cres2),horiz=TRUE,las=1,xlim=c(0,1),xlab="mean Jaccard score")
+
+```
+
+## Session information
+
+```{r,session}
+
+sessionInfo()
+
+```

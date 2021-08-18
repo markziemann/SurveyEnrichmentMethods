@@ -1,8 +1,9 @@
 ---
 title: "Guidelines for reliable and reproducible functional enrichment analysis"
-author: "Kaumadi Wijesooriya1, Sameer A Jadaan2, Tanuveer Kaur1, Kaushalya L Perera1, Mark Ziemann1"
+author: "Kaumadi Wijesooriya, Sameer A Jadaan, Tanuveer Kaur, Kaushalya L Perera, Mark Ziemann"
 date: "`r Sys.Date()`"
 output:
+  rmdformats::robobook:
   html_document:
     toc: true
     toc_float: true
@@ -15,6 +16,8 @@ Source: https://github.com/markziemann/SurveyEnrichmentMethods
 
 Target Journal: Briefings in Bioinformatics (JIF=9.0)
 
+Kaumadi Wijesooriya<sup>1</sup>, Sameer A Jadaan<sup>2</sup>, Tanuveer Kaur<sup>1</sup>, Kaushalya L Perera<sup>1</sup>, Mark Ziemann<sup>1</sup>
+
 **Affiliations**
 
 1. Deakin University, Geelong, Australia, School of Life and Environmental Sciences.
@@ -26,28 +29,26 @@ Target Journal: Briefings in Bioinformatics (JIF=9.0)
 Gene set enrichment tests (a.k.a. functional enrichment analysis) are among the most frequently used methods in computational biology.
 Despite this popularity, there are concerns that these methods are being applied incorrectly and the results of some peer-reviewed publications are unreliable.
 These methodological problems include the use of inappropriate background gene lists, lack of false discovery rate correction and combining up-and downregulated gene sets before enrichment analysis.
-An example analysis of public RNA-seq reveals that inappropriate background gene list and combining up-and downregulated gene sets alters enrichment results sufficiently to .
+An example analysis of public RNA-seq reveals that these methodological errors alter enrichment results dramatically.
 To ascertain the frequency of these errors in the literature, we performed a screen of 1363 open access research articles describing functional enrichment results.
 We find that 95% of analyses using over-representation tests did not implement an appropriate reference gene list or did not describe this in the methods.
 Failure to perform p-value correction for multiple tests was identified in 53% of analyses.
 Many studies lacked detail in the methods section about the tools and gene sets used.
-Only 10% of studies achieved the satisfactory standard of reporting and rigour.
-This highlights the poor state of enrichment test reporting and rigour standards in the contemporary literature.
+Only 10% of studies achieved an overall satisfactory standard, which highlights the poor state of functional enrichment rigour and reporting in the contemporary literature.
 We provide a set of minimum standards that should act as a checklist for researchers and peer-reviewers.
 
 ## Introduction
 
-Since the turn of the millennium, high throughput omics techniques like microarrays and next generation sequencing have brought with them a deluge of data.
-They have revealed how genes are regulated in development and many different diseases.
-These experiments involve the measurement of thousands of genes simultaneously, and can identify hundreds or even thousands of significant associations.
+Since the turn of the millennium, high throughput "omics" techniques like microarrays and next generation sequencing have brought with them a deluge of data.
+These experiments involve the measurement of thousands of genes simultaneously, and can identify hundreds or even thousands of significant associations with developmental stages or diseases.
 Interpreting such data is extraordinarily challenging, as the sheer number of associations can be difficult to investigate in a gene-by-gene manner.
-Instead, many different tools have been developed in an effort to summarise gene profiles into simplified functional categories.
+Instead, many tools have been developed in an effort to summarise gene profiles into simplified functional categories.
 These functional categories typically represent signaling or biochemical pathways, curated from information present in the literature, hence the name functional enrichment.
 
-Widely used functional enrichment tools can be classified into two main categories; (i) over-representation analysis (ORA) and (ii) functional class scoring (FCS), and the most common application is in differential expression analysis.
-In ORA, differentially expressed genes (DEGs) meeting a significance and/or fold change threshold are queried against curated gene sets.
-A statistical test is performed to ascertain whether the number of DEGs in a particular gene set is higher than that expected by random chance.
-ORA tools can be stand alone software packages or web services, and they use one or more statistical tests (Fisher’s Exact test, hypergeometric test, binomial test, χ2 test, etc) (Draghici et al, 2003; Hosack et al, 2003).
+Widely used functional enrichment tools can be classified into two main categories; (i) over-representation analysis (ORA) and (ii) functional class scoring (FCS), and the most common application is in differential gene expression analysis.
+In ORA, differentially expressed genes (DEGs) meeting a significance and/or fold change threshold are queried against curated pathways (gene sets).
+A statistical test is performed to ascertain whether the number of DEGs belonging to a particular pathway (gene set) is higher than that expected by random chance.
+ORA tools can be stand alone software packages or web services, and they use one or more statistical tests (eg: Fisher’s Exact test, hypergeometric test, binomial test) (Draghici et al, 2003; Hosack et al, 2003).
 FCS tools involve giving each detected gene a differential expression score and then evaluating whether the scores are more positive or negative than expected by chance for each set of genes.
 The popular Gene Set Enrichment Analysis (GSEA) tool uses permutation approaches to establish whether a gene set is significantly associated with higher or lower scores, either by permuting sample labels or by permuting genes in the differential expression profile (Subramanian et al, 2005).
 From a user's perspective, ORA is easier to conduct because it is as simple as pasting a list of gene names into a text box on a website.
@@ -160,7 +161,7 @@ A search of PubMed Central showed 2941 articles published in 2019 with the keywo
 From these, 1500 articles were screened for methodological errors; data supplied in Supplementary Table 1.
 We excluded 133 articles from the screen because they did not present any enrichment analysis. 
 Those excluded articles included articles describing novel enrichment analysis techniques or tools, review articles or conference abstracts.
-As some articles included more than one enrichment analysis, the final dataset included 1624 analyses from 1363 articles.
+As some articles included more than one enrichment analysis, the final dataset included 1624 analyses from 1363 articles (Supplementary Table 1).
 A flow diagram of the survey is provided in Figure 2.
 
 ```{r,diagram1,echo=FALSE}
@@ -298,7 +299,7 @@ When applying ORA to differential expression, combining up- and down-regulated g
 Our own tests indicate that combining up- and down-regulated gene lists prior to ORA results in a dramatic loss of sensitivity when the proportion of differentially expressed genes is high.
 Using an inappropriate background list resulted in substantially altered results (Figure 1B).
 In the example here, using the inappropriate background resulted in 2.3 fold more differentially regulated gene sets.
-Thus if there are few or no significant results using a correct background list, there may be a temptation may be to use an inappropriate background.
+Thus if there are few or no significant results using a correct background list, there may be a temptation to use an inappropriate background.
 Results here indicate most ORA articles do not report using a background gene list, suggesting that inappropriate ORA use is common.
 
 We scored each of the analyses included in the screen which revealed only 30 articles scored a satisfactory score of zero or higher.
