@@ -381,4 +381,22 @@ grid()
 
 ```
 
+## Cross check
+
+```{R,crosscheck}
+y <- read.table("PMC_2019-analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
+myqc<-x[1,,drop=TRUE]
+head(myqc)
+mypmc<-myqc[[1]]
+str(myqc)
+
+ydat<-y[which(y$Pubmed.Central.ID==mypmc),,drop=TRUE]
+str(ydat)
+
+
+
+
+
+
+```
 
