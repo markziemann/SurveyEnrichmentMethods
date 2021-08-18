@@ -23,11 +23,13 @@ Target Journal: Briefings in Bioinformatics (JIF=9.0)
 
 ## Abstract
 
-Gene set enrichment tests (a.k.a. functional enrichment analysis) are amongst the most frequently used methods in computational biology.
+Gene set enrichment tests (a.k.a. functional enrichment analysis) are among the most frequently used methods in computational biology.
 Despite this popularity, there are concerns that these methods are being applied incorrectly and the results of some peer-reviewed publications are unreliable.
-To ascertain the frequency of these errors, we performed a screen of 1363 open access research articles describing gene set test results.
+These methodological problems include the use of inappropriate background gene lists, lack of false discovery rate correction and combining up-and downregulated gene sets before enrichment analysis.
+An example analysis of public RNA-seq reveals that inappropriate background gene list and combining up-and downregulated gene sets alters enrichment results sufficiently to .
+To ascertain the frequency of these errors in the literature, we performed a screen of 1363 open access research articles describing functional enrichment results.
 We find that 95% of analyses using over-representation tests did not implement an appropriate reference gene list or did not describe this in the methods.
-Failure to perform p-value correction for multiple tests was identified in 53% of analyses
+Failure to perform p-value correction for multiple tests was identified in 53% of analyses.
 Many studies lacked detail in the methods section about the tools and gene sets used.
 Only 10% of studies achieved the satisfactory standard of reporting and rigour.
 This highlights the poor state of enrichment test reporting and rigour standards in the contemporary literature.
@@ -59,7 +61,7 @@ The purpose of this work is to demonstrate the effect of misusing enrichment too
 (i) lack of a background gene set, 
 (ii) lack of adjustment for multiple comparisons and 
 (ii) lack of essential methodological details.
-By performing a screen of published articles we will identify the most frequent error modes, and use this to inform us to develop a set of minimum standards for functional enrichment analysis (MSFEA).
+By performing a screen of published articles we will identify the most frequent error modes, and use this to inform us to develop a set of minimum standards for functional enrichment analysis.
 
 ## Methods
 
@@ -79,7 +81,7 @@ Analyses were conducted in R version 4.1.0.
 
 ### Survey of enrichment analysis 
 
-We have collated a list of 2941 articles in PubMed Central published in 2019 that have “enrichment analysis” and related keyword terms.
+We have collated a list of 2941 articles in PubMed Central published in 2019 that have keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
 We sampled 1500 of these articles and collected the following information from the article, searching the methods sections and other parts of the article including the supplement.
 
 * Journal name
@@ -159,23 +161,70 @@ From these, 1500 articles were screened for methodological errors; data supplied
 We excluded 133 articles from the screen because they did not present any enrichment analysis. 
 Those excluded articles included articles describing novel enrichment analysis techniques or tools, review articles or conference abstracts.
 As some articles included more than one enrichment analysis, the final dataset included 1624 analyses from 1363 articles.
+A flow diagram of the survey is provided in Figure 2.
+
+```{r,diagram1,echo=FALSE}
+
+library(DiagrammeR)
+grViz("digraph flowchart {
+      # node definitions with substituted label text
+      node [fontname = Helvetica, shape = rectangle]        
+      tab1 [label = '@@1']
+      tab2 [label = '@@2']
+      tab3 [label = '@@3']
+      tab4 [label = '@@4']
+      tab5 [label = '@@5']
+      tab6 [label = '@@6']
+      tab7 [label = '@@7']
+      tab8 [label = '@@8']
+      tab9 [label = '@@9']
+      tab10 [label = '@@10']
+      tab11 [label = '@@11']
+      tab12 [label = '@@12']
+      tab13 [label = '@@13']
+      
+      # edge definitions with the node IDs
+      tab1 -> tab2  -> tab4 -> tab5 -> tab6 -> tab7 -> tab11;
+      tab7 -> tab12 ;
+      tab7 -> tab13 ;
+      tab2-> tab3 ;
+      tab4-> tab8 -> tab9 -> tab10 -> tab13;
+      }
+      [1]: 'PMC keyword search (2019): 2941 results'
+      [2]: '1500 PMC articles selected'
+      [3]: '133 articles excluded'
+      [4]: '1363 articles analyzed by team of five researchers'
+      [5]: '1624 enrichment analyses described'
+      [6]: 'data entry to spreadsheet'
+      [7]: 'data analysis in R'
+      [8]: 'Subset of 231 analyses cross-checked by two senior researchers'
+      [9]: 'data entry to spreadsheet'
+      [10]: 'data analysis in R'
+      [11]: 'Summary charts'
+      [12]: 'Integration with journal and article metrics'
+      [13]: 'Data validation/crosschecking'
+      ")
+
+```
+Figure 2. A summary of the survey of functional enrichment analyses.
+
 There were articles from 330 journals in the screen, with *Scientific Reports*, *Oncology Letters* and *International Journal of Molecular Science* being the biggest contributors (Figure S1A).
 There were 35 different omics types, with RNA-seq and gene expression microarray being the most popular (Figure S1B).
 There were 175 different species under study, but human was the most common with 1104 analyses (Figure S1C).
-We recorded the use of 101 different gene set libraries, with GO and KEGG being the most frequently used (Figure 2A).
+We recorded the use of 101 different gene set libraries, with GO and KEGG being the most frequently used (Figure 3A).
 There were 85 studies where the gene set libraries used were not defined in the article.
-Only 108 analyses reported the version of the gene set library used (Figure 2B).
-There were XX different statistical tests used, and the most common reported tests were Fisher's Exact, GSEA and hypergeometric tests; but the statistical test used was not reported for the majority of analyses (Figure 2C).
-Only 754 of 1594 studies described performing FDR or other p-value correction for multiple testing (Figure 2D).
-There were 145 different tools used to perform enrichment analysis, with DAVID and GSEA being the most common; while 174 analyses (XX%) did not state what tool was used (Figure 2E).
-The version of the software used was provided in only 421 of 1611 analyses (26%) (Figure 2F).
-For analyses using ORA methods, we studied what background gene set was used (Figure 2G). 
+Only 108 analyses reported the version of the gene set library used (Figure 3B).
+There were XX different statistical tests used, and the most common reported tests were Fisher's Exact, GSEA and hypergeometric tests; but the statistical test used was not reported for the majority of analyses (Figure 3C).
+Only 754 of 1594 studies (XX%) described correction of p-values for multiple testing (Figure 3D).
+There were 145 different tools used to perform enrichment analysis, with DAVID and GSEA being the most common; while 174 analyses (XX%) did not state what tool was used (Figure 3E).
+The version of the software used was provided in only 421 of 1611 analyses (26%) (Figure 3F).
+For analyses using ORA methods, we studied what background gene set was used (Figure 3G). 
 This revealed that in most cases, the background list was not stated or it was clear from the article methods section that no background list was used.
 In a few cases, background list was mentioned but was inappropriate, for example using a whole genome background for an assay like RNA-seq.
 In only 67/1460 of cases (4.6%), the appropriate background list was described in the article.
-Of the 293 analyses which used a scripted computer language, only 10 provided links to the code used for enrichment analysis (3.4%) (Figure 2H).
-For 579 of 1618 analyses, the corresponding gene lists/profiles were provided either in the supplement or in the article itself (Figure 2I).
-Next, we quantified the frequency of methodological issues that would undermine the conclusions (Figure 2J).
+Of the 293 analyses which used a scripted computer language, only 10 provided links to the code used for enrichment analysis (3.4%) (Figure 3H).
+For 579 of 1618 analyses, the corresponding gene lists/profiles were provided either in the supplement or in the article itself (Figure 3I).
+Next, we quantified the frequency of methodological issues that would undermine the conclusions (Figure 3J).
 Lack of appropriate background was the most common issue (1361 cases), followed by FDR (761 cases), then inference without test (61 cases), inference without data shown (32 cases) and misinterpreted FDR values (3 cases).
 Only 160 analyses did not exhibit any of these major methodological issues.
 Taken together, these data suggest methodological and reporting deficiencies are widespread in published functional enrichment analyses.
@@ -186,49 +235,49 @@ Taken together, these data suggest methodological and reporting deficiencies are
 
 ![Figure S1C. Representation of different organisms in the data set.](images/organisms1.png "Organisms")
 
-![Figure 2A. Representation of different gene set libraries in the data set.](images/genesetlib1.png "Geneset libraries")
+![Figure 3A. Representation of different gene set libraries in the data set.](images/genesetlib1.png "Geneset libraries")
 
-![Figure 2B. Proportion of analyses that reported version information for gene sets used.](images/genesetvers1.png "Geneset version")
+![Figure 3B. Proportion of analyses that reported version information for gene sets used.](images/genesetvers1.png "Geneset version")
 
-![Figure 2C. Representation of different statistical tests in the data set.](images/stattest1.png "Geneset libraries")
+![Figure 3C. Representation of different statistical tests in the data set.](images/stattest1.png "Geneset libraries")
 
-![Figure 2D. Recognition of p-value correction for multiple testing in the data set.](images/fdr1.png "FDR")
+![Figure 3D. Recognition of p-value correction for multiple testing in the data set.](images/fdr1.png "FDR")
 
-![Figure 2E. Representation of different software tools for enrichment analysis in the data set.](images/app1.png "Software used")
+![Figure 3E. Representation of different software tools for enrichment analysis in the data set.](images/app1.png "Software used")
 
-![Figure 2F. Proportion of analyses that reported version information for software used.](images/appvers1.png "Software version")
+![Figure 3F. Proportion of analyses that reported version information for software used.](images/appvers1.png "Software version")
 
-![Figure 2G. Background gene set usage and reporting in the dataset.](images/bg1.png "Background gene list used")
+![Figure 3G. Background gene set usage and reporting in the dataset.](images/bg1.png "Background gene list used")
 
-![Figure 2H. Proportion of scripted analyses that provided software code.](images/code1.png "Code available")
+![Figure 3H. Proportion of scripted analyses that provided software code.](images/code1.png "Code available")
 
-![Figure 2I. Proportion of scripted analyses that provided gene profiles.](images/genelists1.png "Gene lists provided")
+![Figure 3I. Proportion of scripted analyses that provided gene profiles.](images/genelists1.png "Gene lists provided")
 
-![Figure 2J. Proportion of analyses with different methodological problems.](images/assumptions1.png "Assumptions violated")
+![Figure 3J. Proportion of analyses with different methodological problems.](images/assumptions1.png "Assumptions violated")
 
 ### Analysis scores
 
 We then scored each analysis based on the inclusion or lack of methodological issues and included details.
-The median score was -4, with a mean of -3.5 and standard deviation of 1.3 (Figure 14).
-Next, we assessed whether these analysis scores associate with journal citation metrics (Figure 15).
+The median score was -4, with a mean of -3.5 and standard deviation of 1.3 (Figure 4A).
+Next, we assessed whether these analysis scores associate with journal citation metrics (Figure 4B).
 There was a slight positive correlation using the Pearson method but it was not statistically significant (r=0.04, p=0.16).
 Next we wanted to know which journals had the highest and lowest scores.
 Only journals with five or more analyses were included.
-The best scoring journals were *Transl Psychiatry*, *Metabolites* and *J Exp Clin Cancer Res* (Figure 16), while the poorest were *Mol Med Rep*, *Cancer Med* and *World J Gastroenterol* (Figure 17), although we note that there was a wide variation between articles of the same journal.
-Then, we assessed for an association between mean analysis score and the SJR (Figure 17).
+The best scoring journals were *Transl Psychiatry*, *Metabolites* and *J Exp Clin Cancer Res* (Figure 4C), while the poorest were *Mol Med Rep*, *Cancer Med* and *World J Gastroenterol* (Figure 4D), although we note that there was a wide variation between articles of the same journal.
+Then, we assessed for an association between mean analysis score and the SJR (Figure 4E).
 Again, there was a slightly positive association that wasn't statistically significant (Pearson r=0.09, p=0.55).
 Next we assessed whether there was any association between analysis scores and the number of citations received by the articles.
 After log transforming the citation data, there was no association between citations and analysis scores (Pearson r=0.002, p=0.94).
 
-![Figure 3A. Distribution of analysis scores.](images/hist1.png "Analysis scores")
+![Figure 4A. Distribution of analysis scores.](images/hist1.png "Analysis scores")
 
-![Figure 3B. Association of analysis scores with journal rank.](images/score_sjr1.png "Analysis scores versus journal rank")
+![Figure 4B. Association of analysis scores with journal rank.](images/score_sjr1.png "Analysis scores versus journal rank")
 
-![Figure 3C. Journals with highest analysis scores.](images/score_highest1.png "Highest analysis scores")
+![Figure 4C. Journals with highest analysis scores.](images/score_highest1.png "Highest analysis scores")
 
-![Figure 3D. Journals with Lowest analysis scores.](images/score_lowest1.png "Lowest analysis scores")
+![Figure 4D. Journals with Lowest analysis scores.](images/score_lowest1.png "Lowest analysis scores")
 
-![Figure 3E. Association between SJR and mean analysis score for journals with >=5 analyses.](images/mean_sjr1.png "Mean score vs SJR")
+![Figure 4E. Association between SJR and mean analysis score for journals with >=5 analyses.](images/mean_sjr1.png "Mean score vs SJR")
 
 ## Discussion
 

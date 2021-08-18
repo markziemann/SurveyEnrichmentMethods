@@ -87,7 +87,7 @@ png("images/journals1.png")
 par(mar=c(5,8,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Journal", xlim=c(0,1200))
-text(y = (1:length(res2)*1.2)-1.2  , x = res2+50, label = res2, pos = 3, cex = 1, col = "black")
+text(y = (1:length(res2)*1.2)-0.8  , x = res2+50, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -129,7 +129,7 @@ png("images/omics1.png")
 par(mar=c(5,10,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Omics type", xlim=c(0,600))
-text(y = (1:length(res2)*1.2)-1.2  , x = res2-20, label = res2, pos = 3, cex = 1, col = "black")
+text(y = (1:length(res2)*1.2)-0.8  , x = res2-20, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -172,7 +172,7 @@ png("images/organisms1.png")
 par(mar=c(5,10,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Organism", xlim=c(0,1300))
-text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
+text(y = (1:length(res2)*1.2)-0.8  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -215,7 +215,7 @@ png("images/genesetlib1.png")
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene set library", xlim=c(0,1100))
-text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
+text(y = (1:length(res2)*1.2)-0.8  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -238,8 +238,8 @@ grid()
 png("images/genesetvers1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Gene set version defined", xlim=c(0,1600))
-text(y = (1:length(res)*1.2) - 0.6 , x = res-65, label = res, pos = 3, cex = 1, col = "black")
+        main = "Gene set version defined", xlim=c(0,1900))
+text(y = (1:length(res)*1.2) - 0.6 , x = res+200, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -279,7 +279,7 @@ png("images/stattest1.png")
 par(mar=c(5,10,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Test used", xlim=c(0,1200))
-text(y = (1:length(res2)*1.2)-1.2  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
+text(y = (1:length(res2)*1.2)-0.8  , x = res2+60, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -310,8 +310,8 @@ grid()
 png("images/fdr1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "FDR", xlim=c(0,900))
-text(y = (1:length(res)*1.2)-0.7  , x = res-30, label = res, pos = 3, cex = 1, col = "black")
+        main = "FDR", xlim=c(0,1000))
+text(y = (1:length(res)*1.2)-0.7  , x = res+80, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -356,7 +356,7 @@ png("images/app1.png")
 par(mar=c(5,12,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App used", xlim=c(0,500))
-text(y = (1:length(res2)*1.2)-1.2  , x = res2-20, label = res2, pos = 3, cex = 1, col = "black")
+text(y = (1:length(res2)*1.2)-0.8  , x = res2-20, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -383,7 +383,7 @@ png("images/appvers1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App version defined", xlim=c(0,1600))
-text(y = (1:length(res)*1.2) - 0.6 , x = res-70, label = res, pos = 3, cex = 1, col = "black")
+text(y = (1:length(res)*1.2) - 0.6 , x = res-200, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -407,8 +407,8 @@ grid()
 png("images/code1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Code availability", xlim=c(0,330))
-text(y = (1:length(res)*1.2) - 0.6 , x = res+15, label = res, pos = 3, cex = 1, col = "black")
+        main = "Code availability", xlim=c(0,350))
+text(y = (1:length(res)*1.2) - 0.6 , x = res+30, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -432,8 +432,8 @@ grid()
 png("images/bg1.png")
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Background list defined", xlim=c(0,1300))
-text(y = (1:length(res)*1.2)-0.7  , x = res+60, label = res, pos = 3, cex = 1, col = "black")
+        main = "Background list defined", xlim=c(0,1400))
+text(y = (1:length(res)*1.2)-0.7  , x = res+80, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 ```
@@ -458,7 +458,7 @@ png("images/genelists1.png",width = 260, height = 260)
 par(mar=c(5,7,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene lists provided", xlim=c(0,1200))
-text(y = (1:length(res)*1.2) - 0.6 , x = res-70, label = res, pos = 3, cex = 1, col = "black")
+text(y = (1:length(res)*1.2) - 0.6 , x = res-120, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
@@ -495,8 +495,8 @@ grid()
 png("images/assumptions1.png")
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Assumptions violated", xlim=c(0,1500))
-text(y = (1:length(res)*1.2)-0.75  , x = res+60, label = res, pos = 3, cex = 1, col = "black")
+        main = "Assumptions violated", xlim=c(0,100))
+text(y = (1:length(res)*1.2)-0.75  , x = res+100, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
