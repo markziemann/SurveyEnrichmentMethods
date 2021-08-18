@@ -82,6 +82,7 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
 text(y = (1:length(res2)*1.2)-1.2  , x = res2+50, label = res2, pos = 3, cex = 1, col = "black")
 grid()
 
+dir.create("images")
 png("images/journals1.png")
 par(mar=c(5,8,3,1))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
