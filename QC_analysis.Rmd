@@ -414,6 +414,7 @@ categoryMeans
 
 tres <- t(res)
 head(tres)
+
 par(mar=c(5,12,3,1))
 vioplot(tres,horizontal=TRUE,las=1,xlab="mean Jaccard score")
 par(mar=c(5,12,3,1))
@@ -421,6 +422,9 @@ barplot(categoryMeans,horiz=TRUE,las=1,xlim=c(0,1),xlab="mean Jaccard score")
 
 articleMeans <- colMeans(res)
 hist(articleMeans)
+
+# PMCs that need to be redone
+tres[which(rowMeans(tres)<1),]  %>% kbl() %>% kable_paper("hover", full_width = F)
 
 ```
 
