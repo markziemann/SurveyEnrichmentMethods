@@ -401,8 +401,10 @@ res <- sapply(xyunique,function(myid){
   qcres <- sapply(5:16, function(m) {
     mqc <- myqc[[m]]
     mqc <- unlist(strsplit(mqc,", "))
+    mqc <- gsub("Not stated","No",mqc)
     myy <- ydat[[m]]
     myy <- unlist(strsplit(myy,", "))
+    myy <- gsub("Not stated","No",myy)
   length(intersect(mqc,myy)) / length(union(mqc,myy))
   })
   return(qcres)
