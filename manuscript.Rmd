@@ -374,13 +374,19 @@ Functional enrichment analysis is best used as a hypothesis generating procedure
 
 Draghici, S., Khatri, P., Martins, R. P., Ostermeier, G. C., & Krawetz, S. A. (2003). Global functional profiling of gene expression. Genomics, 81(2), 98–104.
 
+Felisbino, M. B., Ziemann, M., Khurana, I., Okabe, J., Al-Hasani, K., Maxwell, S., … El-Osta, A. (2021). Valproic acid influences the expression of genes implicated with hyperglycaemia-induced complement and coagulation pathways. Scientific Reports, 11(1), 2163.
+
 Hong, G., Zhang, W., Li, H., Shen, X., & Guo, Z. (2014). Separate enrichment analysis of pathways for up- and downregulated genes. Journal of the Royal Society, Interface, 11(92), 20130950.
 
 Hosack, D. A., Dennis, G., Jr, Sherman, B. T., Lane, H. C., & Lempicki, R. A. (2003). Identifying biological themes within lists of genes with EASE. Genome Biology, 4(10), R70.
 
 Huang, D. W., Sherman, B. T., & Lempicki, R. A. (2009). Bioinformatics enrichment tools: paths toward the comprehensive functional analysis of large gene lists. Nucleic Acids Research, 37(1), 1–13.
 
+Jassal, B., Matthews, L., Viteri, G., Gong, C., Lorente, P., Fabregat, A., … D’Eustachio, P. (2020). The reactome pathway knowledgebase. Nucleic Acids Research, 48(D1), D498–D503.
+
 Kaspi, A., & Ziemann, M. (2020). Mitch: Multi-contrast pathway enrichment for multi-omics and single-cell profiling data. BMC Genomics, 21(1), 447.
+
+Love, M. I., Huber, W., & Anders, S. (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15(12), 550.
 
 Maleki, F., Ovens, K., Hogan, D. J., & Kusalik, A. J. (2020). Gene set analysis: Challenges, opportunities, and future research. Frontiers in Genetics, 11, 654.
 
@@ -392,4 +398,8 @@ Timmons, J. A., Szkop, K. J., & Gallagher, I. J. (2015). Multiple sources of bia
 
 Xie, C., Jauhari, S., & Mora, A. (2021). Popularity and performance of bioinformatics software: the case of gene set analysis. BMC Bioinformatics, 22(1), 191.
 
+Yu, G., Wang, L.-G., Han, Y., & He, Q.-Y. (2012). clusterProfiler: an R package for comparing biological themes among gene clusters. Omics: A Journal of Integrative Biology, 16(5), 284–287.
+
 Ziemann, M., Eren, Y., & El-Osta, A. (2016). Gene name errors are widespread in the scientific literature. Genome Biology, 17(1), 177.
+
+Ziemann, M., Kaspi, A., & El-Osta, A. (2019). Digital expression explorer 2: a repository of uniformly processed RNA sequencing data. GigaScience, 8(4). doi:10.1093/gigascience/giz022

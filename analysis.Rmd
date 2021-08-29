@@ -495,8 +495,8 @@ grid()
 png("images/assumptions1.png")
 par(mar=c(5,12,3,1))
 barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
-        main = "Assumptions violated", xlim=c(0,100))
-text(y = (1:length(res)*1.2)-0.75  , x = res+100, label = res, pos = 3, cex = 1, col = "black")
+        main = "Assumptions violated", xlim=c(0,1500))
+text(y = (1:length(res)*1.2)-0.75  , x = res+80, label = res, pos = 3, cex = 1, col = "black")
 grid()
 dev.off()
 
