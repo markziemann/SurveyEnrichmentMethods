@@ -34,7 +34,7 @@ library("vioplot")
 
 ```{r,exclude1}
 
-x <- read.table("QC-analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
+x <- read.table("data/QC-analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
 head(x)
 colnames(x)
 dim(x)
