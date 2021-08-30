@@ -33,9 +33,16 @@ library("vioplot")
 
 ## Overview of included and excluded analyses
 
+Here we are also using the QC2 data where possible.
+
 ```{r,exclude1}
 
 x <- read.table("data/PMC_2019-analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
+y <- read.table("data/QC-analysis2.tsv",header=TRUE,fill=TRUE,sep="\t")
+y <- y[,1:16]
+x <- x[which(! x$Pubmed.Central.ID %in% y$Pubmed.Central.ID),]
+x <- rbind(x,y)
+
 head(x)
 colnames(x)
 dim(x)
@@ -47,6 +54,13 @@ length(unique(exclude$Pubmed.Central.ID))
 x <- subset(x,x$GS.version!="EXCLUDE")
 nrow(x)
 length(unique(x$Pubmed.Central.ID))
+
+```
+
+## Filter for studies included in QC2
+
+```{r,xy}
+
 
 ```
 
@@ -585,18 +599,19 @@ score <- function(r){
 }
 
 scores <- apply(X = x,MARGIN = 1, FUN = score)
-hist(scores)
+barplot(table(scores), xlab="analysis score",ylab="frequency")
 x$scores <- scores
 length(which(scores>0))
 
 mean(x$scores)
 sd(x$scores)
 median(x$scores)
+length(scores)
+which(scores>0)
 
-png("images/hist1.png")
+png("images/hist1.png",width=300,height=200)
 par(mar=c(5,5,3,1))
-hist(scores)
-grid()
+barplot(table(scores), xlab="analysis score",ylab="frequency")
 dev.off()
 
 ```
@@ -633,31 +648,35 @@ xm <- merge(x,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
 
 tail(xm$Journal)
 
+hist(xm$SJR,xlab="SJR",main="SJR distribution")
+
 mylm1 <- lm (xm$scores ~ xm$SJR)
-plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
+plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19,
+  xlab="SJR",ylab="score",main="Analysis scores vs. journal metrics")
 abline(mylm1,col="red")
 
 cor.test(xm$scores,xm$SJR,method="pearson")
-
 cor.test(xm$scores,xm$SJR,method="spearman")
 
-png("images/score_sjr1.png")
+png("images/score_sjr1.png",width=350,height=300)
 par(mar=c(5,5,3,1))
-plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
+plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19,
+  xlab="SJR",ylab="score",main="Analysis scores vs. journal metrics")
 abline(mylm1,col="red")
 grid()
 dev.off()
 
 ```
+
 ## Best and worst journals
 
 Minimum of 5 analyses.
 
-```{r,goodbadugly}
+```{r,goodbadugly,fig.height=5,fig.width=6}
 
 xmm <-xm[,c("Journal","scores")]
 tab <- table(xmm$Journal)
-tab <- tab[which(tab>5)]
+tab <- tab[which(tab>=5)]
 xmm <- xmm[which(xmm$Journal %in% names(tab)),]
 dim(xmm)
 jres <- aggregate(. ~ Journal, xmm ,mean)
@@ -669,13 +688,13 @@ head(jres)
 
 par(mar=c(5,12,3,1))
 barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
-        main = "Highest scoring journals",xlim=c(-4,0))
+        main = "Highest scoring",xlim=c(-4,0))
 grid()
 
-png("images/score_highest1.png")
+png("images/score_highest1.png",width=300,height=350)
 par(mar=c(5,12,3,1))
 barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
-        main = "Highest scoring journals",xlim=c(-4,0))
+        main = "Highest scoring",xlim=c(-4,0))
 grid()
 dev.off()
 
@@ -684,10 +703,10 @@ barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,
         main = "Lowest scoring journals",xlim=c(-5,0))
 grid()
 
-png("images/score_lowest1.png")
+png("images/score_lowest1.png",width=300,height=350)
 par(mar=c(5,12,3,1))
 barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
-        main = "Lowest scoring journals",xlim=c(-5,0))
+        main = "Lowest scoring",xlim=c(-5,0))
 grid()
 dev.off()
 
@@ -709,17 +728,19 @@ vioplot(head(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Lowest scor
 
 ## Mean analysis scores vs Journal rank
 
-```{r,scoresvsjrank2}
+```{r,scoresvsjrank2,fig.height=5,fig.width=6}
 
 jjres <- merge(jres,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
 
 mylm2 <- lm (jjres$scores ~ jjres$SJR)
-plot(jjres$SJR,jjres$scores,xlab="SJR",ylab="mean score",main="Association of mean analysis score with journal metrics")
+plot(jjres$SJR,jjres$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+  xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
 abline(mylm2,col="red")
 
-png("images/mean_sjr1.png")
+png("images/mean_sjr1.png",width=350,height=300)
 par(mar=c(5,5,3,1))
-plot(jjres$SJR,jjres$scores,xlab="SJR",ylab="mean score",main="Association of mean analysis score with journal metrics")
+plot(jjres$SJR,jjres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+  xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
 abline(mylm2,col="red")
 dev.off()
 
@@ -766,7 +787,8 @@ Plot the number of citations against analysis scores
 ```{r,citesplot}
 
 mylm2 <- lm (xm$scores ~ xm$cites)
-plot(xm$cites,xm$scores,xlab="Num cites",ylab="score",main="Association of analysis scores with number of citations")
+plot(xm$cites,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+  xlab="Num cites",ylab="score",main="Association of analysis scores with number of citations")
 abline(mylm2,col="red")
 
 cor.test(xm$scores , xm$cites, method="pearson")
@@ -774,12 +796,14 @@ cor.test(xm$scores , xm$cites, method="pearson")
 cor.test(xm$scores , xm$cites, method="spearman")
 
 mylm2 <- lm (xm$scores ~ log2(xm$cites))
-plot(log2(xm$cites),xm$scores,xlab="log2(citations)",ylab="score",main="Association of analysis scores with log2(citations)")
+plot(log2(xm$cites),xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+  xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
 abline(mylm2,col="red")
 
-png("images/cites1.png")
+png("images/cites1.png",width=350,height=300)
 par(mar=c(5,5,3,1))
-plot(log2(xm$cites),xm$scores,xlab="log2(citations)",ylab="score",main="Association of analysis scores with log2(citations)")
+plot(log2(xm$cites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+  xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
 abline(mylm2,col="red")
 dev.off()
 

@@ -109,9 +109,12 @@ We excluded articles describing novel enrichment analysis techniques/tools, revi
 Some articles presented the results of >1 enrichment analysis, so additional rows were added to accommodate them. 
 These data were entered into a Google Spreadsheet by a team of five researchers.
 These articles were cross checked by another team member and any discrepancies were resolved.
-For quality control, 200 randomly selected assessed articles were cross-checked by two senior team members to ensure consistency across the five team members.
+For analyses using GSEA, we scanned the articles to identify whether key methodological steps were described, including (i) the gene weighting parameter, (ii) test type, ie: permuting sample labels or genes, and (iii) method used for ranking genes.
+For ORA of differential gene expression analyses, we inspected the articles to see evidence that researchers were conducting enrichment of up and down regulated genes separately or combined.
 Cleaned data were then loaded into R v4.1 for downstream analysis.
 
+For assessment of enrichment analysis quality with journal metrics and citations, we required a larger set of studies so we sampled and analysed a further 1300 articles from PMC.
+Results from this sample were not double-checked and so may have a small number of inaccuracies.
 We rated each analysis with a simple approach that deducted points for missing methodological details and awarding points for including extra information (Table 1). 
 
 | 1 point deducted | 1 point awarded |
@@ -162,10 +165,10 @@ A search of PubMed Central showed 2941 articles published in 2019 with the keywo
 From these, 1500 articles were screened for methodological errors; data supplied in Supplementary Table 1.
 We excluded 133 articles from the screen because they did not present any enrichment analysis. 
 Those excluded articles included articles describing novel enrichment analysis techniques or tools, review articles or conference abstracts.
-As some articles included more than one enrichment analysis, the final dataset included 1624 analyses from 1363 articles (Supplementary Table 1).
+As some articles included more than one enrichment analysis, the dataset included 235 analyses from 186 articles (Supplementary Table 1).
 A flow diagram of the survey is provided in Figure 2.
 
-```{r,diagram1,echo=FALSE}
+```{r,diagram1,echo=FALSE,fig.width=8,fig.height=4}
 
 library(DiagrammeR)
 grViz("digraph flowchart {
@@ -179,11 +182,18 @@ grViz("digraph flowchart {
       tab6 [label = '@@6']
       tab7 [label = '@@7']
       tab8 [label = '@@8']
+      tab9 [label = '@@9']
+      tab10 [label = '@@10']
+      tab11 [label = '@@11']
+      tab12 [label = '@@12']
+      tab13 [label = '@@13']
       
       # edge definitions with the node IDs
       tab1 -> tab2  -> tab4 -> tab5 -> tab6 -> tab7;
       tab2 -> tab3 ;
-      tab6 -> tab8 ;
+      tab1 -> tab9 -> tab10;
+      tab5 -> tab13   ;
+      tab9 -> tab11 -> tab12 -> tab13 -> tab8 ; 
       }
       [1]: 'PMC keyword search (2019): 2941 results'
       [2]: '200 PMC articles selected'
@@ -191,9 +201,15 @@ grViz("digraph flowchart {
       [4]: '235 analyses screened and cross-checked'
       [5]: 'data entry to spreadsheet'
       [6]: 'data analysis in R'
-      [7]: 'Summary charts'
-      [8]: 'Integration with journal and article metrics'
-")
+      [7]: 'summary charts'
+      [8]: 'integration with journal and article metrics'
+      [9]: 'additional 1300 PMC articles selected'
+      [10]: '118 articles excluded'
+      [11]: '1395 articles screened'
+      [12]: 'data entry to spreadsheet'
+      [13]: 'data analysis in R'
+",
+width = 700)
 
 ```
 *Figure 2. A summary of the survey of functional enrichment analyses.*
@@ -220,47 +236,65 @@ For 93 of 235 analyses (40%), the corresponding gene lists/profiles were provide
 Next, we quantified the frequency of methodological issues and reporting that would undermine the conclusions (Figure 3J).
 Lack of appropriate background was the most common issue (179 cases), followed by FDR (94 cases), then lack of data shown (13), inference without test (11 cases), and misinterpreted FDR values (2 cases).
 Only 35 analyses (15%) did not exhibit any of these major methodological issues.
+
+During the course of this survey, we also noticed some studies that grouped up- and down-regulated gene lists together prior to ORA, a practice we were not expecting.
+To assess this in a systematic way we assessed differential gene expression studies to determine how common it was to combine up- and down-regulated gene lists prior to ORA (Figure 3K).
+From 109 analyses, just 28 studies performed stated they performed separate analysis of up- and down-regulated gene sets.
+
+We also looked at studies performing GSEA, and whether three important analytical choices were described in the methods.
+These are (i) the gene weighting parameter, (ii) test type, ie: permuting sample labels or genes, and (iii) method used for ranking genes.
+These parameters were not stated in more than half of the analyses.
+
 Taken together, these data suggest methodological and reporting deficiencies are widespread in published functional enrichment analyses.
 
-![Figure S1a. Representation of journals in the data set.](images/journals1.png "Journals")
+![Figure S1a. Representation of journals in the data set.](images/journals2.png "Journals")
 
-![Figure S1B. Representation of different omics types in the data set.](images/omics1.png "Omics")
+![Figure S1B. Representation of different omics types in the data set.](images/omics2.png "Omics")
 
-![Figure S1C. Representation of different organisms in the data set.](images/organisms1.png "Organisms")
+![Figure S1C. Representation of different organisms in the data set.](images/organisms2.png "Organisms")
 
-![Figure 3A. Representation of different gene set libraries in the data set.](images/genesetlib1.png "Geneset libraries")
+![Figure 3A. Representation of different gene set libraries in the data set.](images/genesetlib2.png "Geneset libraries")
 
-![Figure 3B. Proportion of analyses that reported version information for gene sets used.](images/genesetvers1.png "Geneset version")
+![Figure 3B. Proportion of analyses that reported version information for gene sets used.](images/genesetvers2.png "Geneset version")
 
-![Figure 3C. Representation of different statistical tests in the data set.](images/stattest1.png "Geneset libraries")
+![Figure 3C. Representation of different statistical tests in the data set.](images/stattest2.png "Geneset libraries")
 
-![Figure 3D. Recognition of p-value correction for multiple testing in the data set.](images/fdr1.png "FDR")
+![Figure 3D. Recognition of p-value correction for multiple testing in the data set.](images/fdr2.png "FDR")
 
-![Figure 3E. Representation of different software tools for enrichment analysis in the data set.](images/app1.png "Software used")
+![Figure 3E. Representation of different software tools for enrichment analysis in the data set.](images/app2.png "Software used")
 
-![Figure 3F. Proportion of analyses that reported version information for software used.](images/appvers1.png "Software version")
+![Figure 3F. Proportion of analyses that reported version information for software used.](images/appvers2.png "Software version")
 
-![Figure 3G. Background gene set usage and reporting in the dataset.](images/bg1.png "Background gene list used")
+![Figure 3G. Background gene set usage and reporting in the dataset.](images/bg2.png "Background gene list used")
 
-![Figure 3H. Proportion of scripted analyses that provided software code.](images/code1.png "Code available")
+![Figure 3H. Proportion of scripted analyses that provided software code.](images/code2.png "Code available")
 
-![Figure 3I. Proportion of scripted analyses that provided gene profiles.](images/genelists1.png "Gene lists provided")
+![Figure 3I. Proportion of scripted analyses that provided gene profiles.](images/genelists2.png "Gene lists provided")
 
-![Figure 3J. Proportion of analyses with different methodological problems.](images/assumptions1.png "Assumptions violated")
+![Figure 3J. Proportion of analyses with different methodological problems.](images/assumptions2.png "Assumptions violated")
+
+![Figure 3K. Representation of journals in the data set.](images/comb2.png "Journals")
+
+![Figure 3L. Reporting of GSEA parameters.](images/gseaparam2.png "Journals")
 
 ### Analysis scores
 
+In order to make an accurate assessment of association between analysis quality and bibliometrics, we required a larger sample of articles.
+We therefore analysed a further 1300 articles, bringing the total number of analyses described up to 1365. 
+This larger sample did not undergo double-checking so may contain a small number of errors.
+
 We then scored each analysis based on the inclusion or lack of methodological issues and included details.
-The median score was -4, with a mean of -3.5 and standard deviation of 1.3 (Figure 4A).
+The median score was -4, with a mean of -3.5 and standard deviation of 1.4 (Figure 4A).
 Next, we assessed whether these analysis scores associate with journal citation metrics (Figure 4B).
-There was a slight positive correlation using the Pearson method but it was not statistically significant (r=0.04, p=0.16).
+There was no statistically significant association of analysis score and SJR (Pearson r=0.03, p=0.23).
 Next we wanted to know which journals had the highest and lowest scores.
 Only journals with five or more analyses were included.
-The best scoring journals were *Transl Psychiatry*, *Metabolites* and *J Exp Clin Cancer Res* (Figure 4C), while the poorest were *Mol Med Rep*, *Cancer Med* and *World J Gastroenterol* (Figure 4D), although we note that there was a wide variation between articles of the same journal.
-Then, we assessed for an association between mean analysis score and the SJR (Figure 4E).
-Again, there was a slightly positive association that wasn't statistically significant (Pearson r=0.09, p=0.55).
+The best scoring journals were *Transl Psychiatry*, *Metabolites* and *J Exp Clin Cancer Res* (Figure 4C), while the poorest were *RNA Biol*, *Mol Med Rep*, *Cancer Med* and *World J Gastroenterol* (Figure 4D), although we note that there was a wide variation between articles of the same journal.
+Then, we assessed for an association between mean analysis score and the SJR, for journals with 5 or more analyses (Figure 4E).
+Again, there was no association between analysis score and SJR (Pearson r=-0.008, p=0.95).
 Next we assessed whether there was any association between analysis scores and the number of citations received by the articles.
-After log transforming the citation data, there was no association between citations and analysis scores (Pearson r=0.002, p=0.94).
+After log transforming the citation data, there was no association between citations and analysis scores (Pearson r=0.002, p=0.95) (Figure 4F).
+Taken together, these findings suggest that these methodological issues are not limited to lower ranking or poorly cited articles.
 
 ![Figure 4A. Distribution of analysis scores.](images/hist1.png "Analysis scores")
 
@@ -270,33 +304,36 @@ After log transforming the citation data, there was no association between citat
 
 ![Figure 4D. Journals with Lowest analysis scores.](images/score_lowest1.png "Lowest analysis scores")
 
-![Figure 4E. Association between SJR and mean analysis score for journals with >=5 analyses.](images/mean_sjr1.png "Mean score vs SJR")
+![Figure 4E. Association between SJR and mean analysis score for journals with 5 or more analyses.](images/mean_sjr1.png "Mean score vs SJR")
+
+![Figure 4F. Association between SJR and citations.](images/cites1.png "Mean score vs citations")
+
 
 ## Discussion
 
-While there have been several articles evaluating the performance of functional enrichment tools, there has been relatively little interest in how existing tools are (mis)used. 
-A recent study looked at the the popularity of frequently used tools and their performance (Xie et al, 2021), but this assumes that the tools were properly used.
+While there have been several articles benchmarking the performance of functional enrichment tools, there has been relatively little interest in how existing tools are (mis)used. 
+A recent study looked at the the popularity of frequently used tools and their performance (Xie et al, 2021), but this assumes that the tools were properly used and sufficiently reported.
 In this sample of open access research articles, there appears to be a bias toward tools that are easy to use.
 ORA tools that only require pasting lists of gene identifiers into a webpage (ie: DAVID, IPA, KOBAS and PANTHER) are collectively more popular than other solutions like GSEA (a standalone graphical user interface software for FCS) or any command line tool.
 This is despite the fact that ORA tools perform worse than FCS and new generation pathway topology tools (Kaspi & Ziemann 2020; Maleki et al, 2020; Xie et al, 2021).
 
-The lack of methodological details regarding enrichment analysis in some articles was disturbing.
-To illustrate this, many articles mention prominently in the abstract the functional enrichment results but do not detail in their methods sections anything about what type of enrichment analysis was actually conducted.
-This is not limited to a few obscure journals; there were 88 journals that published articles where the tool used for enrichment analysis was not defined.
-
-As we screened these articles, we observed other types of details lacking.
-For example GSEA has different options that impact the results including the ranking metric, gene weighting method and the permutation type (on samples or genes), which were not regularly reported in articles.
-For ORA, in some instances it was unclear whether up- and down-regulated gene lists were combined before analysis.
-When applying ORA to differential expression, combining up- and down-regulated gene lists is considered poor practice (Hong et al, 2014).
-Our own tests indicate that combining up- and down-regulated gene lists prior to ORA results in a dramatic loss of sensitivity when the proportion of differentially expressed genes is high.
-Using an inappropriate background list resulted in substantially altered results (Figure 1B).
+Failing to properly describe the background gene list was the most common methodological issue (Figure 3J).
+This error can lead to substantially distorted results (Figure 1B).
 In the example here, using the inappropriate background resulted in 2.3 fold more differentially regulated gene sets.
 Thus if there are few or no significant results using a correct background list, there may be a temptation to use an inappropriate background.
-Results here indicate most ORA articles do not report using a background gene list, suggesting that inappropriate ORA use is common.
 
-We scored each of the analyses included in the screen which revealed only 30 articles scored a satisfactory score of zero or higher.
-Surprisingly, the analysis scores we generated did not correlate with a journal level bibliographic metric, nor accrued citations of individual articles.
-This suggests no association between methodological rigour and traditional research impact metrics in this sample.
+The proportion of ORA studies that combined up- and down-regulated gene set was also surprisingly high, at 70% (Figure 3K).
+As exemplified in Figure 1C, combining up- and down-regulated genes can severely reduce the number of significant  gene sets (from 293 pathways to just 22 in this example).
+This is consistent with a previous report indicating that combining up- and down-regulated gene lists is considered poor practice because it reduces sensitivity (Hong et al, 2014).
+Results shown here indicate that a large fraction of published works suffer from a high rate of false negatives, in effect missing a large fraction of truly differentially regulated gene sets.
+This is exacerbated by using an inappropriate background gene list, which leads to a high rate of false positives.
+
+Although analyses involving GSEA scored better overall, they were not free of issues.
+For example GSEA has different options that impact the results including the ranking metric, gene weighting method and the permutation type (on samples or genes), which were not regularly reported in articles (Figure 3L).
+
+We scored a total of 1630 analyses, revealing only a small fraction of articles obtained a satisfactory score of zero or higher.
+Surprisingly, the analysis scores we generated did not correlate with journal level bibliographic metric, nor accrued citations of individual articles, showing no association between methodological rigour and traditional research impact metrics in this sample.
+This suggests that methodological and reporting problems are not limited lower ranked journals, but are a more general problem.
 
 Still there are some limitations that need to be recognised.
 Many open access articles examined here are from journals not considered to be highly prestigious, and the distribution of analysis scores might be different for closed access articles.
@@ -318,6 +355,7 @@ These databases are regularly upgraded so this is important for reproducibility.
 As these tools are regularly updated, this will aid reproducibility.
 
 3. If making claims about the regulation of a gene set, then results of a statistical test must be shown (including measures of significance and effect size).
+The number of genes belonging to a pathway on its own is insufficient to infer enrichment.
 "Data not shown" is not acceptable when it is possible to attach supplementary files.
 
 4. Report which statistical test was used.
@@ -326,7 +364,8 @@ This is especially relevant for tools that report the results of different stati
 
 5. Always report FDR or q-values (p-values that have been corrected for multiple tests).
 This will reduce the chance of false positives when performing many tests simultaneously.
-Report what method was used for p-value adjustment; Bonferonni, FDR and FWER are examples.
+Report what method was used for p-value adjustment.
+Bonferonni, FDR and FWER are examples.
 
 6. If ORA is used, it is vital to use a background list consisting of all detected genes, and report this in the methods section.
 Avoid tools that don't accept a background list.
@@ -338,29 +377,27 @@ Any parameters that are vary from the defaults should be reported.
 
 8. If using ORA for gene expression analysis, refrain from combining up- and down-regulated genes before analysis.
 
+9. Functional enrichment analysis results shouldn't be considered proof of biological plausibility nor validity of omics data analysis (Timmons et al, 2015). 
+These tools are best used generating new hypotheses; informing subsequent biochemical or signaling experimentation.
+
 ### Additional recommendations for enhanced reproducibility 
 
 The following guidelines are directed at going over and above the minimum standards towards a gold standard of reliability and reproducibility.
 
-9. Preference FCS and pathway topology tools over ORA tools.
+10. Preference FCS and pathway topology tools over ORA tools.
 ORA tools have a lower sensitivity. 
 In practice, they are rarely used properly.
 
-10. Include the gene profile data (including any background lists) in the supplementary data in TSV or CSV formats.
+11. Include the gene profile data (including any background lists) in the supplementary data in TSV or CSV formats.
 Excel spreadsheets are not recommended for genomics work (Ziemann et al, 2016)
 
-11. Scripted analysis workflows are preferred over analysis involving graphical user interfaces because they can attain a higher degree of computational reproducibility, so consider investing in upgrading your analysis.
+12. Scripted analysis workflows are preferred over analysis involving graphical user interfaces because they can attain a higher degree of computational reproducibility, so consider investing in upgrading your analysis.
 Similarly, free and open source software tools are preferred over proprietary software.
 
-12. If using a scripted analysis, provide code by depositing it to a repository like GitHub or Zenodo.
+13. If using a scripted analysis, provide code by depositing it to a repository like GitHub or Zenodo.
 Link the data to the code, so anyone can download and reproduce your analysis (Peng 2011).
 
 <hr>
-
-## Conclusions
-
-We echo the sentiments of Timmons et al (2015) that functional enrichment analysis results should be interpreted with extreme caution, and that they shouldn't be considered proof of biological plausibility nor validity of omics data analysis.
-Functional enrichment analysis is best used as a hypothesis generating procedure to inform subsequent biochemical or signaling experimentation.
 
 ## References
 

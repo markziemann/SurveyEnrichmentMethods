@@ -80,7 +80,7 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 7, label = res2, pos = 3, cex = 1, col = "black")
 
 dir.create("images")
-png("images/journals1.png",width=400,height=300)
+png("images/journals2.png",width=400,height=300)
 par(mar=c(5,12,3,3))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Journal", xlim=c(0,170))
@@ -120,7 +120,7 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Omics type", xlim=c(0,100))
 text(y = (1:length(res2)*1.2)-1.2  , x = res2+5, label = res2, pos = 3, cex = 1, col = "black")
 
-png("images/omics1.png",width=400,height=300)
+png("images/omics2.png",width=400,height=300)
 par(mar=c(5,12,3,3))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Omics type", xlim=c(0,100))
@@ -162,7 +162,7 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Organism", xlim=c(0,200))
 text(y = (1:length(res2)*1.2)-1.2  , x = res2+7, label = res2, pos = 3, cex = 1, col = "black")
 
-png("images/organisms1.png",width=400,height=300)
+png("images/organisms2.png",width=400,height=300)
 par(mar=c(5,12,3,3))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Organism", xlim=c(0,200))
@@ -204,7 +204,7 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene set library", xlim=c(0,140))
 text(y = (1:length(res2)*1.2)-1.2  , x = res2+7, label = res2, pos = 3, cex = 1, col = "black")
 
-png("images/genesetlib1.png",width=400,height=300)
+png("images/genesetlib2.png",width=400,height=300)
 par(mar=c(5,12,3,3))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene set library", xlim=c(0,150))
@@ -228,7 +228,7 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res)*1.2) - 0.75 , x = res+15, label = res, pos = 3, cex = 1, col = "black")
 
 
-png("images/genesetvers1.png",width=300,height=150)
+png("images/genesetvers2.png",width=300,height=150)
 par(mar=c(5,5,3,3))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene set version defined", xlim=c(0,250))
@@ -269,7 +269,7 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Test used", xlim=c(0,150))
 text(y = (1:length(res2)*1.2)-1.1  , x = res2+10, label = res2, pos = 3, cex = 1, col = "black")
 
-png("images/stattest1.png",width=400,height=300)
+png("images/stattest2.png",width=400,height=300)
 par(mar=c(5,12,3,3))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Test used", xlim=c(0,160))
@@ -300,7 +300,7 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "FDR correction performed", xlim=c(0,150))
 text(y = (1:length(res)*1.2) - 0.8 , x = res+10, label = res, pos = 3, cex = 1, col = "black")
 
-png("images/fdr1.png",width=300,height=200)
+png("images/fdr2.png",width=300,height=200)
 par(mar=c(5,8,3,3))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "FDR correction performed", xlim=c(0,160))
@@ -340,7 +340,7 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App used", xlim=c(0,80))
 text(y = (1:length(res2)*1.2)-1.1  , x = res2+5, label = res2, pos = 3, cex = 1, col = "black")
 
-png("images/app1.png",width=400,height=300)
+png("images/app2.png",width=400,height=300)
 par(mar=c(5,12,3,3))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App used", xlim=c(0,80))
@@ -363,7 +363,7 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App version defined", xlim=c(0,200))
 text(y = (1:length(res)*1.2) - 0.75 , x = res+15, label = res, pos = 3, cex = 1, col = "black")
 
-png("images/appvers1.png",width=300,height=150)
+png("images/appvers2.png",width=300,height=150)
 par(mar=c(5,5,3,3))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "App version defined", xlim=c(0,200))
@@ -386,7 +386,7 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Code availability", xlim=c(0,50))
 text(y = (1:length(res)*1.2) - 0.75 , x = res+2, label = res, pos = 3, cex = 1, col = "black")
 
-png("images/code1.png",width=300,height=150)
+png("images/code2.png",width=300,height=150)
 par(mar=c(5,5,3,3))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Code availability", xlim=c(0,50))
@@ -410,7 +410,7 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Background list specification", xlim=c(0,200))
 text(y = (1:length(res)*1.2) - 0.85 , x = res+10, label = res, pos = 3, cex = 1, col = "black")
 
-png("images/bg1.png",width=300,height=200)
+png("images/bg2.png",width=300,height=200)
 par(mar=c(5,9,3,2))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Background list specified", xlim=c(0,220))
@@ -433,7 +433,7 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene lists provided", xlim=c(0,160))
 text(y = (1:length(res)*1.2) - 0.75 , x = res+8, label = res, pos = 3, cex = 1, col = "black")
 
-png("images/genelists1.png",width=300,height=150)
+png("images/genelists2.png",width=300,height=150)
 par(mar=c(5,5,3,3))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene lists provided", xlim=c(0,160))
@@ -470,7 +470,7 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Methodological flaws", xlim=c(0,200))
 text(y = (1:length(res)*1.2) - 0.9 , x = res+8, label = res, pos = 3, cex = 1, col = "black")
 
-png("images/assumptions1.png",width=400,height=250)
+png("images/assumptions2.png",width=400,height=250)
 par(mar=c(5,12,3,2))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Methodological flaws", xlim=c(0,220))
@@ -497,7 +497,7 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 grid()
 text(y = (1:length(res)*1.2) - 0.9 , x = res+5, label = res, pos = 3, cex = 1, col = "black")
 
-png("images/comb1.png",width=300,height=200)
+png("images/comb2.png",width=300,height=200)
 par(mar=c(5,8,3,2))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Separated or combined ORA", xlim=c(0,100))
@@ -541,7 +541,7 @@ barplot(t(params),horiz=TRUE,las=1,xlim=c(0,30),legend = colnames(params),
 text(y = (1:nrow(params)*1.2) - 0.7 , x = params[,1]-3, label = params[,1], pos = 3, cex = 1, col = "white")
 text(y = (1:nrow(params)*1.2) - 0.7 , x = params[,1]+2, label = params[,2], pos = 3, cex = 1, col = "black")
 
-png("images/gseaparam1.png",width=350,height=250)
+png("images/gseaparam2.png",width=350,height=250)
 par(mar=c(5,8,3,2))
 params <- rbind(rankspec,algospec,weightspec)
 rownames(params) <- c("rank method", "test type", "weight type")
@@ -552,6 +552,205 @@ barplot(t(params),horiz=TRUE,las=1,xlim=c(0,30),legend = colnames(params),
 text(y = (1:nrow(params)*1.2) - 0.7 , x = params[,1]-3, label = params[,1], pos = 3, cex = 1, col = "white")
 text(y = (1:nrow(params)*1.2) - 0.7 , x = params[,1]+2, label = params[,2], pos = 3, cex = 1, col = "black")
 dev.off()
+
+```
+
+## Score
+
+Here I am proposing a scoring scheme.
+If there is information missing from the article, or basic mistakes are made, then a point is deducted.
+If the article goes over and above the basic reproducibility, then they are awarded a point.
+
+Gene set library origin not stated = -1
+
+Gene set library version not stated = -1
+
+Stat test not stated = -1
+
+No stat test conducted = -1
+
+No FDR correction conducted = -1
+
+App used not stated = -1
+
+App version not stated = -1
+
+Background list not defined = -1
+
+Inappropriate background list used = -1
+
+Code availability = +1
+
+Gene lists provided = +1
+
+```{r,score}
+
+score <- function(r){
+  r[is.na(r)] <- 0
+  SCORE=0
+  # gene set lib
+  if(r["Gene.set.library"]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # GS version
+  if(r["GS.version"]=="No"){
+    SCORE=SCORE-1
+  }
+  # stat test
+  if(r["Statistical.test.used"]=="No test"){
+    SCORE=SCORE-1
+  }
+  if(r["Statistical.test.used"]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # FDR
+  if(r["FDR.Correction"]!="Yes"){
+    SCORE=SCORE-1
+  }
+  # app used
+  if(r["App.used"]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # App version
+  if(r["App.Version"]=="No"){
+    SCORE=SCORE-1
+  }
+  # Code availability
+  if(r["Code.availability"]=="Yes"){
+    SCORE=SCORE+1
+  }
+  # Background
+  if(r["Background.gene.set"]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  if(r["Background.gene.set"]=="No"){
+    SCORE=SCORE-1
+  }
+  if(r["Background.gene.set"]=="Stated, but incorrect"){
+    SCORE=SCORE-1
+  }
+  # gene list
+  if(r["Gene.lists.provided"]=="Yes"){
+    SCORE=SCORE+1
+  }
+  return(SCORE)
+}
+
+scores <- apply(X = x,MARGIN = 1, FUN = score)
+barplot(table(scores), xlab="analysis score",ylab="frequency")
+x$scores <- scores
+length(which(scores>0))
+
+mean(x$scores)
+sd(x$scores)
+median(x$scores)
+
+
+```
+
+## Journal rank
+
+```{r,journal rank}
+
+jmetrics <- read.table("scimagojr_2020.csv",sep=";",header=TRUE,dec = ",")
+jmetrics$Title <- toupper(jmetrics$Title)
+head(jmetrics,3)
+dim(jmetrics)
+
+nlmcat <- readLines("nlmcatalog_result.txt")
+journaltitle <- nlmcat[grep("Title\\(s\\):",nlmcat)]
+journaltitle <- gsub("Title\\(s\\): ","",journaltitle)
+journaltitle <- gsub("\\.$","",journaltitle)
+journaltitle <- toupper(journaltitle) 
+journalabbrev <- nlmcat[grep("Title Abbreviation:",nlmcat)]
+journalabbrev <- sapply(strsplit(journalabbrev,":"),"[[",2)
+journalabbrev <- gsub(" $","",journalabbrev)
+journalabbrev <- gsub("^ ","",journalabbrev)
+jdf <- data.frame(journalabbrev,journaltitle)
+
+mjdf <- merge(jdf,jmetrics,by.x="journaltitle",by.y="Title")
+
+xm <- merge(x,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
+
+```
+
+## Analysis scores vs Journal rank
+
+```{r,scoresvsjrank1}
+
+tail(xm$Journal)
+
+mylm1 <- lm (xm$scores ~ xm$SJR)
+plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
+abline(mylm1,col="red")
+
+cor.test(xm$scores,xm$SJR,method="pearson")
+
+cor.test(xm$scores,xm$SJR,method="spearman")
+
+png("images/score_sjr1.png")
+par(mar=c(5,5,3,1))
+plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
+abline(mylm1,col="red")
+grid()
+dev.off()
+
+```
+
+## Best and worst journals
+
+Minimum of 5 analyses.
+
+```{r,goodbadugly}
+
+xmm <-xm[,c("Journal","scores")]
+tab <- table(xmm$Journal)
+tab <- tab[which(tab>3)]
+xmm <- xmm[which(xmm$Journal %in% names(tab)),]
+dim(xmm)
+jres <- aggregate(. ~ Journal, xmm ,mean)
+jsd <- aggregate(. ~ Journal, xmm ,sd)
+jres$sd <- jsd$scores
+jres <- jres[order(jres$scores),]
+dim(jres)
+head(jres)
+
+par(mar=c(5,12,3,1))
+barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Highest scoring journals",xlim=c(-4,0))
+grid()
+
+png("images/score_highest1.png")
+par(mar=c(5,12,3,1))
+barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Highest scoring journals",xlim=c(-4,0))
+grid()
+dev.off()
+
+par(mar=c(5,12,3,1))
+barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Lowest scoring journals",xlim=c(-5,0))
+grid()
+
+png("images/score_lowest1.png")
+par(mar=c(5,12,3,1))
+barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Lowest scoring journals",xlim=c(-5,0))
+grid()
+dev.off()
+
+j <- unique(xmm$Journal)
+jscores <- sapply(j,function(jj) {
+ xmm[which(xmm$Journal == jj ),2]  
+})
+
+jscores <- jscores[order(unlist(lapply(jscores,mean)))]
+
+par(mar=c(5,12,3,1))
+vioplot(tail(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Highest scoring journals")
+
+par(mar=c(5,12,3,1))
+vioplot(head(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Lowest scoring journals")
 
 ```
 
