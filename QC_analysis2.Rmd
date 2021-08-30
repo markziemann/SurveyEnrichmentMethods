@@ -681,16 +681,18 @@ xm <- merge(x,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
 tail(xm$Journal)
 
 mylm1 <- lm (xm$scores ~ xm$SJR)
-plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
+plot(xm$SJR,xm$scores, bty="n",
+  xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
 abline(mylm1,col="red")
 
 cor.test(xm$scores,xm$SJR,method="pearson")
 
 cor.test(xm$scores,xm$SJR,method="spearman")
 
-png("images/score_sjr1.png")
+png("images/score_sjr2.png")
 par(mar=c(5,5,3,1))
-plot(xm$SJR,xm$scores,xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
+plot(xm$SJR,xm$scores, bty="n",
+  xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
 abline(mylm1,col="red")
 grid()
 dev.off()
@@ -720,7 +722,7 @@ barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,
         main = "Highest scoring journals",xlim=c(-4,0))
 grid()
 
-png("images/score_highest1.png")
+png("images/score_highest2.png")
 par(mar=c(5,12,3,1))
 barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
         main = "Highest scoring journals",xlim=c(-4,0))
@@ -732,7 +734,7 @@ barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,
         main = "Lowest scoring journals",xlim=c(-5,0))
 grid()
 
-png("images/score_lowest1.png")
+png("images/score_lowest2.png")
 par(mar=c(5,12,3,1))
 barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
         main = "Lowest scoring journals",xlim=c(-5,0))

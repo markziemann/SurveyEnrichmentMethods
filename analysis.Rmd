@@ -651,7 +651,7 @@ tail(xm$Journal)
 hist(xm$SJR,xlab="SJR",main="SJR distribution")
 
 mylm1 <- lm (xm$scores ~ xm$SJR)
-plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19,
+plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19, bty="n",
   xlab="SJR",ylab="score",main="Analysis scores vs. journal metrics")
 abline(mylm1,col="red")
 
@@ -660,7 +660,7 @@ cor.test(xm$scores,xm$SJR,method="spearman")
 
 png("images/score_sjr1.png",width=350,height=300)
 par(mar=c(5,5,3,1))
-plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19,
+plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19,bty="n",
   xlab="SJR",ylab="score",main="Analysis scores vs. journal metrics")
 abline(mylm1,col="red")
 grid()
@@ -733,13 +733,13 @@ vioplot(head(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Lowest scor
 jjres <- merge(jres,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
 
 mylm2 <- lm (jjres$scores ~ jjres$SJR)
-plot(jjres$SJR,jjres$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+plot(jjres$SJR,jjres$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
 abline(mylm2,col="red")
 
 png("images/mean_sjr1.png",width=350,height=300)
 par(mar=c(5,5,3,1))
-plot(jjres$SJR,jjres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+plot(jjres$SJR,jjres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
 abline(mylm2,col="red")
 dev.off()
@@ -787,7 +787,7 @@ Plot the number of citations against analysis scores
 ```{r,citesplot}
 
 mylm2 <- lm (xm$scores ~ xm$cites)
-plot(xm$cites,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+plot(xm$cites,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="Num cites",ylab="score",main="Association of analysis scores with number of citations")
 abline(mylm2,col="red")
 
@@ -796,13 +796,13 @@ cor.test(xm$scores , xm$cites, method="pearson")
 cor.test(xm$scores , xm$cites, method="spearman")
 
 mylm2 <- lm (xm$scores ~ log2(xm$cites))
-plot(log2(xm$cites),xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+plot(log2(xm$cites),xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
 abline(mylm2,col="red")
 
 png("images/cites1.png",width=350,height=300)
 par(mar=c(5,5,3,1))
-plot(log2(xm$cites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,
+plot(log2(xm$cites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
 abline(mylm2,col="red")
 dev.off()

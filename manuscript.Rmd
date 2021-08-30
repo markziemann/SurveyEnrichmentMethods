@@ -322,7 +322,7 @@ Taken together, these findings suggest that these methodological issues are not 
 
 ![Figure 4E. Association between SJR and mean analysis score for journals with 5 or more analyses.](images/mean_sjr1.png "Mean score vs SJR")
 
-![Figure 4F. Association between SJR and citations.](images/cites1.png "Mean score vs citations")
+![Figure 4F. Association between citations and analysis scores.](images/cites1.png "Mean score vs citations")
 
 
 ## Discussion
