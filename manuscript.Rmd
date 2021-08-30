@@ -83,7 +83,7 @@ Analyses were conducted in R version 4.1.0.
 ### Survey of enrichment analysis 
 
 We have collated a list of 2941 articles in PubMed Central published in 2019 that have keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
-We sampled 1500 of these articles and collected the following information from the article, searching the methods sections and other parts of the article including the supplement.
+We sampled 200 of these articles and collected the following information from the article, searching the methods sections and other parts of the article including the supplement.
 
 * Journal name
 
@@ -108,9 +108,10 @@ We sampled 1500 of these articles and collected the following information from t
 We excluded articles describing novel enrichment analysis techniques/tools, review articles and conference abstracts.
 Some articles presented the results of >1 enrichment analysis, so additional rows were added to accommodate them. 
 These data were entered into a Google Spreadsheet by a team of five researchers.
+These articles were cross checked by another team member and any discrepancies were resolved.
 For quality control, 200 randomly selected assessed articles were cross-checked by two senior team members to ensure consistency across the five team members.
-Data were then cleaned of spelling mistakes and other irregularities by loading them into R and tabulating the common occurrences, then fixing the original spreadsheet.
-Cleaned data were then loaded into R v4.1 for downstream analysis. 
+Cleaned data were then loaded into R v4.1 for downstream analysis.
+
 We rated each analysis with a simple approach that deducted points for missing methodological details and awarding points for including extra information (Table 1). 
 
 | 1 point deducted | 1 point awarded |
@@ -178,56 +179,47 @@ grViz("digraph flowchart {
       tab6 [label = '@@6']
       tab7 [label = '@@7']
       tab8 [label = '@@8']
-      tab9 [label = '@@9']
-      tab10 [label = '@@10']
-      tab11 [label = '@@11']
-      tab12 [label = '@@12']
-      tab13 [label = '@@13']
       
       # edge definitions with the node IDs
-      tab1 -> tab2  -> tab4 -> tab5 -> tab6 -> tab7 -> tab11;
-      tab7 -> tab12 ;
-      tab7 -> tab13 ;
-      tab2-> tab3 ;
-      tab4-> tab8 -> tab9 -> tab10 -> tab13;
+      tab1 -> tab2  -> tab4 -> tab5 -> tab6 -> tab7;
+      tab2 -> tab3 ;
+      tab6 -> tab8 ;
       }
       [1]: 'PMC keyword search (2019): 2941 results'
-      [2]: '1500 PMC articles selected'
-      [3]: '133 articles excluded'
-      [4]: '1363 articles analyzed by team of five researchers'
-      [5]: '1624 enrichment analyses described'
-      [6]: 'data entry to spreadsheet'
-      [7]: 'data analysis in R'
-      [8]: 'Subset of 231 analyses cross-checked by two senior researchers'
-      [9]: 'data entry to spreadsheet'
-      [10]: 'data analysis in R'
-      [11]: 'Summary charts'
-      [12]: 'Integration with journal and article metrics'
-      [13]: 'Data validation/crosschecking'
-      ")
+      [2]: '200 PMC articles selected'
+      [3]: '14 articles excluded'
+      [4]: '235 analyses screened and cross-checked'
+      [5]: 'data entry to spreadsheet'
+      [6]: 'data analysis in R'
+      [7]: 'Summary charts'
+      [8]: 'Integration with journal and article metrics'
+")
 
 ```
-Figure 2. A summary of the survey of functional enrichment analyses.
+*Figure 2. A summary of the survey of functional enrichment analyses.*
 
-There were articles from 330 journals in the screen, with *Scientific Reports*, *Oncology Letters* and *International Journal of Molecular Science* being the biggest contributors (Figure S1A).
-There were 35 different omics types, with RNA-seq and gene expression microarray being the most popular (Figure S1B).
-There were 175 different species under study, but human was the most common with 1104 analyses (Figure S1C).
-We recorded the use of 101 different gene set libraries, with GO and KEGG being the most frequently used (Figure 3A).
-There were 85 studies where the gene set libraries used were not defined in the article.
-Only 108 analyses reported the version of the gene set library used (Figure 3B).
-There were XX different statistical tests used, and the most common reported tests were Fisher's Exact, GSEA and hypergeometric tests; but the statistical test used was not reported for the majority of analyses (Figure 3C).
-Only 754 of 1594 studies (XX%) described correction of p-values for multiple testing (Figure 3D).
-There were 145 different tools used to perform enrichment analysis, with DAVID and GSEA being the most common; while 174 analyses (XX%) did not state what tool was used (Figure 3E).
-The version of the software used was provided in only 421 of 1611 analyses (26%) (Figure 3F).
+There were articles from 100 journals in the sample, with *PLoS One*, *Scientific Reports*, and *PeerJ* being the biggest contributors (Figure S1A).
+There were 18 different omics types, with gene expression array and RNA-seq being the most popular (Figure S1B).
+There were 31 different species under study, but human was the most common with 157 analyses (Figure S1C).
+We recorded the use of 26 different gene set libraries, with GO and KEGG being the most frequently used (Figure 3A).
+There were 14 analyses where the gene set libraries used were not defined in the article.
+Only 18 analyses reported the version of the gene set library used (Figure 3B).
+There were 12 different statistical tests used, and the most common reported tests were Fisher's Exact, GSEA and hypergeometric tests; but the statistical test used was not reported for the majority of analyses (Figure 3C).
+Out of the 225 analyses that performed a statistical test, only 119 (53%) described correction of p-values for multiple testing (Figure 3D).
+There were 50 different tools used to perform enrichment analysis, with DAVID and GSEA being the most common; while 15 analyses (6.4%) did not state what tool was used (Figure 3E).
+The version of the software used was provided in only 68 of 235 analyses (29%) (Figure 3F).
+
 For analyses using ORA methods, we studied what background gene set was used (Figure 3G). 
 This revealed that in most cases, the background list was not stated or it was clear from the article methods section that no background list was used.
 In a few cases, background list was mentioned but was inappropriate, for example using a whole genome background for an assay like RNA-seq.
-In only 67/1460 of cases (4.6%), the appropriate background list was described in the article.
-Of the 293 analyses which used a scripted computer language, only 10 provided links to the code used for enrichment analysis (3.4%) (Figure 3H).
-For 579 of 1618 analyses, the corresponding gene lists/profiles were provided either in the supplement or in the article itself (Figure 3I).
-Next, we quantified the frequency of methodological issues that would undermine the conclusions (Figure 3J).
-Lack of appropriate background was the most common issue (1361 cases), followed by FDR (761 cases), then inference without test (61 cases), inference without data shown (32 cases) and misinterpreted FDR values (3 cases).
-Only 160 analyses did not exhibit any of these major methodological issues.
+In only 8/197 of cases (4.1%), the appropriate background list was described in the article.
+
+Of the 47 analyses which used a scripted computer language, only 3 provided links to the code used for enrichment analysis (6.4%) (Figure 3H).
+For 93 of 235 analyses (40%), the corresponding gene lists/profiles were provided either in the supplement or in the article itself (Figure 3I).
+
+Next, we quantified the frequency of methodological issues and reporting that would undermine the conclusions (Figure 3J).
+Lack of appropriate background was the most common issue (179 cases), followed by FDR (94 cases), then lack of data shown (13), inference without test (11 cases), and misinterpreted FDR values (2 cases).
+Only 35 analyses (15%) did not exhibit any of these major methodological issues.
 Taken together, these data suggest methodological and reporting deficiencies are widespread in published functional enrichment analyses.
 
 ![Figure S1a. Representation of journals in the data set.](images/journals1.png "Journals")
