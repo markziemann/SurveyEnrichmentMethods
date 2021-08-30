@@ -287,7 +287,7 @@ fdr <- strsplit(fdr,", ")
 fdr <- unlist(fdr)
 res <- table(fdr)
 res <- res[order(res)]
-sum(res[which(names(res)!="Yes")])/sum(res)*100
+res[which(names(res)!="Yes")]/sum(res)*100
 res
 
 par(mar=c(1,1,1,5))
