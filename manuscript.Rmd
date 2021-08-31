@@ -76,14 +76,15 @@ Next, genes with an average of 10 reads per sample were discarded.
 Differential expression statistical analysis was conducted with DESeq2 v1.32.0 (Love et al, 2014) to identify genes altered by high glucose exposure.
 For gene set analysis, Reactome gene sets (Jassal et al, 2020) were downloaded (URL: https://reactome.org/download/current/ReactomePathways.gmt.zip , accessed 13th August 2021).
 FCS was performed using the mitch R package v1.4.0 with default settings, which uses a rank-ANOVA statistical test (Kaspi and Ziemann 2020).
-ORA analysis was performed using the clusterProfiler R package (v4.0.2) enricher function that implements a hypergeometric test (Yu et al, 2012).
+Genes with FDR<0.05 were used for ORA analysis using the clusterProfiler R package (v4.0.2) enricher function that implements a hypergeometric test (Yu et al, 2012).
+No fold-change threshold was used to select genes for ORA.
 For ORA, two types of background gene sets were used (i) all detected genes, or (ii) all genes in the annotation set.
 For genes and gene sets, a false discovery rate adjusted p-value (FDR) of 0.05 was considered significant.
 Analyses were conducted in R version 4.1.0.
 
 ### Survey of enrichment analysis 
 
-We have collated a list of 2941 articles in PubMed Central published in 2019 that have keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
+We collated 2941 articles in PubMed Central published in 2019 that have keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
 We sampled 200 of these articles and collected the following information from the article, searching the methods sections and other parts of the article including the supplement.
 
 * Journal name
@@ -105,7 +106,8 @@ We sampled 200 of these articles and collected the following information from th
 * Whether gene profile was provided in the supplement
 
 * Whether the analysis had any major flaws that might invalidate the results.
-This includes, (i) background gene set not stated or inappropriate background set used,
+This includes:
+(i) background gene set not stated or inappropriate background set used,
 (ii) lack of FDR correction,
 (iii) no enrichment data shown,
 (iv) inference without performing any statistical test, and
@@ -123,7 +125,7 @@ For ORA of differential gene expression analyses, we inspected the articles to s
 Cleaned data were then loaded into R v4.1 for downstream analysis.
 
 For assessment of enrichment analysis quality with journal metrics and citations, we required a larger set of studies so we sampled and analysed a further 1300 articles from PMC.
-Results from this sample were not double-checked and so may have a small number of inaccuracies.
+Results from this sample were not double-checked and so may contain a small number of inaccuracies.
 We rated each analysis with a simple approach that deducted points for missing methodological details and awarding points for including extra information (Table 1). 
 
 | 1 point deducted | 1 point awarded |
@@ -140,7 +142,7 @@ We rated each analysis with a simple approach that deducted points for missing m
 
 Scimago Journal Ranks were downloaded from the Scimago website (https://www.scimagojr.com/journalrank.php) and used to rank journals by their citation metrics.
 Using NCBI’s Eutils API, we collected the number of citations each article accrued since publication.
-We used Spearman and Pearson correlation tests to determine any association with the analysis scores we generated.
+We used Pearson correlation tests to assess the association with the analysis scores we generated.
 All data analyses were conducted in R v4.1 and the analysis scripts are available at GitHub (https://github.com/markziemann/SurveyEnrichmentMethods).
 
 ## Results
@@ -177,7 +179,7 @@ A search of PubMed Central showed 2941 articles published in 2019 with the keywo
 From these, 200 articles were screened for methodological errors.
 We excluded 14 articles from the screen because they did not present any enrichment analysis. 
 Those excluded articles included articles describing novel enrichment analysis techniques or tools, review articles or conference abstracts.
-As some articles included more than one enrichment analysis, the dataset included 235 analyses from 186 articles (Supplementary Table 1).
+As some articles included more than one enrichment analysis, the dataset included 235 analyses from 186 articles; this data is available in Table S1.
 A flow diagram of the survey is provided in Figure 2.
 
 ```{r,diagram1,echo=FALSE,fig.width=8,fig.height=4}
@@ -294,8 +296,7 @@ Taken together, these data suggest methodological and reporting deficiencies are
 ### Analysis scores
 
 In order to make an accurate assessment of association between analysis quality and bibliometrics, we required a larger sample of articles.
-We therefore analysed a further 1300 articles, bringing the total number of analyses described up to 1365. 
-This larger sample did not undergo double-checking so may contain a small number of errors.
+We therefore analysed a further 1300 articles, bringing the total number of analyses described up to 1365; this dataset is available in Table S2.
 
 We then scored each analysis based on the inclusion or lack of methodological issues and included details.
 The median score was -4, with a mean of -3.5 and standard deviation of 1.4 (Figure 4A).
@@ -415,6 +416,17 @@ Similarly, free and open source software tools are preferred over proprietary so
 Link the data to the code, so anyone can download and reproduce your analysis (Peng 2011).
 
 <hr>
+
+## Supporting information
+
+[**Table S1**](http://ziemann-lab.net/public/kaumadi/TableS1.tsv "A survey of 186 articles describing functional enrichment results.") A survey of 186 articles describing functional enrichment results.
+
+[**Table S2**](http://ziemann-lab.net/public/kaumadi/TableS2.tsv "A survey of 1365 articles describing functional enrichment results.") A survey of 1365 articles describing functional enrichment results.
+
+## Acknowledgements
+
+We thank Dr Nicholas C. Wong (Monash University) and Dr Antony Kaspi (Walter and Eliza Hall Institute) for comments on the manuscript.
+This research was supported by use of the Nectar Research Cloud, a collaborative Australian research platform supported by the NCRIS-funded Australian Research Data Commons (ARDC).
 
 ## References
 

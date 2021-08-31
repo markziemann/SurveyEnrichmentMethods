@@ -689,14 +689,6 @@ cor.test(xm$scores,xm$SJR,method="pearson")
 
 cor.test(xm$scores,xm$SJR,method="spearman")
 
-png("images/score_sjr2.png")
-par(mar=c(5,5,3,1))
-plot(xm$SJR,xm$scores, bty="n",
-  xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
-abline(mylm1,col="red")
-grid()
-dev.off()
-
 ```
 
 ## Best and worst journals
@@ -722,24 +714,10 @@ barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,
         main = "Highest scoring journals",xlim=c(-4,0))
 grid()
 
-png("images/score_highest2.png")
-par(mar=c(5,12,3,1))
-barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
-        main = "Highest scoring journals",xlim=c(-4,0))
-grid()
-dev.off()
-
 par(mar=c(5,12,3,1))
 barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
         main = "Lowest scoring journals",xlim=c(-5,0))
 grid()
-
-png("images/score_lowest2.png")
-par(mar=c(5,12,3,1))
-barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
-        main = "Lowest scoring journals",xlim=c(-5,0))
-grid()
-dev.off()
 
 j <- unique(xmm$Journal)
 jscores <- sapply(j,function(jj) {
