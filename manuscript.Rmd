@@ -140,7 +140,7 @@ We rated each analysis with a simple approach that deducted points for missing m
 | Background list not defined | |
 | Inappropriate background list used | |
 
-Scimago Journal Ranks were downloaded from the Scimago website (https://www.scimagojr.com/journalrank.php) and used to rank journals by their citation metrics.
+Scimago Journal Rank (SJR) data were downloaded from the Scimago website (https://www.scimagojr.com/journalrank.php) and used to score journals by their citation metrics.
 Using NCBI’s Eutils API, we collected the number of citations each article accrued since publication.
 We used Pearson correlation tests to assess the association with the analysis scores we generated.
 All data analyses were conducted in R v4.1 and the analysis scripts are available at GitHub (https://github.com/markziemann/SurveyEnrichmentMethods).
@@ -296,9 +296,9 @@ Taken together, these data suggest methodological and reporting deficiencies are
 ### Analysis scores
 
 In order to make an accurate assessment of association between analysis quality and bibliometrics, we required a larger sample of articles.
-We therefore analysed a further 1300 articles, bringing the total number of analyses described up to 1365; this dataset is available in Table S2.
+We therefore analysed a further 1300 articles, bringing the total number of analyses described up to 1630; this dataset is available in Table S2.
 
-We then scored each analysis based on the inclusion or lack of methodological issues and included details.
+We then scored each analysis based on the presence or absence of methodological issues and included details.
 The median score was -4, with a mean of -3.5 and standard deviation of 1.4 (Figure 4A).
 Next, we assessed whether these analysis scores associate with journal citation metrics (Figure 4B).
 There was no statistically significant association of analysis score and SJR (Pearson r=0.03, p=0.23).
@@ -331,7 +331,7 @@ Taken together, these findings suggest that these methodological issues are not 
 While there have been several articles benchmarking the performance of functional enrichment tools, there has been relatively little written on how existing tools are used (or misused). 
 A recent study looked at the the popularity of frequently used tools and benchmarked their performance (Xie et al, 2021), but this assumes that the tools were properly used and methods sufficiently reported.
 In this sample of open access research articles, there appears to be a bias toward tools that are easy to use.
-ORA tools that only require pasting lists of gene identifiers into a webpage (ie: DAVID, IPA, KOBAS and PANTHER) are collectively more popular than other solutions like GSEA (a standalone graphical user interface software for FCS) or any command line tool.
+ORA tools that only require pasting lists of gene identifiers into a webpage (ie: DAVID, KOBAS and PANTHER) are collectively more popular than other solutions like GSEA (a standalone graphical user interface software for FCS) or any command line tool.
 This is despite the fact that ORA tools perform worse than FCS and new generation pathway topology tools (Kaspi & Ziemann 2020; Maleki et al, 2020; Xie et al, 2021).
 
 Failing to properly describe the background gene list was the most common methodological issue (Figure 3J).
@@ -350,11 +350,11 @@ For example GSEA has different options that impact the results including the ran
 
 We scored a total of 1630 analyses, revealing only a small fraction of articles obtained a satisfactory score of zero or higher.
 Surprisingly, the analysis scores we generated did not correlate with journal level bibliographic metric, nor accrued citations of individual articles, showing no association between methodological rigour and traditional research impact metrics in this sample.
-This suggests that methodological and reporting problems are not limited lower ranked journals, but are a more general problem.
+This suggests that methodological and reporting problems are not limited to lower ranked journals, but are a more general problem.
 
 Still there are some limitations that need to be recognised.
 Many open access articles examined here are from journals not considered to be highly prestigious, and the distribution of analysis scores might be different for closed access articles.
-The articles included in this study contained keywords related to functional enrichment in the abstract, and it is plausible that articles in more prestigious journals contain such details in the abstract at lower rates.
+The articles included in this study contained keywords related to functional enrichment in the abstract, and it is plausible that articles in higher ranked journals contain such details in the abstract at lower rates.
 
 Nevertheless, these results are a wake up call for reproducibility and highlight the urgent need for minimum standards for functional enrichment analysis. 
 To address this, we provide a set of minimum standards for functional enrichment analysis, as well as additional recommendations to achieve gold standard reliability and reproducibility (Box 1).

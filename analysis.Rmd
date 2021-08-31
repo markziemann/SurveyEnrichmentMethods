@@ -55,14 +55,7 @@ x <- subset(x,x$GS.version!="EXCLUDE")
 nrow(x)
 length(unique(x$Pubmed.Central.ID))
 
-write.table(x,file="TableS2.tsv",quote=FALSE,sep="\t",col.names = TRUE,row.names = TRUE)
-
-```
-
-## Filter for studies included in QC2
-
-```{r,xy}
-
+write.table(x,file="TableS2.tsv",quote=FALSE,sep="\t",col.names = TRUE,row.names = FALSE)
 
 ```
 
