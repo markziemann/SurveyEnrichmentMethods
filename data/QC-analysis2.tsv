@@ -17,7 +17,7 @@ PMC6372980	179	-	ACS Comb Sci	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EX
 PMC6584587	1113	-	Sci Rep	Gene expression array	Homo sapiens	MetaCore	Yes	Hypergeometric	Yes	MetaCore	Yes	NA	Not stated	Background	Yes	Combined	-
 PMC6355180	88	-	Oncotarget	Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	No	Background, FDR	Yes	Combined	-
 PMC6356810	94	-	Genes (Basel)	Gene expression array	Homo sapiens	KEGG	No	Not stated	No	KOBAS	Yes	NA	No	Background, FDR	No	Separated	-
-PMC6461035	557	-	Peer J	RNA-seq	Rattus norvegicus	KEGG, GO	No	Not stated	Yes	clusterProfiler	No	No	Not stated	Background	Yes	Combined	-
+PMC6461035	557	-	PeerJ	RNA-seq	Rattus norvegicus	KEGG, GO	No	Not stated	Yes	clusterProfiler	No	No	Not stated	Background	Yes	Combined	-
 PMC6586291	1121	-	PLoS One	Metabolomics	Homo sapiens	KEGG	No	MSEA	Yes	MetaboAnalyst	Yes	NA	NA	No	No	-	-
 PMC6504884	723	-	Sci Rep	Metabolomics	Mus musculus	Not stated	No	Not stated	No	MetaboAnalyst	Yes	NA	Not stated	Background, FDR	No	-	-
 PMC6504884	723	-	Sci Rep	Metabolomics	Mus musculus	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No	-	-
@@ -47,7 +47,7 @@ PMC6544406	902	-	Oncotarget	Protein array	Homo sapiens	MSigDB	No	GSEA	Yes	GSEA	N
 PMC6383095	207	-	Cancer Control	Gene expression array	Homo sapiens	GO, KEGG	No	Not stated	Yes	DAVID	No	NA	No	Background	Yes	Separated	-
 PMC6626963	1331	-	J Diabetes Investig	Gene expression array, Database	Homo sapiens	GO, KEGG	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	No	Combined	-
 PMC6447814	499	-	Exp Ther Med	Gene expression array	Mus musculus	KEGG, GO	No	No test	No test	DAVID	Yes	NA	Not stated	Inference without test	No	Combined	-
-PMC6541682	888	-	J Assist Reprod Genet.	RNA-seq	Homo sapiens	MSigDB	No	GSEA	Yes	GSEA	No	NA	NA	No	Yes	-	rank=yes, algo=yes, weight=no
+PMC6541682	888	-	J Assist Reprod Genet	RNA-seq	Homo sapiens	MSigDB	No	GSEA	Yes	GSEA	No	NA	NA	No	Yes	-	rank=yes, algo=yes, weight=no
 PMC6352917	80	-	Front Immunol	Proteomics	Mus musculus	Reactome	No	Hypergeometric	Yes	ReactomePA	No	No	Not stated	Background	Yes	-	-
 PMC6352917	80	-	Front Immunol	Proteomics	Mus musculus	KEGG	No	Hypergeometric	Yes	clusterProfiler	No	No	Not stated	Background	Yes	-	-
 PMC6506780	725	-	Front Immunol	RNA-seq	Homo sapiens	GO, Reactome	No	Not stated	Yes	GOseq	No	No	Not stated	Background	No	Combined	-
@@ -60,10 +60,10 @@ PMC6548796	928	-	3 Biotech	RNA-seq	Anas platyrhynchos	GO, KEGG	No	Hypergeometric
 PMC6342918	55	-	Transl Psychiatry	Gene expression array, DNA methylation array	Homo sapiens	MSigDB	No	Hypergeometric	Yes	GSEA	Yes	Yes	NA	No	Yes	-	-
 PMC6463127	564	-	J Clin Med	RNA-seq	Homo sapiens	KEGG, GO	No	Fisher	No	DAVID	No	NA	Not stated	Background, FDR	Yes	Separated	-
 PMC6400810	280	-	J Cancer	Gene expression array, DNA methylation array	Homo sapiens	KEGG, GO	No	Not stated	No	DAVID	No	NA	Not stated	Background, FDR	No	Separated	-
-PMC6543588	897	-	Clin Epigenetics. 	DNA methylation array	Homo sapiens	GO	No	Fisher	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes	-	-
+PMC6543588	897	-	Clin Epigenetics	DNA methylation array	Homo sapiens	GO	No	Fisher	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	Yes	-	-
 PMC6438477	449	-	PLoS One	Genome sequencing	Coturnix japonica	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	No	Not stated	Background, FDR	No	-	-
 PMC6651993	1420	-	J Immunother Cancer	Genome sequencing	Homo sapiens	KEGG	No	Kruskal-Wallis	No	Not stated	No	No	Not stated	Background, FDR	No	-	-
-PMC6529576	822	-	Front Genet 	Genome sequencing	Homo sapiens	Jensen Diseases database	No	Fisher	No	Enrichr	No	NA	Not stated	Background, FDR	Yes	-	-
+PMC6529576	822	-	Front Genet	Genome sequencing	Homo sapiens	Jensen Diseases database	No	Fisher	No	Enrichr	No	NA	Not stated	Background, FDR	Yes	-	-
 PMC6533725	839	-	BMC Musculoskelet Disord	Proteomics	Homo sapiens	GO	No	Not stated	No	PANTHER	Yes	NA	Not stated	Background, FDR	No	-	-
 PMC6459497	552	-	PLoS One	Genome sequencing	Bos taurus	GO	Yes	Binomial	Yes	PANTHER	No	NA	Not stated	Background	Yes	-	-
 PMC6459497	552	-	PLoS One	Genome sequencing	Bos taurus	KEGG	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	Yes	-	-
@@ -80,12 +80,12 @@ PMC6507459	735	-	Oncol Lett	Gene expression array	Homo sapiens	GO, KEGG	No	Not s
 PMC6446359	490	-	Respir Res	RNA-seq	Homo sapiens	KEGG, Reactome	No	Not stated	Yes	GAGE	No	NA	NA	No	No	-	-
 PMC6377737	187	-	BMC Genomics	miRNA-seq	Rattus norvegicus	KEGG	No	Not stated	Yes	DAVID	No	NA	Not stated	Background	Yes	-	-
 PMC6520261	779	-	Int J Ophthalmol	miRNA array	Mus musculus	GO, KEGG	No	Not stated	No	Not stated	No	NA	Not stated	Background, FDR	No	-	-
-PMC6466271	573	-	Animals (Basel	Genome sequencing	Canis lupus familiaris	GO, KEGG	No	Not stated	Yes	g:GOSt	No	No	Not stated	Background	No	-	-
+PMC6466271	573	-	Animals (Basel)	Genome sequencing	Canis lupus familiaris	GO, KEGG	No	Not stated	Yes	g:GOSt	No	No	Not stated	Background	No	-	-
 PMC6627192	1334	-	Cancers (Basel)	miRNA array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	Yes	Ingenuity Pathway Analysis	No	NA	Not stated	Background	No	-	-
 PMC6363745	127	-	Sci Rep	RNA-seq	Homo sapiens	GO	No	No test	No test	DAVID	Yes	NA	Not stated	No data shown	Yes	Not stated	-
 PMC6425643	394	-	Chin Med	Gene expression array	Homo sapiens	Ingenuity Knowledge Base	No	Not stated	No	Ingenuity Pathway Analysis	No	NA	Not stated	Background, FDR	No	Combined	-
 PMC6595412	1175	-	Mol Ther Nucleic Acids	RNA-seq	Rattus norvegicus	GO, KEGG	No	Not stated	Yes	KOBAS	No	NA	Not stated	Background	Yes	Combined	-
-PMC6518761	775	-	BMC Bioinformatics.	Gene expression array	Homo sapiens, Mus musculus	KEGG, Reactome, BioCarta	No	Hypergeometric	No	anamiR	No	Yes	Not stated	Background, FDR	No	Combined	-
+PMC6518761	775	-	BMC Bioinformatics	Gene expression array	Homo sapiens, Mus musculus	KEGG, Reactome, BioCarta	No	Hypergeometric	No	anamiR	No	Yes	Not stated	Background, FDR	No	Combined	-
 PMC6549101	933	-	Oncol Rep	Gene expression array	Homo sapiens	GO, KEGG, Reactome, BioCarta	No	Not stated	Yes	DAVID	Yes	NA	Not stated	Background	No	-	-
 PMC6549101	933	-	Oncol Rep	Gene expression array	Homo sapiens	MSigDB	Yes	GSEA	Yes	GSEA	Yes	NA	NA	No	No	-	rank=no, algo=no, weight=no
 PMC6555064	968	-	J Endocr Soc	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	EXCLUDE	-	-

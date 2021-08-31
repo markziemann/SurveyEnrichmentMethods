@@ -228,7 +228,7 @@ width = 700)
 ```
 *Figure 2. A summary of the survey of functional enrichment analyses.*
 
-There were articles from 100 journals in the sample, with *PLoS One*, *Scientific Reports*, and *PeerJ* being the biggest contributors (Figure S1A).
+There were articles from 96 journals in the sample, with *PLoS One*, *Scientific Reports*, and *PeerJ* being the biggest contributors (Figure S1A).
 There were 18 different omics types, with gene expression array and RNA-seq being the most popular (Figure S1B).
 There were 31 different species under study, but human was the most common with 157 analyses (Figure S1C).
 
@@ -328,7 +328,7 @@ Taken together, these findings suggest that these methodological issues are not 
 
 ## Discussion
 
-While there have been several articles benchmarking the performance of functional enrichment tools, there has been relatively little written on how existing tools are used (or misused). 
+While there have been several articles benchmarking the performance of functional enrichment tools, there has been relatively little written on how existing tools are used (or misused).
 A recent study looked at the the popularity of frequently used tools and benchmarked their performance (Xie et al, 2021), but this assumes that the tools were properly used and methods sufficiently reported.
 In this sample of open access research articles, there appears to be a bias toward tools that are easy to use.
 ORA tools that only require pasting lists of gene identifiers into a webpage (ie: DAVID, KOBAS and PANTHER) are collectively more popular than other solutions like GSEA (a standalone graphical user interface software for FCS) or any command line tool.
@@ -349,7 +349,7 @@ Although analyses involving GSEA scored better overall, they were not free of is
 For example GSEA has different options that impact the results including the ranking metric, gene weighting method and the permutation type (on samples or genes), which were not regularly reported in articles (Figure 3L).
 
 We scored a total of 1630 analyses, revealing only a small fraction of articles obtained a satisfactory score of zero or higher.
-Surprisingly, the analysis scores we generated did not correlate with journal level bibliographic metric, nor accrued citations of individual articles, showing no association between methodological rigour and traditional research impact metrics in this sample.
+The analysis scores we generated did not correlate with journal or article metrics.
 This suggests that methodological and reporting problems are not limited to lower ranked journals, but are a more general problem.
 
 Still there are some limitations that need to be recognised.
@@ -380,7 +380,7 @@ This will help long term reproducibility, for example if in future the tool is n
 This is especially relevant for tools that report the results of different statistical tests.
 
 5. Always report FDR or q-values (p-values that have been corrected for multiple tests).
-This will reduce the chance of false positives when performing many tests simultaneously.
+This will reduce the chance of false positives when performing many tests simultaneously (Hung et al, 2012).
 Report what method was used for p-value adjustment.
 Bonferonni, FDR and FWER are examples.
 
@@ -425,7 +425,7 @@ Link the data to the code, so anyone can download and reproduce your analysis (P
 
 ## Acknowledgements
 
-We thank Dr Nicholas C. Wong (Monash University) and Dr Antony Kaspi (Walter and Eliza Hall Institute) for comments on the manuscript.
+We thank XX for comments on the manuscript.
 This research was supported by use of the Nectar Research Cloud, a collaborative Australian research platform supported by the NCRIS-funded Australian Research Data Commons (ARDC).
 
 ## References
@@ -439,6 +439,8 @@ Hong, G., Zhang, W., Li, H., Shen, X., & Guo, Z. (2014). Separate enrichment ana
 Hosack, D. A., Dennis, G., Jr, Sherman, B. T., Lane, H. C., & Lempicki, R. A. (2003). Identifying biological themes within lists of genes with EASE. Genome Biology, 4(10), R70.
 
 Huang, D. W., Sherman, B. T., & Lempicki, R. A. (2009). Bioinformatics enrichment tools: paths toward the comprehensive functional analysis of large gene lists. Nucleic Acids Research, 37(1), 1–13.
+
+Hung, J.-H., Yang, T.-H., Hu, Z., Weng, Z., & DeLisi, C. (2012). Gene set enrichment analysis: performance evaluation and usage guidelines. Briefings in Bioinformatics, 13(3), 281–291.
 
 Jassal, B., Matthews, L., Viteri, G., Gong, C., Lorente, P., Fabregat, A., … D’Eustachio, P. (2020). The reactome pathway knowledgebase. Nucleic Acids Research, 48(D1), D498–D503.
 

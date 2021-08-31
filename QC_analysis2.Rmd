@@ -86,6 +86,14 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Journal", xlim=c(0,170))
 text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 10, label = res2, pos = 3, cex = 1, col = "black")
 dev.off()
+
+pdf("images/journals2.pdf",width=4,height=4)
+par(mar=c(5,9,3,2))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Journal", xlim=c(0,180))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 15, label = res2, pos = 3, cex = 1, col = "black")
+dev.off()
+
 ```
 
 
@@ -112,6 +120,8 @@ barplot(tail(res,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="no. analyses",
         main = "Omics type", xlim=c(0,100))
 grid()
 
+names(res) <- gsub("RNA array","Gene expression array",names(res))
+
 other <- sum(res[1:(nrow(res)-10)])
 res2 <- c(other,tail(res,9))
 names(res2)[1] <- "Other"
@@ -125,6 +135,13 @@ par(mar=c(5,12,3,3))
 barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Omics type", xlim=c(0,100))
 text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 6, label = res2, pos = 3, cex = 1, col = "black")
+dev.off()
+
+pdf("images/omics2.pdf",width=4,height=4)
+par(mar=c(5,10,3,2))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Omics type", xlim=c(0,110))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 10, label = res2, pos = 3, cex = 1, col = "black")
 dev.off()
 
 ```
@@ -169,6 +186,12 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 15, label = res2, pos = 3, cex = 1, col = "black")
 dev.off()
 
+pdf("images/organisms2.pdf",width=4,height=4)
+par(mar=c(5,11,3,2))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Organism", xlim=c(0,200))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 25, label = res2, pos = 3, cex = 1, col = "black")
+dev.off()
 
 ```
 
@@ -211,6 +234,13 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 15, label = res2, pos = 3, cex = 1, col = "black")
 dev.off()
 
+pdf("images/genesetlib2.pdf",width=4,height=4)
+par(mar=c(5,11,3,2))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Gene set library", xlim=c(0,150))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 16, label = res2, pos = 3, cex = 1, col = "black")
+dev.off()
+
 ```
 
 ## Gene set version
@@ -234,6 +264,14 @@ barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene set version defined", xlim=c(0,250))
 text(y = (1:length(res)*1.2)-1.2  , x = res + 20, label = res, pos = 3, cex = 1, col = "black")
 dev.off()
+
+pdf("images/genesetvers2.pdf",width=3,height=2)
+par(mar=c(5,4,3,2))
+barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Gene set version defined", xlim=c(0,260))
+text(y = (1:length(res)*1.2)-1.2  , x = res + 25, label = res, pos = 3, cex = 1, col = "black")
+dev.off()
+
 
 ```
 
@@ -276,6 +314,13 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 15, label = res2, pos = 3, cex = 1, col = "black")
 dev.off()
 
+pdf("images/stattest2.pdf",width=4,height=4)
+par(mar=c(5,11,3,2))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Test used", xlim=c(0,170))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 20, label = res2, pos = 3, cex = 1, col = "black")
+dev.off()
+
 ```
 
 ## FDR Correction
@@ -306,6 +351,15 @@ barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "FDR correction performed", xlim=c(0,160))
 text(y = (1:length(res)*1.2)-1.2  , x = res + 15, label = res, pos = 3, cex = 1, col = "black")
 dev.off()
+
+pdf("images/fdr2.pdf",width=3,height=3)
+par(mar=c(5,5,3,2))
+barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "FDR correction performed", xlim=c(0,160))
+text(y = (1:length(res)*1.2)-1.0  , x = res + 15, label = res, pos = 3, cex = 1, col = "black")
+dev.off()
+
+
 ```
 
 
@@ -347,6 +401,13 @@ barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 5, label = res2, pos = 3, cex = 1, col = "black")
 dev.off()
 
+pdf("images/app2.pdf",width=4,height=4)
+par(mar=c(5,12,3,2))
+barplot(res2,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "App used", xlim=c(0,80))
+text(y = (1:length(res2)*1.2)-1.2  , x = res2 + 10, label = res2, pos = 3, cex = 1, col = "black")
+dev.off()
+
 ```
 
 ## App version
@@ -370,6 +431,13 @@ barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res)*1.2)-1.2  , x = res + 15, label = res, pos = 3, cex = 1, col = "black")
 dev.off()
 
+pdf("images/appvers2.pdf",width=3,height=2)
+par(mar=c(5,4,3,2))
+barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "App version defined", xlim=c(0,200))
+text(y = (1:length(res)*1.2)-1.2  , x = res + 19, label = res, pos = 3, cex = 1, col = "black")
+dev.off()
+
 ```
 
 ## Code available
@@ -391,6 +459,13 @@ par(mar=c(5,5,3,3))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Code availability", xlim=c(0,50))
 text(y = (1:length(res)*1.2)-1.2  , x = res + 3, label = res, pos = 3, cex = 1, col = "black")
+dev.off()
+
+pdf("images/code2.pdf",width=3,height=2)
+par(mar=c(5,4,3,2))
+barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Code availability", xlim=c(0,55))
+text(y = (1:length(res)*1.2)-1.2  , x = res + 5, label = res, pos = 3, cex = 1, col = "black")
 dev.off()
 
 ```
@@ -417,6 +492,13 @@ barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res)*1.2)-1.1  , x = res + 18, label = res, pos = 3, cex = 1, col = "black")
 dev.off()
 
+pdf("images/bg2.pdf",width=4,height=3)
+par(mar=c(5,10,3,2))
+barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Background list specified", xlim=c(0,220))
+text(y = (1:length(res)*1.2)-1.1  , x = res + 20, label = res, pos = 3, cex = 1, col = "black")
+dev.off()
+
 ```
 
 ## Gene lists provided
@@ -438,6 +520,13 @@ par(mar=c(5,5,3,3))
 barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
         main = "Gene lists provided", xlim=c(0,160))
 text(y = (1:length(res)*1.2)-1.2  , x = res + 9, label = res, pos = 3, cex = 1, col = "black")
+dev.off()
+
+pdf("images/genelists2.pdf",width=3,height=2)
+par(mar=c(5,4,3,2))
+barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Gene lists provided", xlim=c(0,170))
+text(y = (1:length(res)*1.2)-1.25  , x = res + 15, label = res, pos = 3, cex = 1, col = "black")
 dev.off()
 
 ```
@@ -477,6 +566,13 @@ barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res)*1.2)-1.1  , x = res + 18, label = res, pos = 3, cex = 1, col = "black")
 dev.off()
 
+pdf("images/assumptions2.pdf",width=4,height=3)
+par(mar=c(5,11,3,2))
+barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Methodological flaws", xlim=c(0,230))
+text(y = (1:length(res)*1.2)-1.2  , x = res + 25, label = res, pos = 3, cex = 1, col = "black")
+dev.off()
+
 ```
 
 
@@ -504,8 +600,14 @@ barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
 text(y = (1:length(res)*1.2)-1.1  , x = res + 5, label = res, pos = 3, cex = 1, col = "black")
 dev.off()
 
-```
+pdf("images/comb2.pdf",width=3,height=2.5)
+par(mar=c(5,5,3,2))
+barplot(res,horiz=TRUE,las=1,cex.names = 1, xlab="no. analyses",
+        main = "Separated or combined ORA", xlim=c(0,100))
+text(y = (1:length(res)*1.2)-1.1  , x = res + 10, label = res, pos = 3, cex = 1, col = "black")
+dev.off()
 
+```
 
 ## GSEA parameters
 
@@ -551,6 +653,15 @@ barplot(t(params),horiz=TRUE,las=1,xlim=c(0,30),legend = colnames(params),
         args.legend = list(x = "topleft", inset = c(0.05, 0.1)))
 text(y = (1:nrow(params)*1.2) - 0.7 , x = params[,1]-3, label = params[,1], pos = 3, cex = 1, col = "white")
 text(y = (1:nrow(params)*1.2) - 0.7 , x = params[,1]+2, label = params[,2], pos = 3, cex = 1, col = "black")
+dev.off()
+
+pdf("images/gseaparam2.pdf",width=4.5,height=3)
+par(mar=c(5,6,3,2))
+barplot(t(params),horiz=TRUE,las=1,xlim=c(0,30),legend = colnames(params),
+        main="GSEA parameter reporting", xlab="no. analyses",
+        args.legend = list(x = "topleft", bg="white",inset = c(0.05, 0.1)))
+text(y = (1:nrow(params)*1.2) - 0.8 , x = params[,1]-3, label = params[,1], pos = 3, cex = 1, col = "white")
+text(y = (1:nrow(params)*1.2) - 0.8 , x = params[,1]+2, label = params[,2], pos = 3, cex = 1, col = "black")
 dev.off()
 
 ```
