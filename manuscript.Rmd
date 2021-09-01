@@ -148,9 +148,9 @@ All data analyses were conducted in R v4.1 and the analysis scripts are availabl
 
 ## Results
 
-### An example of gene set analysis misuse
+### An example of functional enrichment analysis misuse
 
-In order to demonstrate the effect of gene set test misuse, we used an example RNA-seq dataset examining the effect of high glucose exposure on hepatocytes.
+In order to demonstrate the effect of functional enrichment analysis misuse, we used an example RNA-seq dataset examining the effect of high glucose exposure on hepatocytes.
 Out of 39,297 genes in the annotation set, 15,635 were above the detection threshold (>10 reads per sample on average).
 Statistical analysis revealed 3,472 differentially expressed genes with 1,560 up-regulated and 1,912 down-regulated (FDR<0.05) due to glucose exposure.
 
@@ -184,6 +184,8 @@ There were articles from 96 journals in the sample, with *PLoS One*, *Scientific
 There were 18 different omics types, with gene expression array and RNA-seq being the most popular (Figure S1B).
 There were 31 different species under study, but human was the most common with 157 analyses (Figure S1C).
 
+![Figure S1. General make up of the sample. (A) Journals. (B) Types of omics analysis applied. (C) Organisms under study.](images/FigureS1.png "Figure S1")
+
 We recorded the use of 26 different gene set libraries, with GO and KEGG being the most frequently used (Figure 3A).
 There were 14 analyses where the gene set libraries used were not defined in the article.
 Only 18 analyses reported the version of the gene set library used (Figure 3B).
@@ -214,9 +216,6 @@ These are (i) the gene weighting parameter, (ii) test type, ie: permuting sample
 These parameters were not stated in more than half of the analyses (Figure 3L).
 
 Taken together, these data suggest methodological and reporting deficiencies are widespread in published functional enrichment analyses.
-
-![Figure S1. General make up of the sample. (A) Journals. (B) Types of omics analysis applied. (C) Organisms under study.](images/FigureS1.png "Figure S1")
-
 
 ![Figure 3. Findings from the survey of published enrichment analyses. (A) Representation of different gene set libraries. (B) Proportion of analyses reporting gene set library version information. (C) Representation of different statistical tests. (D) Proportion of analysis conducting correction of p-values for multiple comparisons. (E) Representation of different software tools for enrichment analysis. (F) Proportion of analyses that reported version information for software used. (G) Background gene set usage and reporting. (H) Proportion of scripted analyses that provided software code. (I) Proportion of analyses that provided gene profiles. (J)  Proportion of analyses with different methodological problems. (K) Whether up- and down-regulated genes were analysed separately or combined. Limited to ORA of differential expression only. (L) Reporting of GSEA parameters.](images/Figure3.png "Figure 3")
 

@@ -51,7 +51,10 @@ wordcloud
 wordcloud2
 XML
 
+Then git clone this repository and run the Rmds in the following order:
 
+1. QC_analysis2.Rmd
 
+2. analysis.Rmd
 
-
+3. manuscript_draft.Rmd
