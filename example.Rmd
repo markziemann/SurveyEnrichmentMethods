@@ -28,6 +28,8 @@ library("kableExtra")
 library("eulerr")
 })
 
+dir.create("images")
+
 ```
 
 ## Get expression data
@@ -265,6 +267,20 @@ dev.off()
 png("images/oracomb1.png")
 plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole genome bg*")
 dev.off()
+
+pdf("images/fcs_ora1.pdf",width=4,height=4)
+plot(euler(v1),quantities = TRUE, main="FCS vs ORA")
+dev.off()
+
+pdf("images/orabg1.pdf",width=4,height=4)
+plot(euler(v2),quantities = TRUE, main="Effect of inappropriate background* (whole genome)")
+dev.off()
+
+pdf("images/oracomb1.pdf",width=4,height=4)
+plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole genome bg*")
+dev.off()
+
+
 
 ```
 

@@ -166,7 +166,12 @@ ORA comb revealed only 22 differentially regulated gene sets with a Jaccard simi
 ORA\* comb yielded 64 differentially regulated gene sets with a Jaccard similarity to ORA of only 0.08.
 These results demonstrate that commonly observed practices of combining the up and downregulated gene lists and using the whole genome background gene list severely distort ORA results.
 
-![Figure 1. Example of enrichment analysis misuse. (A) Comparison of FCS and ORA methods. (B) ORA with standard and whole genome background. (C) Effect of combining up and downregulated genes on ORA results. ](images/Figure1.png "Figure 1")
+![Figure 1A. Comparison of FCS and ORA methods.](images/fcs_ora1.png "FCS vs ORA")
+
+![Figure 1B. ORA with standard and whole genome background.](images/orabg1.png "ORA with different background sets")
+
+![Figure 1C. Effect of combining up and downregulated genes on ORA results.](images/oracomb1.png "ORA combining up and downregulated genes")
+
 
 ### A screen of functional enrichment analyses in open access journals
 
@@ -177,7 +182,96 @@ Those excluded articles included articles describing novel enrichment analysis t
 As some articles included more than one enrichment analysis, the dataset included 235 analyses from 186 articles; this data is available in Table S1.
 A flow diagram of the survey is provided in Figure 2.
 
-![Figure 2. A summary of the survey of functional enrichment analyses. ](images/Figure2.png "Figure 2")
+```{r,diagram1,echo=FALSE,fig.width=8,fig.height=4}
+
+library(tidyverse)
+library(DiagrammeR)
+library(DiagrammeRsvg)
+library(rsvg)
+
+grViz("digraph flowchart {
+      # node definitions with substituted label text
+      node [fontname = Helvetica, shape = rectangle]        
+      tab1 [label = '@@1']
+      tab2 [label = '@@2']
+      tab3 [label = '@@3']
+      tab4 [label = '@@4']
+      tab5 [label = '@@5']
+      tab6 [label = '@@6']
+      tab7 [label = '@@7']
+      tab8 [label = '@@8']
+      tab9 [label = '@@9']
+      tab10 [label = '@@10']
+      tab11 [label = '@@11']
+      tab12 [label = '@@12']
+      tab13 [label = '@@13']
+      
+      # edge definitions with the node IDs
+      tab1 -> tab2  -> tab4 -> tab5 -> tab6 -> tab7;
+      tab2 -> tab3 ;
+      tab1 -> tab9 -> tab10;
+      tab5 -> tab13   ;
+      tab9 -> tab11 -> tab12 -> tab13 -> tab8 ; 
+      }
+      [1]: 'PMC keyword search (2019): 2941 results'
+      [2]: '200 PMC articles selected'
+      [3]: '14 articles excluded'
+      [4]: '235 analyses screened and cross-checked'
+      [5]: 'data entry to spreadsheet'
+      [6]: 'data analysis in R'
+      [7]: 'summary charts'
+      [8]: 'integration with journal and article metrics'
+      [9]: 'additional 1300 PMC articles selected'
+      [10]: '118 articles excluded'
+      [11]: '1395 analyses screened'
+      [12]: 'data entry to spreadsheet'
+      [13]: 'data analysis in R'
+",
+width = 700)
+
+tmp <- grViz("digraph flowchart {
+      # node definitions with substituted label text
+      node [fontname = Helvetica, shape = rectangle]        
+      tab1 [label = '@@1']
+      tab2 [label = '@@2']
+      tab3 [label = '@@3']
+      tab4 [label = '@@4']
+      tab5 [label = '@@5']
+      tab6 [label = '@@6']
+      tab7 [label = '@@7']
+      tab8 [label = '@@8']
+      tab9 [label = '@@9']
+      tab10 [label = '@@10']
+      tab11 [label = '@@11']
+      tab12 [label = '@@12']
+      tab13 [label = '@@13']
+      
+      # edge definitions with the node IDs
+      tab1 -> tab2  -> tab4 -> tab5 -> tab6 -> tab7;
+      tab2 -> tab3 ;
+      tab1 -> tab9 -> tab10;
+      tab5 -> tab13   ;
+      tab9 -> tab11 -> tab12 -> tab13 -> tab8 ; 
+      }
+      [1]: 'PMC keyword search (2019): 2941 results'
+      [2]: '200 PMC articles selected'
+      [3]: '14 articles excluded'
+      [4]: '235 analyses screened and cross-checked'
+      [5]: 'data entry to spreadsheet'
+      [6]: 'data analysis in R'
+      [7]: 'summary charts'
+      [8]: 'integration with journal and article metrics'
+      [9]: 'additional 1300 PMC articles selected'
+      [10]: '118 articles excluded'
+      [11]: '1395 analyses screened'
+      [12]: 'data entry to spreadsheet'
+      [13]: 'data analysis in R'
+") 
+
+tmp2 <- capture.output(rsvg_pdf(charToRaw(export_svg(tmp)),'images/flowchart.pdf'))
+
+```
+*Figure 2. A summary of the survey of functional enrichment analyses.*
 
 There were articles from 96 journals in the sample, with *PLoS One*, *Scientific Reports*, and *PeerJ* being the biggest contributors (Figure S1A).
 There were 18 different omics types, with gene expression array and RNA-seq being the most popular (Figure S1B).
@@ -214,10 +308,35 @@ These parameters were not stated in more than half of the analyses (Figure 3L).
 
 Taken together, these data suggest methodological and reporting deficiencies are widespread in published functional enrichment analyses.
 
-![Figure S1. General make up of the sample. (A) Journals. (B) Types of omics analysis applied. (C) Organisms under study.](images/FigureS1.png "Figure S1")
+![Figure S1A. Representation of journals in the sample.](images/journals2.png "Journals")
 
+![Figure S1B. Representation of different omics types.](images/omics2.png "Omics")
 
-![Figure 3. Findings from the survey of published enrichment analyses. (A) Representation of different gene set libraries. (B) Proportion of analyses reporting gene set library version information. (C) Representation of different statistical tests. (D) Proportion of analysis conducting correction of p-values for multiple comparisons. (E) Representation of different software tools for enrichment analysis. (F) Proportion of analyses that reported version information for software used. (G) Background gene set usage and reporting. (H) Proportion of scripted analyses that provided software code. (I) Proportion of analyses that provided gene profiles. (J)  Proportion of analyses with different methodological problems. (K) Whether up- and down-regulated genes were analysed separately or combined. Limited to ORA of differential expression only. (L) Reporting of GSEA parameters.](images/Figure3.png "Figure 3")
+![Figure S1C. Representation of different organisms.](images/organisms2.png "Organisms")
+
+![Figure 3A. Representation of different gene set libraries.](images/genesetlib2.png "Geneset libraries")
+
+![Figure 3B. Proportion of analyses reporting gene set library version information.](images/genesetvers2.png "Geneset version")
+
+![Figure 3C. Representation of different statistical tests.](images/stattest2.png "Geneset libraries")
+
+![Figure 3D. Proportion of analysis conducting correction of p-values for multiple comparisons.](images/fdr2.png "FDR")
+
+![Figure 3E. Representation of different software tools for enrichment analysis.](images/app2.png "Software used")
+
+![Figure 3F. Proportion of analyses that reported version information for software used.](images/appvers2.png "Software version")
+
+![Figure 3G. Background gene set usage and reporting.](images/bg2.png "Background gene list used")
+
+![Figure 3H. Proportion of scripted analyses that provided software code.](images/code2.png "Code available")
+
+![Figure 3I. Proportion of scripted analyses that provided gene profiles.](images/genelists2.png "Gene lists provided")
+
+![Figure 3J. Proportion of analyses with different methodological problems.](images/assumptions2.png "Assumptions violated")
+
+![Figure 3K. Whether up- and down-regulated genes were analysed separately or combined. Limited to ORA of differential expression only.](images/comb2.png "Journals")
+
+![Figure 3L. Reporting of GSEA parameters.](images/gseaparam2.png "Journals")
 
 ### Analysis scores
 
@@ -239,7 +358,18 @@ Next we assessed whether there was any association between analysis scores and t
 After log transforming the citation data, there was no association between citations and analysis scores (Pearson r=0.002, p=0.95) (Figure 4F).
 Taken together, these findings suggest that these methodological issues are not limited to lower ranking or poorly cited articles.
 
-![Figure 4. Comparison of Analysis scores to bibliometrics. (A) Distribution of analysis scores. (B) Association of analysis scores with Scimago Journal Rank (SJR). (C) Journals with highest analysis scores. (D) Journals with lowest analysis scores. (E) Association of mean analysis score with SJR for journals with 5 or more analyses. (F) Association of analysis scores with accrued citations.](images/Figure4.png "Figure 4")
+![Figure 4A. Distribution of analysis scores.](images/hist1.png "Analysis scores")
+
+![Figure 4B. Association of analysis scores with journal rank.](images/score_sjr1.png "Analysis scores versus journal rank")
+
+![Figure 4C. Journals with highest analysis scores.](images/score_highest1.png "Highest analysis scores")
+
+![Figure 4D. Journals with Lowest analysis scores.](images/score_lowest1.png "Lowest analysis scores")
+
+![Figure 4E. Association between SJR and mean analysis score for journals with 5 or more analyses.](images/mean_sjr1.png "Mean score vs SJR")
+
+![Figure 4F. Association between citations and analysis scores.](images/cites1.png "Mean score vs citations")
+
 
 ## Discussion
 
