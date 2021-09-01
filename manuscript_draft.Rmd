@@ -57,7 +57,9 @@ From a user's perspective, ORA is easier to conduct because it is as simple as p
 FCS tools are more difficult to use, but they are more sensitive at detecting subtle associations (Kaspi and Ziemann 2020; Maleki et al, 2020; Xie et al, 2021).
 
 Although these are powerful tools to summarise complex genomics data, there are concerns that they are not being correctly used.
+Tipney and Hunter (2010) warn that inappropriate background set selection heavily influences enrichment results.
 Timmons et al (2015) highlight published articles where failure to account for sampling bias invalidated enrichment analysis and conclusions.
+
 
 The purpose of this work is to survey the frequency of methodological and reporting flaws in the literature, in particular;
 (i) lack of a background gene set, 
@@ -500,6 +502,8 @@ Peng, R. D. (2011). Reproducible research in computational science. Science (New
 Subramanian, A., Tamayo, P., Mootha, V. K., Mukherjee, S., Ebert, B. L., Gillette, M. A., … Mesirov, J. P. (2005). Gene set enrichment analysis: a knowledge-based approach for interpreting genome-wide expression profiles. Proceedings of the National Academy of Sciences of the United States of America, 102(43), 15545–15550.
 
 Timmons, J. A., Szkop, K. J., & Gallagher, I. J. (2015). Multiple sources of bias confound functional enrichment analysis of global -omics data. Genome Biology, 16(1), 186.
+
+Tipney, H., & Hunter, L. (2010). An introduction to effective use of enrichment analysis software. Human Genomics, 4(3), 202–206.
 
 Xie, C., Jauhari, S., & Mora, A. (2021). Popularity and performance of bioinformatics software: the case of gene set analysis. BMC Bioinformatics, 22(1), 191.
 
