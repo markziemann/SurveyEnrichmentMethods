@@ -12,10 +12,6 @@ output:
 theme: cosmo
 ---
 
-Source: https://github.com/markziemann/SurveyEnrichmentMethods
-
-Target Journal: Briefings in Bioinformatics (JIF=9.0)
-
 Kaumadi Wijesooriya<sup>1</sup>, Sameer A Jadaan<sup>2</sup>, Tanuveer Kaur<sup>1</sup>, Kaushalya L Perera<sup>1</sup>, Mark Ziemann<sup>1</sup>
 
 **Affiliations**
@@ -63,7 +59,7 @@ Timmons et al (2015) highlight published articles where failure to account for s
 The purpose of this work is to survey the frequency of methodological and reporting flaws in the literature, in particular;
 (i) lack of a background gene set, 
 (ii) lack of p-value adjustment for multiple comparisons and 
-(ii) lack of essential methodological details.
+(iii) lack of essential methodological details.
 We use the results of this survey to inform a set of minimum standards for functional enrichment analysis.
 
 ## Methods
@@ -85,7 +81,7 @@ Analyses were conducted in R version 4.1.0.
 
 ### Survey of enrichment analysis 
 
-We collated 2941 articles in PubMed Central published in 2019 that have keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
+We collated 2,941 articles in PubMed Central published in 2019 that have keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
 We sampled 200 of these articles and collected the following information from the article, searching the methods sections and other parts of the article including the supplement.
 
 * Journal name
@@ -129,19 +125,20 @@ For assessment of enrichment analysis quality with journal metrics and citations
 Results from this sample were not double-checked and so may contain a small number of inaccuracies.
 We rated each analysis with a simple approach that deducted points for missing methodological details and awarding points for including extra information (Table 1). 
 
+*Table 1. Scoring schema.*
 | 1 point deducted | 1 point awarded |
 | --- | --- |
 | Gene set library origin not stated | Code made available |
-| Gene set library version not stated | Gene lists provided |
-| Stat test not stated | |
-| No stat test conducted | |
+| Gene set library version not stated | Gene profile data provided |
+| Statistical test not stated | |
+| No statistical test conducted | |
 | No FDR correction conducted | |
 | App used not stated | |
 | App version not stated | |
 | Background list not defined | |
 | Inappropriate background list used | |
 
-Scimago Journal Rank (SJR) data were downloaded from the Scimago website (https://www.scimagojr.com/journalrank.php) and used to score journals by their citation metrics.
+Scimago Journal Rank (SJR) data for 2020 were downloaded from the Scimago website (https://www.scimagojr.com/journalrank.php) and used to score journals by their citation metrics.
 Using NCBI’s Eutils API, we collected the number of citations each article accrued since publication.
 We used Pearson correlation tests to assess the association with the analysis scores we generated.
 All data analyses were conducted in R v4.1 and the analysis scripts are available at GitHub (https://github.com/markziemann/SurveyEnrichmentMethods).
@@ -152,7 +149,7 @@ All data analyses were conducted in R v4.1 and the analysis scripts are availabl
 
 In order to demonstrate the effect of functional enrichment analysis misuse, we used an example RNA-seq dataset examining the effect of high glucose exposure on hepatocytes.
 Out of 39,297 genes in the annotation set, 15,635 were above the detection threshold (>10 reads per sample on average).
-Statistical analysis revealed 3,472 differentially expressed genes with 1,560 up-regulated and 1,912 down-regulated (FDR<0.05) due to glucose exposure.
+Statistical analysis revealed 3,472 differentially expressed genes with 1,560 up-regulated and 1,912 down-regulated (FDR<0.05) due to elevated glucose exposure.
 
 FCS revealed 95 up and 316 downregulated pathways (FDR<0.05).
 ORA with a background gene list consisting of detected genes revealed 55 upregulated and 238 downregulated gene sets (FDR<0.05).
@@ -167,12 +164,12 @@ ORA comb revealed only 22 differentially regulated gene sets with a Jaccard simi
 ORA\* comb yielded 64 differentially regulated gene sets with a Jaccard similarity to ORA of only 0.08.
 These results demonstrate that commonly observed practices of combining the up and downregulated gene lists and using the whole genome background gene list severely distort ORA results.
 
-![Figure 1. Example of enrichment analysis misuse. (A) Comparison of FCS and ORA methods. (B) ORA with standard and whole genome background. (C) Effect of combining up and downregulated genes on ORA results. ](images/Figure1.png "Figure 1")
+![Figure 1. Example of enrichment analysis misuse. Euler diagrams show the overlap between sets of differentially regulated gene sets with different methods (FDR<0.05). (A) Comparison of FCS and ORA methods. (B) ORA with standard and whole genome background. Whole genome background analysis is indicated with a \* (C) Effect of combining up and downregulated genes on ORA results. Analysis using combined gene list is indicated by *ORA comb*, while *ORA\* comb* indicates combined gene list analysis with a whole genome background. ](images/Figure1.png "Figure 1")
 
 ### A screen of functional enrichment analyses in open access journals
 
-A search of PubMed Central showed 2941 articles published in 2019 with the keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
-From these, 200 articles were screened for methodological errors.
+A search of PubMed Central showed 2,941 articles published in 2019 with the keywords "enrichment analysis", "pathway analysis" or "ontology analysis".
+From these, 200 articles were selected for methodological analysis.
 We excluded 14 articles from the screen because they did not present any enrichment analysis. 
 Those excluded articles included articles describing novel enrichment analysis techniques or tools, review articles or conference abstracts.
 As some articles included more than one enrichment analysis, the dataset included 235 analyses from 186 articles; this data is available in Table S1.
@@ -196,8 +193,8 @@ There were 50 different tools used to perform enrichment analysis, with DAVID an
 The version of the software used was provided in only 68 of 235 analyses (29%) (Figure 3F).
 
 For analyses using ORA methods, we studied what background gene set was used (Figure 3G). 
-This revealed that in most cases, the background list was not stated or it was clear from the article methods section that no background list was used.
-In a few cases, background list was mentioned but was inappropriate, for example using a whole genome background for an assay like RNA-seq.
+This revealed that in most cases, the background list was not defined or it was clear from the article methods section that no background list was used.
+In a few cases, a background list was mentioned but was inappropriate, for example using a whole genome background for an assay like RNA-seq.
 In only 8/197 of cases (4.1%), the appropriate background list was described in the article.
 
 Of the 47 analyses which used a scripted computer language, only 3 provided links to the code used for enrichment analysis (6.4%) (Figure 3H).
@@ -222,7 +219,7 @@ Taken together, these data suggest methodological and reporting deficiencies are
 ### Analysis scores
 
 In order to make an accurate assessment of association between analysis quality and bibliometrics, we required a larger sample of articles.
-We therefore analysed a further 1300 articles, bringing the total number of analyses described up to 1630; this dataset is available in Table S2.
+We therefore analysed a further 1,300 articles, bringing the total number of analyses described up to 1630; this dataset is available in Table S2.
 
 We then scored each analysis based on the presence or absence of methodological issues and included details.
 The median score was -4, with a mean of -3.5 and standard deviation of 1.4 (Figure 4A).
@@ -254,21 +251,21 @@ This error can lead to substantially distorted results (Figure 1B).
 In the example here, using the inappropriate background resulted in 2.3 fold more differentially regulated gene sets.
 Thus if there are few or no significant results using a correct background list, there may be a temptation to use an inappropriate background in order to avoid null results.
 
-The proportion of ORA studies that combined up- and down-regulated gene set was also surprisingly high, at 70% (Figure 3K).
+The proportion of ORA studies that combined up- and down-regulated gene list prior to analysis was also surprisingly high, at 70% (Figure 3K).
 As exemplified in Figure 1C, combining up- and down-regulated genes can severely reduce the number of significant  gene sets (from 293 pathways to just 22 in this example).
 This is consistent with a previous report indicating that combining up- and down-regulated gene lists is considered poor practice because it reduces sensitivity (Hong et al, 2014).
 These results suggest that a large fraction of published works suffer from a high rate of false negatives, in effect missing a large fraction of truly differentially regulated gene sets.
 This is exacerbated by using an inappropriate background gene list, which leads to a high rate of false positives.
 
 Although analyses involving GSEA scored better overall, they were not free of issues.
-For example GSEA has different options that impact the results including the ranking metric, gene weighting method and the permutation type (on samples or genes), which were not regularly reported in articles (Figure 3L).
+For example GSEA has different options that impact the results including the ranking metric, gene weighting method and the permutation type (on samples or genes), which were not regularly reported in articles (Figure 3L), limiting reproducibility.
 
 We scored a total of 1630 analyses, revealing only a small fraction of articles obtained a satisfactory score of zero or higher.
 The analysis scores we generated did not correlate with journal or article metrics.
 This suggests that methodological and reporting problems are not limited to lower ranked journals, but are a more general problem.
 
 Still there are some limitations that need to be recognised.
-Many open access articles examined here are from journals not considered to be highly prestigious, and the distribution of analysis scores might be different for closed access articles.
+Many open access articles examined here are from lower-ranked journals, and might not be representative of articles in paywalled journals.
 The articles included in this study contained keywords related to functional enrichment in the abstract, and it is plausible that articles in higher ranked journals contain such details in the abstract at lower rates.
 
 Nevertheless, these results are a wake up call for reproducibility and highlight the urgent need for minimum standards for functional enrichment analysis. 
@@ -286,9 +283,8 @@ These databases are regularly upgraded so this is important for reproducibility.
 2. Report the tool used and its software version.
 As these tools are regularly updated, this will aid reproducibility.
 
-3. If making claims about the regulation of a gene set, then results of a statistical test must be shown (including measures of significance and effect size).
+3. If making claims about the regulation of a gene set, then results of a statistical test must be shown including measures of significance and effect size.
 The number of genes belonging to a pathway on its own is insufficient to infer enrichment.
-"Data not shown" is not acceptable when it is possible to attach supplementary files.
 
 4. Report which statistical test was used.
 This will help long term reproducibility, for example if in future the tool is no longer available.
@@ -305,7 +301,7 @@ Avoid tools that don't accept a background list.
 7. Report selection criteria and parameters.
 If performing ORA, then the inclusion thresholds need to be mentioned.
 If using GSEA or another FCS tool, parameters around ranking, gene weighting and type of test need to be disclosed (eg: permuting sample labels or gene labels).
-Any parameters that are vary from the defaults should be reported.
+Any parameters that vary from the defaults should be reported.
 
 8. If using ORA for gene expression analysis, be sure to conduct ORA tests separately for up- and down-regulated genes before analysis.
 Combining up- and down-regulated genes into a single list will limit sensitivity.
@@ -313,7 +309,7 @@ Combining up- and down-regulated genes into a single list will limit sensitivity
 9. Functional enrichment analysis results shouldn't be considered proof of biological plausibility nor validity of omics data analysis (Timmons et al, 2015). 
 Such tools are best used to generate new hypotheses; informing subsequent biochemical or signaling experimentation.
 
-### Additional recommendations for enhanced reproducibility 
+### Additional recommendations for enhanced reliability and reproducibility 
 
 The following guidelines are directed at going over and above the minimum standards towards a gold standard of reliability and reproducibility.
 
