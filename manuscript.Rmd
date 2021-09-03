@@ -278,53 +278,55 @@ To address this, we provide a set of minimum standards for functional enrichment
 
 The following guidelines are selected to avoid the most severe methodological issues while requiring minimal effort to address.
 
-1. Report the origin of the gene sets and the version used or date downloaded.
+1. Before starting the analysis, read the tool's user manual.
+
+2. Report the origin of the gene sets and the version used or date downloaded.
 These databases are regularly upgraded so this is important for reproducibility.
 
-2. Report the tool used and its software version.
+3. Report the tool used and its software version.
 As these tools are regularly updated, this will aid reproducibility.
 
-3. If making claims about the regulation of a gene set, then results of a statistical test must be shown including measures of significance and effect size.
+4. If making claims about the regulation of a gene set, then results of a statistical test must be shown including measures of significance and effect size.
 The number of genes belonging to a pathway on its own is insufficient to infer enrichment.
 
-4. Report which statistical test was used.
+5. Report which statistical test was used.
 This will help long term reproducibility, for example if in future the tool is no longer available.
 This is especially relevant for tools that report the results of different statistical tests.
 
-5. Always report FDR or q-values (p-values that have been corrected for multiple tests).
+6. Always report FDR or q-values (p-values that have been corrected for multiple tests).
 This will reduce the chance of false positives when performing many tests simultaneously (Hung et al, 2012).
 Report what method was used for p-value adjustment.
 Bonferonni, FDR and FWER are examples.
 
-6. If ORA is used, it is vital to use a background list consisting of all detected genes, and report this in the methods section.
+7. If ORA is used, it is vital to use a background list consisting of all detected genes, and report this in the methods section.
 Avoid tools that don't accept a background list.
 
-7. Report selection criteria and parameters.
+8. Report selection criteria and parameters.
 If performing ORA, then the inclusion thresholds need to be mentioned.
 If using GSEA or another FCS tool, parameters around ranking, gene weighting and type of test need to be disclosed (eg: permuting sample labels or gene labels).
 Any parameters that vary from the defaults should be reported.
 
-8. If using ORA for gene expression analysis, be sure to conduct ORA tests separately for up- and down-regulated genes before analysis.
+9. If using ORA for gene expression analysis, be sure to conduct ORA tests separately for up- and down-regulated genes before analysis.
 Combining up- and down-regulated genes into a single list will limit sensitivity.
 
-9. Functional enrichment analysis results shouldn't be considered proof of biological plausibility nor validity of omics data analysis (Timmons et al, 2015). 
+10. Functional enrichment analysis results shouldn't be considered proof of biological plausibility nor validity of omics data analysis (Timmons et al, 2015). 
 Such tools are best used to generate new hypotheses; informing subsequent biochemical or signaling experimentation.
 
 ### Additional recommendations for enhanced reliability and reproducibility 
 
 The following guidelines are directed at going over and above the minimum standards towards a gold standard of reliability and reproducibility.
 
-10. Preference FCS and pathway topology tools over ORA tools.
+11. Preference FCS and pathway topology tools over ORA tools.
 ORA tools have a lower sensitivity. 
 In practice, they are rarely used properly.
 
-11. Include the gene profile data (including any background lists) in the supplementary data in TSV or CSV formats.
+12. Include the gene profile data (including any background lists) in the supplementary data in TSV or CSV formats.
 Excel spreadsheets are not recommended for genomics work (Ziemann et al, 2016)
 
-12. Scripted analysis workflows are preferred over analysis involving graphical user interfaces because they can attain a higher degree of computational reproducibility, so consider investing in upgrading your analysis.
+13. Scripted analysis workflows are preferred over analysis involving graphical user interfaces because they can attain a higher degree of computational reproducibility, so consider investing in upgrading your analysis.
 Similarly, free and open-source software tools are preferred over proprietary software.
 
-13. If using a scripted analysis, provide code by depositing it to a repository like GitHub or Zenodo.
+14. If using a scripted analysis, provide code by depositing it to a repository like GitHub or Zenodo.
 Link the data to the code, so anyone can download and reproduce your analysis (Peng 2011).
 
 <hr>
@@ -337,7 +339,7 @@ Link the data to the code, so anyone can download and reproduce your analysis (P
 
 ## Acknowledgements
 
-We thank XX for comments on the manuscript.
+We thank Antony Kaspi (Walter and Elisa Hall Institute), Nick Wong and Anup Shah (Monash University) for comments on the manuscript.
 This research was supported by use of the Nectar Research Cloud, a collaborative Australian research platform supported by the NCRIS-funded Australian Research Data Commons (ARDC).
 
 ## References

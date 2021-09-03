@@ -232,36 +232,36 @@ par(mar=c(2,2,2,2))
 v0 <- list("ORA up"=c_up,"ORA dn"=c_dn,
            "ORA comb" = d_de)
 
-plot(euler(v0),quantities = TRUE,main="effect of combining up and down regulated genes")
+plot(euler(v0),quantities = TRUE, edges = "gray", main="effect of combining up and down regulated genes")
 
 v1 <- list("FCS up"=m_up, "FCS dn"=m_dn,
            "ORA up"=c_up,"ORA dn"=c_dn)
   
-plot(euler(v1),quantities = TRUE, main="FCS compared to ORA")
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS compared to ORA")
 
 v2 <- list("ORA up"=c_up,"ORA dn"=c_dn, 
            "ORA* up"=f_up,"ORA* dn"=f_dn )
 
-plot(euler(v2),quantities = TRUE, main="Effect of inappropriate background* (whole genome)")
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
 
 vx <- list("ORA up"=c_up,"ORA dn"=c_dn,
            "ORA comb" = d_de, "ORA* comb" = e_de)
 
-plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole genome bg*")
+plot(euler(vx),quantities = TRUE, edges = "gray", main="combining up and down genes and whole genome bg*")
 
 v3 <- list("ORA up"=c_up,"ORA dn"=c_dn, 
            "ORA* up"=f_up,"ORA* dn"=f_dn ,
            "FCS up"=m_up, "FCS dn"=m_dn)
 
-plot(euler(v3),quantities = TRUE, main="all sets")
+plot(euler(v3),quantities = TRUE, edges = "gray", main="all sets")
 
 
 png("images/fcs_ora1.png")
-plot(euler(v1),quantities = TRUE, main="FCS vs ORA")
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS vs ORA")
 dev.off()
 
 png("images/orabg1.png")
-plot(euler(v2),quantities = TRUE, main="Effect of inappropriate background* (whole genome)")
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
 dev.off()
 
 png("images/oracomb1.png")
@@ -269,18 +269,16 @@ plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole ge
 dev.off()
 
 pdf("images/fcs_ora1.pdf",width=4,height=4)
-plot(euler(v1),quantities = TRUE, main="FCS vs ORA")
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS vs ORA")
 dev.off()
 
 pdf("images/orabg1.pdf",width=4,height=4)
-plot(euler(v2),quantities = TRUE, main="Effect of inappropriate background* (whole genome)")
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
 dev.off()
 
 pdf("images/oracomb1.pdf",width=4,height=4)
-plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole genome bg*")
+plot(euler(vx),quantities = TRUE, edges = "gray", main="combining up and down genes and whole genome bg*")
 dev.off()
-
-
 
 ```
 
