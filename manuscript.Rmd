@@ -27,7 +27,7 @@ Despite this popularity, there are concerns that these methods are being applied
 These methodological problems include the use of inappropriate background gene lists, lack of false discovery rate correction and combining up-and down-regulated gene sets before enrichment analysis.
 An example analysis of public RNA-seq reveals that these methodological errors alter enrichment results dramatically.
 To ascertain the frequency of these errors in the literature, we performed a screen of 186 open access research articles describing functional enrichment results.
-We find that 95% of analyses using over-representation tests did not implement an appropriate reference gene list or did not describe this in the methods.
+We find that 95% of analyses using over-representation tests did not implement an appropriate background gene list or did not describe this in the methods.
 Failure to perform p-value correction for multiple tests was identified in 43% of analyses.
 Many studies lacked detail in the methods section about the tools and gene sets used.
 Only 15% of studies avoided major flaws, which highlights the poor state of functional enrichment rigour and reporting in the contemporary literature.
@@ -43,10 +43,13 @@ These functional categories typically represent signaling or biochemical pathway
 
 Widely used functional enrichment tools can be classified into two main categories; (i) over-representation analysis (ORA) and (ii) functional class scoring (FCS), and the most common application is in differential gene expression analysis.
 In ORA, differentially expressed genes (DEGs) meeting a significance and/or fold change threshold are queried against curated pathways (gene sets).
-A statistical test is performed to ascertain whether the number of DEGs belonging to a particular pathway (gene set) is higher than that expected by random chance.
-ORA tools can be stand-alone software packages or web services, and they use one or more statistical tests (eg: Fisher’s Exact test, hypergeometric test, binomial test) (Draghici et al, 2003; Hosack et al, 2003).
+A statistical test is performed to ascertain whether the number of DEGs belonging to a particular pathway (gene set) is higher than that expected by random chance, as determined by comparison to a background gene list.
+These ORA tools can be stand-alone software packages or web services, and they use one or more statistical tests (eg: Fisher’s Exact test, hypergeometric test) (Draghici et al, 2003; Hosack et al, 2003).
 
-FCS tools involve giving each detected gene a differential expression score and then evaluating whether the scores are more positive or negative than expected by chance for each set of genes.
+In the case of ORA for differential expression (eg: RNA-seq), a whole genome background is inappropriate because in any tissue, most genes are not expressed and therefore have no chance of being classified as DEGs.
+A good rule of thumb is to use a background gene list consisting of genes detected in the assay at a level where they have a chance of being classified as DEG (Tipney and Hunter 2010).
+
+FCS tools involve giving each detected gene a differential expression score and then evaluating whether the scores are more positive or negative than expected by chance for each gene set.
 The popular Gene Set Enrichment Analysis (GSEA) tool uses permutation approaches to establish whether a gene set is significantly associated with higher or lower scores, either by permuting sample labels or by permuting genes in the differential expression profile (Subramanian et al, 2005).
 
 From a user's perspective, ORA is easier to conduct because it is as simple as pasting a list of gene names into a text box on a website.
@@ -54,10 +57,10 @@ FCS tools are more difficult to use, but they are more sensitive at detecting su
 
 Although these are powerful tools to summarise complex genomics data, there are concerns that they are not being correctly used.
 Tipney and Hunter (2010) warn that inappropriate background set selection heavily influences enrichment results.
-Timmons et al (2015) highlight published articles where failure to account for sampling bias invalidated enrichment analysis and conclusions.
+Timmons et al (2015) highlight two cases where an inappropriate background list led to invalid enrichment results in published articles.
 
 The purpose of this work is to survey the frequency of methodological and reporting flaws in the literature, in particular;
-(i) lack of a background gene set, 
+(i) inappropriate background gene set, 
 (ii) lack of p-value adjustment for multiple comparisons and 
 (iii) lack of essential methodological details.
 We use the results of this survey to inform a set of minimum standards for functional enrichment analysis.
@@ -69,13 +72,13 @@ We use the results of this survey to inform a set of minimum standards for funct
 To demonstrate the effect of misusing gene set analysis, a publicly available RNA-seq dataset (accession SRP128998) was downloaded from DEE2 on 13th August 2021 (Ziemann et al, 2019).
 This data consists of immortalised human hepatocytes cultured in standard or high glucose, first described by Felisbino et al (2021).
 Transcript level counts were aggregated to genes using the getDEE2 R package v1.2.0. 
-Next, genes with an average of 10 reads per sample were discarded.
+Next, genes with an average of less than 10 reads per sample were omitted from downstream analysis.
 Differential expression statistical analysis was conducted with DESeq2 v1.32.0 (Love et al, 2014) to identify genes altered by high glucose exposure.
 For gene set analysis, Reactome gene sets (Jassal et al, 2020) were downloaded (URL: https://reactome.org/download/current/ReactomePathways.gmt.zip , accessed 13th August 2021).
 FCS was performed using the mitch R package v1.4.0 with default settings, which uses a rank-ANOVA statistical test (Kaspi and Ziemann 2020).
 Genes with FDR<0.05 were used for ORA analysis using the clusterProfiler R package (v4.0.2) enricher function that implements a hypergeometric test (Yu et al, 2012).
 No fold-change threshold was used to select genes for ORA.
-For ORA, two types of background gene sets were used (i) all detected genes, or (ii) all genes in the annotation set.
+For ORA, two types of background gene sets were used (i) detected genes, or (ii) all genes in the genome.
 For genes and gene sets, a false discovery rate adjusted p-value (FDR) of 0.05 was considered significant.
 Analyses were conducted in R version 4.1.0.
 
@@ -96,7 +99,7 @@ We sampled 200 of these articles and collected the following information from th
 
 * Software package used, and whether a version was reported
 
-* Whether a background gene set was used
+* Whether an appropriate background gene set was used
 
 * Code availability
 
@@ -149,21 +152,21 @@ All data analyses were conducted in R v4.1 and the analysis scripts are availabl
 ### An example of functional enrichment analysis misuse
 
 In order to demonstrate the effect of functional enrichment analysis misuse, we used an example RNA-seq dataset examining the effect of high glucose exposure on hepatocytes.
-Out of 39,297 genes in the annotation set, 15,635 were above the detection threshold (>10 reads per sample on average).
+Out of 39,297 genes in the whole genome, 15,635 were above the detection threshold (≥10 reads per sample on average).
 Statistical analysis revealed 3,472 differentially expressed genes with 1,560 up-regulated and 1,912 down-regulated (FDR<0.05) due to elevated glucose exposure.
 
 FCS revealed 95 up and 316 downregulated pathways (FDR<0.05).
 ORA with a background gene list consisting of detected genes revealed 55 upregulated and 238 downregulated gene sets (FDR<0.05).
-There was a strong overlap between FCS and ORA results with a Jaccard statistic of 0.66 (Figure 1A).
+The overlap between FCS and ORA shown in Figure 1A is reflected by a Jaccard statistic of 0.66, indicating moderate concordance between these methods.
 
 We then performed ORA using the whole genome gene list (indicated as ORA\*), which resulted in 147 up and 530 down regulated gene sets (FDR<0.05),
-The overlap of ORA with ORA\* was relatively smaller, with a Jaccard statistic of 0.41 (Figure 1B).
+The overlap of ORA with ORA\* was relatively small, with a Jaccard statistic of 0.41 (Figure 1B).
 Interestingly, 26 gene sets were simultaneously up and downregulated with this approach.
 
 Then we performed ORA analysis after combining up and downregulated genes as sometimes observed in the literature (indicated as ORA comb) with the standard background and again with a whole genome background (indicated as ORA\* comb).
 ORA comb revealed only 22 differentially regulated gene sets with a Jaccard similarity to ORA of only 0.04 (Figure 1C). 
 ORA\* comb yielded 64 differentially regulated gene sets with a Jaccard similarity to ORA of only 0.08.
-These results demonstrate that commonly observed practices of combining the up and downregulated gene lists and using the whole genome background gene list severely distort ORA results.
+These results suggest that when used properly, FCS and ORA yield similar results, but when used improperly, ORA results can be severely distorted.
 
 ![Figure 1. Example of enrichment analysis misuse. Euler diagrams show the overlap between sets of differentially regulated gene sets with different methods (FDR<0.05). (A) Comparison of FCS and ORA methods. (B) ORA with standard and whole genome background. Whole genome background analysis is indicated with a \* (C) Effect of combining up and downregulated genes on ORA results. Analysis using combined gene list is indicated by *ORA comb*, while *ORA\* comb* indicates combined gene list analysis with a whole genome background. ](images/Figure1.png "Figure 1")
 
@@ -193,7 +196,7 @@ Out of the 225 analyses that performed a statistical test, only 119 (53%) descri
 There were 50 different tools used to perform enrichment analysis, with DAVID and GSEA being the most common; while 15 analyses (6.4%) did not state what tool was used (Figure 3E).
 The version of the software used was provided in only 68 of 235 analyses (29%) (Figure 3F).
 
-For analyses using ORA methods, we studied what background gene set was used (Figure 3G). 
+For analyses using ORA methods, we examined what background gene set was used (Figure 3G). 
 This revealed that in most cases, the background list was not defined, or it was clear from the article methods section that no background list was used.
 In a few cases, a background list was mentioned but was inappropriate, for example using a whole genome background for an assay like RNA-seq.
 In only 8/197 of cases (4.1%), the appropriate background list was described in the article.
@@ -249,7 +252,7 @@ This is despite the fact that ORA tools perform worse than FCS and new generatio
 
 Failing to properly describe the background gene list was the most common methodological issue (Figure 3J).
 This error can lead to substantially distorted results (Figure 1B).
-In the example here, using the inappropriate background resulted in 2.3-fold more differentially regulated gene sets.
+In the example here, using the inappropriate whole genome background resulted in 2.3-fold more differentially regulated gene sets.
 Thus, if there are few or no significant results using a correct background list, there may be a temptation to use an inappropriate background to avoid null results.
 
 The proportion of ORA studies that combined up- and down-regulated gene list prior to analysis was also surprisingly high, at 70% (Figure 3K).
@@ -285,6 +288,7 @@ These databases are regularly upgraded so this is important for reproducibility.
 
 3. Report the tool used and its software version.
 As these tools are regularly updated, this will aid reproducibility.
+For online tools, record the date the tool was used.
 
 4. If making claims about the regulation of a gene set, then results of a statistical test must be shown including measures of significance and effect size.
 The number of genes belonging to a pathway on its own is insufficient to infer enrichment.
