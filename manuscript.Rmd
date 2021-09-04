@@ -91,19 +91,19 @@ We sampled 200 of these articles and collected the following information from th
 
 * Type of omics data
 
-* Gene set library used, and whether a version was reported
+* Gene set library used, and whether a version or date was reported
 
 * Statistical test used
 
 * Whether p-values were corrected for multiple comparisons
 
-* Software package used, and whether a version was reported
+* Software package used, and whether a version or date was reported
 
 * Whether an appropriate background gene set was used
 
 * Code availability
 
-* Whether gene profile was provided in the supplement
+* Whether gene profile was provided (in the supplement or main text).
 
 * Whether the analysis had any major flaws that might invalidate the results.
 This includes:
