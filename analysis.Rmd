@@ -606,15 +606,36 @@ median(x$scores)
 length(scores)
 which(scores>0)
 
+table(scores)
+
 png("images/hist1.png",width=300,height=200)
-par(mar=c(5,5,3,1))
-barplot(table(scores), xlab="analysis score",ylab="frequency")
+par(mar=c(5,5,2,1))
+barplot(table(scores), xlab="analysis score",ylab="frequency",ylim=c(0,600))
+text(x= 1:length(table(scores))* 1.2 -0.5, y = table(scores), label = table(scores), pos = 3, cex = 1, col = "black")
 dev.off()
 
-pdf("images/hist1.pdf",width=4,height=3)
-par(mar=c(5,5,3,1))
-barplot(table(scores), xlab="analysis score",ylab="frequency")
+pdf("images/hist1.pdf",width=5,height=4)
+par(mar=c(5,5,2,1))
+barplot(table(scores), xlab="analysis score",ylab="frequency",ylim=c(0,600))
+text(x= 1:length(table(scores))* 1.2 -0.5, y = table(scores), label = table(scores), pos = 3, cex = 1, col = "black")
 dev.off()
+
+scores2 <- round(table(scores)/sum(table(scores))*100,1)
+scores2
+
+
+png("images/hist2.png",width=300,height=200)
+par(mar=c(5,5,2,1))
+barplot(scores2, xlab="analysis score",ylab="frequency",ylim=c(0,50))
+text(x= 1:length(scores2)* 1.2 -0.5, y = scores2, label = scores2, pos = 3, cex = 0.9, col = "black")
+dev.off()
+
+pdf("images/hist2.pdf",width=5,height=4)
+par(mar=c(5,5,2,1))
+barplot(scores2, xlab="analysis score",ylab="frequency",ylim=c(0,40))
+text(x= 1:length(scores2)* 1.2 -0.5, y = scores2, label = scores2, pos = 3, cex = 0.9, col = "black")
+dev.off()
+
 
 ```
 
