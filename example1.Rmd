@@ -331,6 +331,8 @@ dat
 
 barplot(dat,ylab="jaccard metric")
 
+saveRDS(dat,file = "ex1dat.rds")
+
 ```
 
 ## Session information

@@ -266,27 +266,27 @@ v3 <- list("ORA up"=c_up,"ORA dn"=c_dn,
            "ORA* up"=f_up,"ORA* dn"=f_dn ,
            "FCS up"=m_up, "FCS dn"=m_dn)
 
-png("images/fcs_ora1.png")
+png("images/fcs_ora3.png")
 plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS vs ORA")
 dev.off()
 
-png("images/orabg1.png")
+png("images/orabg3.png")
 plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
 dev.off()
 
-png("images/oracomb1.png")
+png("images/oracomb3.png")
 plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole genome bg*")
 dev.off()
 
-pdf("images/fcs_ora1.pdf",width=4,height=4)
+pdf("images/fcs_ora3.pdf",width=4,height=4)
 plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS vs ORA")
 dev.off()
 
-pdf("images/orabg1.pdf",width=4,height=4)
+pdf("images/orabg3.pdf",width=4,height=4)
 plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
 dev.off()
 
-pdf("images/oracomb1.pdf",width=4,height=4)
+pdf("images/oracomb3.pdf",width=4,height=4)
 plot(euler(vx),quantities = TRUE, edges = "gray", main="combining up and down genes and whole genome bg*")
 dev.off()
 
@@ -328,6 +328,8 @@ dat <- c("FCS vs ORA"=cm,"ORA vs ORA*"=cf,"FCS vs ORA*"=mf, "ORA vs ORA comb"=dc
 dat
 
 barplot(dat,ylab="jaccard metric")
+
+saveRDS(dat,file = "ex3dat.rds")
 
 ```
 

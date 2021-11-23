@@ -1,0 +1,101 @@
+---
+title: "Example gene set analysis: bringing it together"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+## Intro
+
+Previously we analysed five datasets below and looked at the differences between FCS and ORA methods for gene set enrichment. 
+
+| Dataset | SRA accesion | genes in annotation set | genes detected | genes differentially expressed |
+| :---: | :---: | :---: | :---: | :---: | 
+| 1. | SRP128998 | 39297 | 15635 | 3472 |
+| 2. | SRP038101 | 39297 | 13926 | 3589 | 
+| 3. | SRP096178 | 39297 | 15477 | 9488 |
+| 4. | SRP038101 | 39297 | 15607 | 5150 | 
+| 5. | SRP247621 | 39297 | 14288 | 230 |
+
+
+```{r,begin}
+
+suppressPackageStartupMessages({
+library("kableExtra")
+library("beeswarm")
+})
+
+```
+
+## Summarise
+
+Here I'm summarising the results of the five example data sets.
+
+```{r,getdata,fig.width=7,fig.height=5}
+
+exdat=NULL
+ex1dat <- readRDS("ex1dat.rds")
+ex2dat <- readRDS("ex2dat.rds")
+ex3dat <- readRDS("ex3dat.rds")
+ex4dat <- readRDS("ex4dat.rds")
+ex5dat <- readRDS("ex5dat.rds")
+
+exdat <- rbind(ex1dat,ex2dat,ex3dat,ex4dat,ex5dat)
+rownames(exdat) <- c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621")
+
+mysd <- apply(exdat,2,sd)
+
+par(mar=c(5,10,3,1))
+barplot(rev(colMeans(exdat)),xlab="mean Jaccard index",horiz = TRUE, las =1, xlim=c(0,.7) )
+
+pdf("images/jacbar1.pdf",width=4,height=4)
+par(mar=c(5,10,3,1))
+barplot(rev(colMeans(exdat)),xlab="mean Jaccard index",horiz = TRUE, las =1, xlim=c(0,.7) )
+dev.off()
+
+png("images/jacbar1.png")
+par(mar=c(5,10,3,1))
+barplot(rev(colMeans(exdat)),xlab="mean Jaccard index",horiz = TRUE, las =1, xlim=c(0,.7) )
+dev.off()
+
+exdat <- rbind(exdat,"mean"=colMeans(exdat))
+
+cols <- c("#CC79A7","#56B4E9","#E69F00","#F0E442","#009E73","black")
+coll <- list(cols, cols, cols, cols, cols)
+par(mar=c(5,10,3,1))
+beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=2,pch=19, xlab = "Jaccard index")
+legend("bottomright", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","mean"), pch=19,  col=cols, cex=1,pt.cex = 1.5)
+
+pdf("images/jacswarm1.pdf",width=6,height=5)
+par(mar=c(5,9,3,1))
+beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=2,pch=19, xlab = "Jaccard index")
+legend("bottomright", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","mean"), pch=19,  col=cols, cex=1.0, pt.cex = 1.7)
+dev.off()
+
+png("images/jacswarm1.png")
+par(mar=c(5,10,3,1))
+beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=2,pch=19, xlab = "Jaccard index")
+legend("bottomright", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","mean"), pch=19,  col=cols, cex=1,pt.cex = 1.5)
+dev.off()
+
+rbind(exdat,mysd) %>% kbl() %>% kable_paper("hover", full_width = F)
+
+```
+
+
+## Session information
+
+```{r,session}
+
+sessionInfo()
+
+```
