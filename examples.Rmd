@@ -63,7 +63,7 @@ exdat %>% kbl(caption="jaccard index values across seven RNA-seq studies") %>% k
 
 means <- colMeans(exdat)
 medians <- colMedians(exdat)
-sds <- sd(exdat)
+sds <- apply(exdat,2,sd)
 summstats <- rbind(means,medians,sds)
 summstats %>% kbl(caption="summary statistics of different enrichment analysis comparisons") %>% kable_paper("hover", full_width = F)
 
