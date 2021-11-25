@@ -48,6 +48,8 @@ samplesheet<-samplesheet[order(samplesheet$SRR_accession),]
 samplesheet$trt<-as.factor(c(1,1,1,0,0,0))
 s1 <- samplesheet
 
+s1 %>% kbl(caption = "sample sheet") %>% kable_paper("hover", full_width = F)
+
 w<-getDEE2("hsapiens",samplesheet$SRR_accession,metadata=mdat,legacy = TRUE)
 x<-Tx2Gene(w)
 x<-x$Tx2Gene

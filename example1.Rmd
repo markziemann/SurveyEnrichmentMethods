@@ -51,6 +51,8 @@ samplesheet$trt<-as.factor(c(1,1,1,1,1,1,0,0,0,0,0,0))
 samplesheet$VPA<-as.factor(c(0,0,0,1,1,1,0,0,0,1,1,1))
 s1 <- subset(samplesheet,VPA==0)
 
+s1 %>% kbl(caption = "sample sheet") %>% kable_paper("hover", full_width = F)
+
 w<-getDEE2("hsapiens",samplesheet$SRR_accession,metadata=mdat,legacy = TRUE)
 x<-Tx2Gene(w)
 x<-x$Tx2Gene
@@ -328,10 +330,24 @@ mf <- length(intersect(m_de, f_de )) / length(union(m_de, f_de))
 dat <- c("FCS vs ORA"=cm,"ORA vs ORA*"=cf,"FCS vs ORA*"=mf, "ORA vs ORA comb"=dc, "ORA vs ORA* comb"=ec)
 
 dat
-
-barplot(dat,ylab="jaccard metric")
-
 saveRDS(dat,file = "ex1dat.rds")
+
+
+par(mar=c(5,10,3,1))
+barplot(rev(dat),xlab="Jaccard index",horiz = TRUE, las =1, xlim=c(0,.75) , main=name)
+text( x=rev(dat)+0.05 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),2))
+
+pdf("images/jacbar.pdf",width=4,height=3)
+par(mar=c(5,9,3,1))
+barplot(rev(dat),xlab="Jaccard index",horiz = TRUE, las =1, xlim=c(0,.8) , main=name)
+text( x=rev(dat)+0.08 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),2))
+dev.off()
+
+png("images/jacbar.png")
+par(mar=c(5,10,3,1))
+barplot(rev(dat),xlab="Jaccard index",horiz = TRUE, las =1, xlim=c(0,.75) , main=name)
+text( x=rev(dat)+0.05 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),2))
+dev.off()
 
 ```
 
