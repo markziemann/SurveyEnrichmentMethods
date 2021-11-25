@@ -62,7 +62,7 @@ exdat %>% kbl(caption="jaccard index values across seven RNA-seq studies") %>% k
 ```{r,summary_stats}
 
 means <- colMeans(exdat)
-medians <- colMedians(exdat)
+medians <- apply(exdat,2,median)
 sds <- apply(exdat,2,sd)
 summstats <- rbind(means,medians,sds)
 summstats %>% kbl(caption="summary statistics of different enrichment analysis comparisons") %>% kable_paper("hover", full_width = F)
@@ -117,34 +117,6 @@ png("images/jacbar1.png")
 par(mar=c(5,10,3,1))
 barplot(rev(colMeans(exdat)),xlab="mean Jaccard index",horiz = TRUE, las =1, xlim=c(0,.7) )
 dev.off()
-
-```
-
-Now plot as a beeswarm.
-
-```{r,jacswarm}
-
-exdat <- rbind(exdat,"mean"=colMeans(exdat))
-
-cols <- c("#CC79A7","#56B4E9","#E69F00","#F0E442","#009E73","black")
-coll <- list(cols, cols, cols, cols, cols)
-par(mar=c(5,10,3,1))
-beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=2,pch=19, xlab = "Jaccard index")
-legend("bottomright", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","mean"), pch=19,  col=cols, cex=1,pt.cex = 1.5)
-
-pdf("images/jacswarm1.pdf",width=6,height=5)
-par(mar=c(5,9,3,1))
-beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=2,pch=19, xlab = "Jaccard index")
-legend("bottomright", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","mean"), pch=19,  col=cols, cex=1.0, pt.cex = 1.7)
-dev.off()
-
-png("images/jacswarm1.png")
-par(mar=c(5,10,3,1))
-beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=2,pch=19, xlab = "Jaccard index")
-legend("bottomright", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","mean"), pch=19,  col=cols, cex=1,pt.cex = 1.5)
-dev.off()
-
-rbind(exdat,mysd) %>% kbl() %>% kable_paper("hover", full_width = F)
 
 ```
 
