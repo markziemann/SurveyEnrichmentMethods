@@ -1,0 +1,255 @@
+---
+title: "PMC6349697: A replication study"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+## Intro
+
+```{r,begin}
+
+suppressPackageStartupMessages({
+library("getDEE2")
+library("DESeq2")
+library("clusterProfiler")
+library("org.Hs.eg.db")
+library("mitch")
+library("kableExtra")
+library("eulerr")
+})
+
+```
+
+In [Kaumadi et al 2021](https://www.biorxiv.org/content/10.1101/2021.09.06.459114v1) we
+showed that major problems plague functional enrichment analysis in many journal articles.
+
+Here I will do my best to reproduce and replicate the findings of some studies.
+These were selected on the following criteria:
+
+* Included in the 2019 group that was studies in Kaumadi et al 2021.
+
+* Human study
+
+* RNA-seq gene expression
+
+* Performed DAVID gene set analysis
+
+* Provided gene list
+
+From this subset, four studies were selected
+
+| Study | Analytical issues |
+| --- | --- |
+| PMC6349697 | Background |
+| PMC6425008 | Background, FDR |
+| PMC6463127 | Background, FDR |
+| PMC6535219 | Background | 
+
+In this document I will be seeing if I can reproduce the same findings by using the same
+tool with the gene list provided in the article.
+Also I will correct the method wherever possible.
+This means using the correct background gene list, using FDR control and performing 
+separate analysis of up and down-regulated gene lists.
+
+The study examined in this document is PMC6349697: 
+[Liu et al, 2019](https://pubmed.ncbi.nlm.nih.gov/30723491/).
+
+In this study, LINC00941 is the focus.
+From TGCA expression data, a coexpression network was built and then genes associated with
+LINC00941 were obtained.
+These genes were then subject to enrichment analysis of GO terms and KEGG pathways using 
+DAVID v6.8, with pathways FDR<0.05 considered significant.
+No information is provided in the article about a background gene list.
+
+From the article, they present in [Supplementary Table S5](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6349697/#SM5)
+a list of 123 co-expressed genes.
+
+In [Supplementary Table S6](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6349697/#SM6) 
+they show the 3180 genes that underwent clustering, along with the cluster
+assignment.
+There are 124 genes in the "yellow" cluster.
+
+In [Supplementary Table S7](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6349697/#SM7),
+authors show the significant results of the enrichment tests.
+
+| Category | Term | Count | FDR |
+| --- | --- | --- | --- |
+| GOTERM_BP_DIRECT | GO:0030574~collagen catabolic process | 15 | 2.73E-15 |
+| GOTERM_BP_DIRECT | GO:0030199~collagen fibril organization | 13 | 8.48E-15 |
+| GOTERM_BP_DIRECT | GO:0030198~extracellular matrix organization | 20 | 1.43E-14 |
+| GOTERM_BP_DIRECT | GO:0007155~cell adhesion | 21 | 8.40E-09 |
+| GOTERM_BP_DIRECT | GO:0001501~skeletal system development | 10 | 2.67E-04 |
+| GOTERM_BP_DIRECT | GO:0001503~ossification | 7 | 0.0154 |
+| KEGG | hsa04512:ECM-receptor interaction | 10 | 1.81E-06 |
+| KEGG | hsa04974:Protein digestion and absorption | 9 | 4.53E-05 |
+| KEGG | hsa04510:Focal adhesion | 10 | 0.0032 |
+| KEGG | hsa04151:PI3K-Akt signaling pathway | 11 | 0.032 |
+
+## Try to reproduce
+
+Here I'm going to reproduce the findings with DAVID as best I can.
+
+Here is the list of genes used as the foreground.
+The gene IDs are saved as a txt file on this repository called "PMC6349697_fg.txt"
+
+```{r,fg}
+
+fg <- readLines("PMC6349697_fg.txt")
+
+fg
+
+```
+
+These genes were submitted to DAVID v6.8 on 29th November 2021 without any particular 
+background gene set, which gave the following results.
+
+```{r,res1}
+
+res1 <- read.table("PMC6349697_res1.tsv",header=TRUE,sep="\t")
+
+res1 %>% kbl(caption="DAVID results obtained using article gene list without background") %>% kable_paper("hover", full_width = F)
+
+```
+
+This result means that most pathways could be replicated using the gene list as provided 
+by the authors without the use of a custom background gene list.
+
+## Try to reproduce with corrected background gene list
+
+Now I will try to use a corrected gene list.
+I see that the Table S6 has all the other clustered genes sets, totalling 3180 genes, 
+however this is likely not all the  genes that were detected in the dataset.
+Therefore, I downloaded the TGCA data used in the study and identified all the genes with
+an average of 10 reads per sample or more.
+
+There are 25947 genes in the background.
+
+```{r,bg1}
+
+bg <- readLines("PMC6349697_bg.txt")
+
+length(bg)
+
+```
+
+These genes are stored as "PMC6349697_bg.txt" in the repo.
+
+Next I repeated DAVID analysis, this time using the correct background gene list.
+Here is the result I obtained.
+
+```{r,res2}
+
+res2 <- read.table("PMC6349697_res2.tsv",header=TRUE,sep="\t")
+
+res2 %>% kbl(caption="DAVID results obtained using the correct background") %>% kable_paper("hover", full_width = F)
+
+```
+
+In contrast to the six GOs and four KEGGs identified with FDR<0.05 originally, with
+the corrected background there's eight GOs and six KEGGs now.
+
+## What about the conclusions of the study?
+
+Some interesting statements about the enrichment analysis:
+
+* Abstract: 
+
+>"... functional enrichment analysis of LINC00941 co-expression network demonstrated that LINC00941 might be an essential regulator of tumor metastasis and cancer cell proliferation. "
+
+* Introduction final paragraph: 
+
+> "... through the functional enrichment analysis, we found that LINC00941 might be an essential regulator of tumor metastasis and cancer cell proliferation. "
+
+* Results:
+
+> "Some GO terms, such as extracellular matrix organization (GO: 0030198) and cell adhesion (GO: 0007155) are cell migration-related GO processes, which are associated with tumor metastasis. We detected that ECM-receptor interaction (KEGG: hsa04512) and Focal adhesion (KEGG: hsa04510) are metastasis-related pathways. PI3K-Akt signaling pathway (KEGG: hsa04151) is cell proliferation-related pathway. Our findings demonstrated that LINC00941 could be a potential regulator of tumor metastasis and cancer cell proliferation."
+
+* Discussion:
+
+> "The results of GO terms and KEGG pathways were mainly enriched in cell proliferation, cell migration, and tumor metastasis."
+
+Indeed the results indicate LINC00941 is co-regulated with genes involved in ECM structure and metabolism.
+This pathway might be involved with tissue remodelling involved with tumour maturation.
+This looks to all be okay, apart from one statement about proliferation.
+None of these ontologies/pathways are related to cell cycle or proliferation.
+The statement in the discussion is also suspect, because none of these pathways are closely linked to proliferation, migration or 
+metastasis.
+There are likely other gene sets available which can be used to test these associations more thoroughly.
+For example there are 58 gene sets containing the keyword "metastasis" in the MSigDB v7.4 collection (29/11/2021).
+
+
+## What about a replication using an R script
+
+Here I'm using the enrichGO function to analyse the data.
+The algorithm is slightly different and the gene sets might be a different version.
+First GO biological processes.
+
+```{r,repl2_go}
+
+go_bp <- enrichGO(gene = fg,  keyType = "ENSEMBL", universe = bg,
+    OrgDb = org.Hs.eg.db, ont = "BP", pAdjustMethod = "BH", pvalueCutoff  = 0.01,
+    qvalueCutoff  = 0.05, readable = TRUE)
+
+go_bp <- data.frame(go_bp)
+
+go_bp <- subset(go_bp,qvalue<0.05)
+
+nrow(go_bp)
+
+writeLines(go_bp$Description,"PMC6349697_gobp.txt")
+
+go_bp[,c(2:7,9)] %>% kbl(caption="Clusterprofiler GO results obtained using the correct background") %>% kable_paper("hover", full_width = F)
+
+```
+
+Now KEGG analysis but need to convert to entrez first
+
+```{r,repl2_kegg}
+
+fg_entrez <- unlist(mget(fg, org.Hs.egENSEMBL2EG, ifnotfound = NA))
+
+bg_entrez <- unlist(mget(bg, org.Hs.egENSEMBL2EG, ifnotfound = NA))
+
+
+kegg <- enrichKEGG(gene = fg_entrez, universe = bg_entrez,
+    organism = "hsa", pAdjustMethod = "BH", pvalueCutoff  = 0.01,
+    qvalueCutoff  = 0.05)
+
+kegg <- as.data.frame(kegg)
+
+writeLines(kegg$Description,"PMC6349697_kegg.txt")
+
+kegg[,c(2:7,9)] %>% kbl(caption="Clusterprofiler KEGG results obtained using the correct background") %>% kable_paper("hover", full_width = F)
+
+
+```
+
+The clusterProfiler GO:BP results gave 69 significant terms.
+Prominent similar terms to the article were ECM, collagen, skeletal system and ossification, whereas clusterprofiler 
+also gave some interesting gene sets such as angiogenesis, smooth muscle cell migration, response to transforming 
+growth factor beta.
+
+With KEGG analysis, only two sets were consistent, while focal adhesion and PI3K-Akt were not significant.
+
+In conclusion, it appears that the lack of a background gene set did not have much of an effect on the results,
+however the conclusions drawn in the article regarding proliferation and metastasis based on enrichment analysis
+are unfounded.
+
+## Session information
+
+```{r,session}
+
+sessionInfo()
+
+```
+
