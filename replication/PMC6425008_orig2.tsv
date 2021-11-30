@@ -1,0 +1,15 @@
+Go terms	Category	Number of genes	Go id	up_P-value	dn_p-value
+Response to unfolded protein	BP	8	GO:0006986	1.79E-09	NA
+Negative regulation of programmed cell death	BP	2	GO:0043069	0.62	0.33
+Negative regulation of cell death	BP	4	GO:0060548	0.77	0.57
+Regulation of cell cycle	BP	19	GO:0051726	1.64E-05	1.64E-05
+Negative regulation of programmed cell death	BP	2	GO:0043069	0.62	0.33
+Positive regulation of cell death	BP	1	GO:0010942	0.12	NA
+Negative regulation of cell death	BP	4	GO:0060548	0.77	0.57
+Intracellular membrane-bounded organelle	CC	10	GO:0043231	NA	0.67
+Negative regulation of cell growth	BP	2	GO:0030308	NA	0.87
+Negative regulation of catalytic activity	BP	1	GO:0043086	0.64	NA
+Cell cycle arrest	BP	4	GO:0007050	NA	0.64
+Negative regulation of growth	BP	2	GO:0045926	0.4	NA
+Cellular protein metabolic process	BP	5	GO:0044267	NA	0.64
+Positive regulation of cellular protein metabolic process	BP	1	GO:0032270	NA	0.76

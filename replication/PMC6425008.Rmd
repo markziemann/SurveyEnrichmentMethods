@@ -1,0 +1,243 @@
+---
+title: "PMC6425008: A replication study"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+## Intro
+
+```{r,begin}
+
+suppressPackageStartupMessages({
+library("getDEE2")
+library("DESeq2")
+library("clusterProfiler")
+library("org.Hs.eg.db")
+library("mitch")
+library("kableExtra")
+library("eulerr")
+})
+
+```
+
+In [Kaumadi et al 2021](https://www.biorxiv.org/content/10.1101/2021.09.06.459114v1) we
+showed that major problems plague functional enrichment analysis in many journal articles.
+
+Here I will do my best to reproduce and replicate the findings of some studies.
+These were selected on the following criteria:
+
+* Included in the 2019 group that was studies in Kaumadi et al 2021.
+
+* Human study
+
+* RNA-seq gene expression
+
+* Performed DAVID gene set analysis
+
+* Provided gene list
+
+From this subset, four studies were selected
+
+| Study | Analytical issues |
+| --- | --- |
+| PMC6349697 | Background |
+| PMC6425008 | Background, FDR |
+| PMC6463127 | Background, FDR |
+| PMC6535219 | Background | 
+
+In this document I will be seeing if I can reproduce the same findings by using the same
+tool with the gene list provided in the article.
+Also I will correct the method wherever possible.
+This means using the correct background gene list, using FDR control and performing 
+separate analysis of up and down-regulated gene lists.
+
+The study examined in this document is PMC6425008: 
+[Balusamy et al, 2019](https://pubmed.ncbi.nlm.nih.gov/30890753/).
+
+In this study, the effect of citral (3,7-dimethyl-2,6-octadienal) on cells is investigated.
+In the paper, they isolate the compound with chromatography, followed by in vitro 
+treatment of AGL cell line with different levels of the compound.
+Treated cells were characterised in terms of morphology and viability.
+Citral caused shrunken cells, amorphous shape and lower cell number.
+To understand the pattern of gene expression, RNA-seq of n=1 control and n=1 treated
+samples was performed yielding 75 and 65 M read pairs respectively which were deposited to
+SRA (SRP150561).
+
+Some type of differential analysis was performed with Cuffdiff, but with no replicates,
+this might not be reliable.
+Anyway, the up and down regulated gene lists are found in (Supplementary File S6)[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6425008/bin/41598_2019_41406_MOESM7_ESM.xlsx].
+It contains 612 genes; 216 up and 396 downregulated genes.
+
+There is a network analysis which looks a bit like a hairball and isn't described in any
+detail.
+
+Figures 5-7 show the results of the enrichment analysis.
+A number of gene sets are presented as significant, despite lack of FDR correction.
+There was no mention of a background gene list in the article.
+
+Here I have summarised the "significant" findings presented in the supplements.
+There are some problems.
+Firstly, only 7 of these have an FDR (BH method) < 0.05.
+Secondly, some of these show that only 1 gene was found in a gene set.
+Surely one gene on its own can't constitute a valid enrichment.
+
+```{r,orig_res1}
+
+orig <- read.table("PMC6425008_orig.tsv",sep="\t",header=TRUE)
+
+orig %>% kbl(caption="Enrichment results presented in PMC6425008 supplementary files") %>% kable_paper("hover", full_width = F)
+
+```
+
+In this work, I will see if I can replicate the results for the 7 FDR significant gene sets.
+
+```{r,orig_res3}
+
+subset(orig,BH.method < 0.05)$GO.Term
+
+```
+
+The article also shows some KEGG pathway analysis in Table 2 but shows results for individual genes and doesn't present any results
+of enrichment tests for gene sets.
+
+In Table 3 of the article, GO enrichment table is shown for apoptosis pathways.
+It seems only two of the sets are significant: "Response to unfolded protein" and "Regulation of cell cycle"
+
+```{r,orig_res2}
+
+orig2 <- read.table("PMC6425008_orig2.tsv",sep="\t",header=TRUE)
+
+orig2 %>% kbl(caption="Enrichment results presented in PMC6425008 Table 3") %>% kable_paper("hover", full_width = F)
+
+```
+
+In addition, the results of Table 3 are inconsistent with the GO results shown in the supplements.
+For example "Response to unfolded protein" and "Regulation of cell cycle" are missing from the supplementary tables.
+
+## Try to reproduce
+
+I submitted the 216 upregulated genes to DAVID and these were mapped to 213 DAVID gene IDs.
+This analysis without a background list gave 31 BP, 17 CC and 10 MF significant GO terms (see table below).
+This is drastically different to what is shown in the article. 
+
+```{r,repl1}
+
+repl1 <- read.table("PMC6425008_repl1.tsv", header=TRUE, sep="\t")
+
+repl1 %>% kbl(caption="DAVID Enrichment results when using the genes provided in the supplement and a corrected background gene list.") %>% kable_paper("hover", full_width = F)
+
+```
+
+## Try to reproduce with corrected background gene list
+
+Now I'll try this again, but using a correct background gene set.
+As the data is found on the DEE2 database, I can see which genes are detected and I can use those ones as a background.
+As the results below show, there are 14209 genes in the background.
+
+```{r,bg}
+
+m <- getDEE2::getDEE2Metadata(species="hsapiens")
+ss <- m[grep("SRP150561",m$SRP_accession),]
+x <- getDEE2(species="hsapiens",SRRvec=ss$SRR_accession,legacy=TRUE)
+mx <- x$GeneCounts
+mxf <- mx[which(rowMeans(mx)>=10),]
+nrow(mx) #58302
+nrow(mxf) #14119
+bg <- rownames(mxf)
+
+geneinfo <- x$GeneInfo
+bgg <- unique(geneinfo[which(rownames(geneinfo) %in%bg),"GeneSymbol"])
+length(bgg)
+writeLines(bgg,"PMC6425008_bg.txt")
+
+```
+So I tried DAVID with the new background, but was greeted with "Due to the ambiguous nature of Gene Symbol, DAVID does not allow it to be used for a background."
+This poses a problem for many researchers.
+
+Anyway so I will use Ensembl IDs instead (14218 IDs).
+
+```{r,bg2}
+
+writeLines(bg,"PMC6425008_bg2.txt")
+
+```
+
+Here are the results when using all detected genes as the background.
+
+```{r,repl2}
+
+repl2 <- read.table("PMC6425008_repl2.tsv", header=TRUE, sep="\t")
+
+repl2 %>% kbl(caption="DAVID Enrichment results when using the genes provided in the supplement.") %>% kable_paper("hover", full_width = F)
+
+```
+
+## Do the results reproduce?
+
+Considering the results shown in the supplement, there were 7 FDR significant sets.
+
+When the analysis was rerun without a specific background there were mixed results with most of the findings not reproducing.
+
+* Did reproduce: "Proteasome complex", "Inclusion body"
+
+* Did not reproduce: "Protein metabolism", "Heat shock protein activity", "Ubiquitin-specific protease activity", "Exosomes", "Lysosome"
+
+When considering the re-analysis with the corrected background set:
+
+* Did reproduce: "Proteasome complex", "Inclusion body"
+
+* Did not reproduce: "Protein metabolism", "Heat shock protein activity", "Ubiquitin-specific protease activity", "Exosomes", "Lysosome"
+
+This suggests that the main problem here is that the results shown in the supplement are incorrect and are inconsistent with the gene list provided
+in the supplement.
+
+Regarding the results shown in Table 3, "Response to unfolded protein" was reproduced, while "Regulation of cell cycle" wasn't reproduced.
+
+## What about the conclusions of the study?
+
+Some interesting statements about the enrichment analysis:
+
+* Abstract: 
+
+>"... Furthermore, the enrichment and KEGG pathway results suggested that there are several genes involved to induce apoptosis pathway. "
+
+>".. The enrichment analysis identified DEGs genes from transcriptome libraries including cell death, cell cycle, apoptosis and cell growth. "
+
+>"The present study showed the significant inhibition effect upon citral by regulating various genes involved in signaling pathways, inhibits metastasis, colony formation and induced apoptosis both in silico and in vitro."
+
+* Results and Discussion:
+
+> "KEGG analysis revealed that MAPK signaling pathway, NF-kappa B signaling pathway, p53 signaling pathway, PI3-K-Akt signaling pathway, pathways in cancer, and prostate cancer pathways are mostly enriched in up and down-regulated genes which identified between normal and citral treated samples in AGS. Among them, cell cycle, pathways in cancer, and MAPK signaling pathways were observed as mostly enriched pathways. In addition, several common genes were identified in these pathways were listed in Table 2. Among them, cell cycle (hsa04110) and cancer (hsa05200) occupied several down-regulated DEG genes. The genes involved in cell cycle synthesis are very crucial for the inhibition of cancer cell progression19. For example, cyclin-dependent kinases (CKD2) are the most important regulators for the transition and cell cycle progression and play a significant role in regulating cell cycle division including centromere duplication, DNA synthesis, G1-S transition, and modulation of G2 progression20–22. Furthermore, the enrichment analysis and KEGG pathway results indicated that, there are several genes involved to initiate apoptosis pathway that are directly/indirectly related to the treatment of citral. In addition, enrichment analysis identified DEGs genes from transcriptome libraries were mainly involved in cell death, cell cycle, apoptotic process, and cell growth (Table 3)."
+
+To summarise the conclusions, authors allude to enrichment analysis identifying apoptosis pathways.
+They speak about the KEGG classifications but there was no statistical enrichment test performed so this is not a quantitative enrichment.
+Specifically they mention table 3 supports enrichment analysis that indicates "cell death, cell cycle, apoptotic process, and cell growth"
+
+The only hint of apoptosis pathways identified was the "Ubiquitin-specific protease activity" found in the original study (FDR=3.1e-04), and this was 
+partially reproduced with DAVID without a background set (GO:0051436~negative regulation of ubiquitin-protein ligase activity involved in mitotic cell cycle; 
+FDR=3.154072e-09), however when a correct background gene set was used, no ubiquitin-related pathways were identified as significant.
+
+## My conclusion
+
+So to conclude, it appears that most pathway results weren't reproduced regarding cell cycle, signaling or apoptosis.
+
+What I did find, was that the upregulated genes were enriched in functions related to protein misfolding, eg: chaperones, proteasome, etc.
+
+## Session information
+
+```{r,session}
+
+sessionInfo()
+
+```
+
