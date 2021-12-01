@@ -1,0 +1,17 @@
+GOtype	Category	GO_Term_ID	GO_Term_Count	pvalue
+BP	GO:0006351	transcription, DNA-templated	14	<0.001
+BP	GO:0050684	regulation of mRNA processing	3	<0.001
+BP	GO:0006325	chromatin organization	3	0.004
+BP	GO:0045893	positive regulation of transcription, DNA-templated	6	0.005
+BP	GO:0018026	peptidyl-lysine monomethylation	2	0.017
+BP	GO:0006355	regulation of transcription, DNA-templated	8	0.038
+CC	GO:0005654	nucleoplasm	19	<0.001
+CC	GO:0005634	nucleus	26	<0.001
+MF	GO:0003676	nucleic acid binding	10	<0.001
+MF	GO:0003682	chromatin binding	6	0.002
+MF	GO:0003713	transcription coactivator activity	5	0.002
+MF	GO:0000166	nucleotide binding	5	0.008
+MF	GO:0003677	DNA binding	10	0.012
+MF	GO:0003690	double-stranded DNA binding	3	0.015
+MF	GO:0003729	mRNA binding	3	0.034
+MF	GO:0016279	protein-lysine N-methyltransferase activity	2	0.039

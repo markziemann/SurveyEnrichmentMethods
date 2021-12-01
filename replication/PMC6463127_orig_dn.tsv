@@ -1,0 +1,16 @@
+GOtype	Category	GO_Term_ID	GO_Term_Count	p-value
+BP	GO:0002474	antigen processing and presentation of peptide antigen via MHC class I	5	<0.001
+BP	GO:0061077	chaperone-mediated protein folding	5	<0.001
+BP	GO:0006465	signal peptide processing	4	0.002
+BP	GO:0006506	GPI anchor biosynthetic process	4	0.003
+BP	GO:0044829	positive regulation by host of viral genome replication	3	0.003
+CC	GO:0070062	extracellular exosome	79	<0.001
+CC	GO:0016020	membrane	64	<0.001
+CC	GO:0005789	endoplasmic reticulum membrane	36	<0.001
+CC	GO:0005783	endoplasmic reticulum	31	<0.001
+CC	GO:0042470	melanosome	12	<0.001
+MF	GO:0044822	poly(A) RNA binding	23	0.003
+MF	GO:0005515	protein binding	110	0.004
+MF	GO:0001540	beta-amyloid binding	4	0.005
+MF	GO:0019904	protein domain specific binding	8	0.006
+MF	GO:0051087	chaperone binding	5	0.01

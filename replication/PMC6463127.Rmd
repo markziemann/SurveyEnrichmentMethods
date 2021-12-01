@@ -1,0 +1,257 @@
+---
+title: "PMC6463127: A replication study"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+## Intro
+
+```{r,begin}
+
+suppressPackageStartupMessages({
+library("getDEE2")
+library("DESeq2")
+library("clusterProfiler")
+library("org.Hs.eg.db")
+library("mitch")
+library("kableExtra")
+library("eulerr")
+})
+
+```
+
+In [Kaumadi et al 2021](https://www.biorxiv.org/content/10.1101/2021.09.06.459114v1) we
+showed that major problems plague functional enrichment analysis in many journal articles.
+
+Here I will do my best to reproduce and replicate the findings of some studies.
+These were selected on the following criteria:
+
+* Included in the 2019 group that was studies in Kaumadi et al 2021.
+
+* Human study
+
+* RNA-seq gene expression
+
+* Performed DAVID gene set analysis
+
+* Provided gene list
+
+From this subset, four studies were selected
+
+| Study | Analytical issues |
+| --- | --- |
+| PMC6349697 | Background |
+| PMC6425008 | Background, FDR |
+| PMC6463127 | Background, FDR |
+| PMC6535219 | Background | 
+
+In this document I will be seeing if I can reproduce the same findings by using the same
+tool with the gene list provided in the article.
+Also I will correct the method wherever possible.
+This means using the correct background gene list, using FDR control and performing 
+separate analysis of up and down-regulated gene lists.
+
+The study examined in this document is PMC6463127: 
+[Chai et al, 2019](https://pubmed.ncbi.nlm.nih.gov/30832348/).
+
+The focus of this study is to compare the RNA expression profiles of parathyroid adenomas with normal parathyroid gland tissue.
+They found 247 differentially expressed genes; 45 up-regulated, 202 down-regulated.
+
+They used DAVID for GO/KEGG analysis.
+They did not perform FDR correction of enrichment results.
+
+Here are the upregulated and downregulated GO terms and the downregulated KEGG pathways. 
+(Presuming there were no significantly upregulated KEGG pathways.)
+
+```{r,orig1}
+
+orig1 <- read.table("PMC6463127_orig_up.tsv",header=TRUE,sep="\t")
+
+orig1 %>% kbl(caption="upregulated GO terms shown in the article") %>% kable_paper("hover", full_width = F)
+
+orig2 <- read.table("PMC6463127_orig_dn.tsv",header=TRUE,sep="\t")
+
+orig2 %>% kbl(caption="down-regulated GO terms shown in the article") %>% kable_paper("hover", full_width = F)
+
+orig3 <- read.table("PMC6463127_orig_keggdn.tsv",header=TRUE,sep="\t")
+
+orig3 %>% kbl(caption="down-regulated KEGG pathways shown in the article") %>% kable_paper("hover", full_width = F)
+ 
+
+```
+
+## Try to reproduce
+
+So let's see if I can reproduce their result using DAVID without a background gene list.
+The study provided the differentially regulated gene lists in Table S2
+
+Here are the significant GO terms for the up and down directions, along with the downregulated KEGG pathways.
+
+```{r,repl1}
+
+repl1up <- read.table("PMC6463127_repl_up.tsv",header=TRUE,sep="\t")
+
+repl1up %>% kbl(caption="Upregulated GO terms obtained using article gene list without background") %>% kable_paper("hover", full_width = F)
+
+repl1dn <- read.table("PMC6463127_repl_dn.tsv",header=TRUE,sep="\t")
+
+repl1dn %>% kbl(caption="Downregulated GO terms obtained using article gene list without background") %>% kable_paper("hover", full_width = F)
+
+repl1kegg <- read.table("PMC6463127_repl_kegg.tsv",header=TRUE,sep="\t")
+
+repl1kegg %>% kbl(caption="Downregulated KEGG pathways obtained using article gene list without background") %>% kable_paper("hover", full_width = F)
+
+```
+
+There is a supplement with all expressed genes (Supplementary Table S2) which I will use as a background.
+To get this to work, I will convert the gene symbols to Ensembl identifiers.
+There were only ~8000 expressed genes which is a bit low.
+
+```{r,bg}
+
+bgg <- readLines("PMC6463127_bgg.txt")
+head(bgg)
+length(bgg)
+
+geneinfo <- read.table("http://dee2.io/data/hsapiens/hsa_gene_info.tsv",header=TRUE)
+
+bg <- geneinfo[which(geneinfo$GeneSymbol %in% bgg),"GeneID"]
+bg <- bg[which(!is.na(bg))]
+bg <- unique(bg)
+length(bg)
+writeLines(bg,"PMC6463127_bge.txt")
+
+```
+
+## Try to reproduce with corrected background gene list
+
+Then I ran DAVID again using the correct background. 
+Here is the result of the upregulated genes.
+
+```{r,replbg1up}
+
+repl2up <- read.table("PMC6463127_repl_up2.tsv",header=TRUE,sep="\t")
+
+repl2up %>% kbl(caption="Upregulated GO terms obtained using article gene list with a background") %>% kable_paper("hover", full_width = F)
+
+repl2dn <- read.table("PMC6463127_repl_dn2.tsv",header=TRUE,sep="\t")
+
+repl2dn %>% kbl(caption="Downregulated GO terms obtained using article gene list with a background") %>% kable_paper("hover", full_width = F)
+
+repl2kegg <- read.table("PMC6463127_repl_kegg2.tsv",header=TRUE,sep="\t")
+
+repl2kegg %>% kbl(caption="Downregulated KEGG pathways obtained using article gene list with a background") %>% kable_paper("hover", full_width = F)
+
+```
+
+## What about a replication using an R script
+
+Here I'm using the enrichGO function to analyse the data.
+The algorithm is slightly different and the gene sets might be a different version.
+First GO biological processes.
+
+```{r,repl2_go}
+
+# from supp table 2
+upg <- readLines("PMC6463127_up.txt")
+dng <- readLines("PMC6463127_dn.txt")
+
+upe <- geneinfo[which(geneinfo$GeneSymbol %in% upg),"GeneID"]
+dne <- geneinfo[which(geneinfo$GeneSymbol %in% dng),"GeneID"]
+
+# up
+go_up <- enrichGO(gene = upe,  keyType = "ENSEMBL", universe = bg,
+    OrgDb = org.Hs.eg.db, ont = "ALL", pAdjustMethod = "BH", pvalueCutoff  = 0.05,
+    qvalueCutoff  = 1, readable = TRUE)
+
+go_up <- data.frame(go_up)
+nrow(go_up)
+
+go_up <- subset(go_up,qvalue<0.05)
+nrow(go_up)
+
+go_up[,c(1,3:7)] %>% kbl(caption="Upregulated GO terms obtained using clusterProfiler with the correct background") %>% kable_paper("hover", full_width = F)
+
+# dn
+go_dn <- enrichGO(gene = dne,  keyType = "ENSEMBL", universe = bg,
+    OrgDb = org.Hs.eg.db, ont = "ALL", pAdjustMethod = "BH", pvalueCutoff  = 0.05,
+    qvalueCutoff  = 1, readable = TRUE)
+
+go_dn <- data.frame(go_dn)
+nrow(go_dn)
+
+go_dn <- subset(go_dn,qvalue<0.05)
+nrow(go_dn)
+
+go_dn[,c(1,3:7)] %>% kbl(caption="Downregulated GO terms obtained using clusterProfiler with the correct background") %>% kable_paper("hover", full_width = F)
+
+
+
+```
+
+Now KEGG analysis but need to convert to entrez first
+
+```{r,repl2_kegg}
+
+dn_entrez <- unlist(mget(dne, org.Hs.egENSEMBL2EG, ifnotfound = NA))
+
+bg_entrez <- unlist(mget(bg, org.Hs.egENSEMBL2EG, ifnotfound = NA))
+
+
+kegg <- enrichKEGG(gene = dn_entrez, universe = bg_entrez,
+    organism = "hsa", pAdjustMethod = "BH", pvalueCutoff  = 0.05,
+    qvalueCutoff  = 1)
+
+kegg <- as.data.frame(kegg)
+
+kegg[,c(2:7)] %>% kbl(caption="Clusterprofiler KEGG results obtained using the correct background") %>% kable_paper("hover", full_width = F)
+
+
+```
+
+## Are the conclusions of the study supported?
+
+In the article, they obtained 45 upregulated and 78 downregulated GO terms, along with 5 downregulated KEGG pathways.
+
+The authors don't specifically draw any conclusions from the enrichment analysis, but let the reader come to their
+own conclusions on the basis of the results tables presented.
+
+Anyway, we can look at whether the top results were confirmed with a corrected method.
+
+I repeated the analysis without a background and received the same upregulated GO terms as the article 
+(16 terms with p<0.05), but of these, only 5 gave an FDR<0.05.
+
+When a correct background gene list was used, only 2 GOs were upregulated with FDR<0.05.
+Basically, there were no significantly upregulated GO BP or MF terms when using a correct background and FDR control. 
+Using a clusterProfiler script, I got 9 upregulated GOs, 8 of which were different to the DAVID results.
+
+It was the same story with the downregulated GOs, but after using a background gene list
+the p-values were larger and the ranks of the terms were changed.
+
+I was able to repeat the KEGG results without a specialised background.
+When using the appropriate background, the KEGG results were similar.
+
+In summary the results shown in the article were described as significant, but as
+authors did not perform FDR correction, they are not reliable.
+
+Incidentally, the hypergeometric test used in clusterProfiler found many more ontologies
+and KEGG pathways that were statistically significant.
+
+## Session information
+
+```{r,session}
+
+sessionInfo()
+
+```
+

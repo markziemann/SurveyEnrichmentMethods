@@ -1,0 +1,6 @@
+Term_ID	Term	Count	p-value	Genes
+hsa04141	Protein processing in endoplasmic reticulum	15	<0.001	SEC63, DNAJA1, EIF2AK1, XBP1, UGGT2, CANX, SEC61G, STT3A, PDIA6, HYOU1, SEC13, RPN1, PDIA3, CALR, BCAP31
+hsa03060	Protein export	5	<0.001	SEC63, SPCS2, SEC61G, SEC11A, SEC11C
+hsa03013	RNA transport	8	0.008	STRAP, XPO1, EIF3E, SUMO1, EIF2S3, NUP205, SEC13, RGPD2
+hsa00563	Glycosylphosphatidylinositol (GPI)-anchor biosynthesis	3	0.043	PIGU, PIGG, PIGP
+hsa00240	Pyrimidine metabolism	5	0.049	CTPS2, NT5C3A, NME7, POLR2H, DPYD
