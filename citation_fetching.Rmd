@@ -64,7 +64,8 @@ get_cites <- function(PMCID) {
   PMID <- mylink[1]
   CITES <- elink(uid = PMID , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" )
   N_CITES <- length(CITES[1])
-  PUBDATE <- get_pub_date(PMCID)
+  #PUBDATE <- get_pub_date(PMCID)
+  PUBDATE <- get_pub_date(PMID)
   return(c(PMCID,PMID,N_CITES,PUBDATE))
 }
 
@@ -75,11 +76,11 @@ res
 
 ```
 
-## Get cites  and pu
+## Get cites for small group
 
-Now to get a bunch of these.
+<!-- Now to get results for a few PMC IDs to test the functions are working OK. -->
 
-```{r,reutils3}
+```{r,test1}
 
 PMCIDS <- c("PMC6317205", "PMC6317219", "PMC6318854", "PMC6318897", "PMC6322516", "PMC6323737", "PMC6323741", "PMC6325784", "PMC6325795", "PMC6325889", "PMC6326702", "PMC6327033",
             "PMC6327913", "PMC6328174", "PMC6328465", "PMC6328499", "PMC6329100", "PMC6329100", "PMC6329125", "PMC6329125", "PMC6329193", "PMC6329348")
@@ -102,6 +103,36 @@ mylm
 ```
 
 Looks like it works :)
+
+## Get cites for all 
+
+Now to get a bunch of these.
+
+```{r,getcites}
+
+x <- read.table("data/PMC_2019-analysis.tsv",sep="\t",header=TRUE)
+head(x)
+PMCIDS <- unique(x$Pubmed.Central.ID)
+str(PMCIDS)
+
+PMCIDS <- as.numeric(gsub("PMC","",PMCIDS))
+
+res <- lapply(X = PMCIDS, FUN = get_cites)
+mx <- do.call(rbind,res)
+mx <- apply(X = mx, MARGIN = 2, FUN = as.numeric)
+df <- as.data.frame(mx)
+colnames(df) <- c("PMCID","PMID","NumCites","Pubdate")
+
+df %>% kbl %>% kable_paper("hover", full_width = F)
+
+plot(df$Pubdate,df$NumCites)
+mylm <- lm(df$NumCites ~ df$Pubdate)
+
+mylm
+
+saveRDS(df,"cites_data.rds")
+
+```
 
 ## Session information
 
