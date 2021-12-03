@@ -32,66 +32,83 @@ The output format is
 library("reutils")
 library("XML")
 library("kableExtra")
+library("anytime")
 
 ```
 
 Here are the functions.
 
+You can see that there are tryCatch expressions used to manage the occasional error that are raised by 
+eutils queries which I can't reproduce nor debug. 
+So for those queries I just attempt again.
+
 ```{r,functions}
 
-get_pub_date <- function(PMCID) {
-  res2 <- esummary(uid=PMCID, db = "pmc")
-  res3 <- content(x=res2,as="text")
-  res5 <- xmlToList(res3)
-  d <- res5$DocumentSummarySet$DocumentSummary$EPubDate
-  d <- gsub(" Jan ","-1-",d)
-  d <- gsub(" Feb ","-2-",d)
-  d <- gsub(" Mar ","-3-",d)
-  d <- gsub(" Apr ","-4-",d)
-  d <- gsub(" May ","-5-",d)
-  d <- gsub(" Jun ","-6-",d)
-  d <- gsub(" Jul ","-7-",d)
-  d <- gsub(" Aug ","-8-",d)
-  d <- gsub(" Sep ","-9-",d)
-  d <- gsub(" Oct ","-10-",d)
-  d <- gsub(" Nov ","-11-",d)
-  d <- gsub(" Dec ","-12-",d)
-  return(as.Date(d))
-}
-
-get_cites <- function(PMCID) {
-  mylink <- elink(uid=PMCID , dbFrom="pmc", dbTo = "pubmed")
-  PMID <- mylink[1]
-  CITES <- elink(uid = PMID , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" )
+cites <- function(PMID) {
+  tryCatch(
+    expr = {
+        CITES <- elink(uid=PMID , dbFrom="pubmed", linkname = "pubmed_pubmed_citedin" )
+    },
+    error = function(e){ 
+        CITES <- elink(uid=PMID , dbFrom="pubmed", linkname = "pubmed_pubmed_citedin" )
+    },
+    finally = {
+      return(CITES)
+    }
+)}
+  
+get_cites <- function(PMID) {
+  CITES <- cites(PMID)
   N_CITES <- length(CITES[1])
-  #PUBDATE <- get_pub_date(PMCID)
-  PUBDATE <- get_pub_date(PMID)
-  return(c(PMCID,PMID,N_CITES,PUBDATE))
+  return(c(PMID,N_CITES))
 }
 
 # test the function
-PMCID=3155154
-res <- get_cites(PMCID = PMCID)
+PMID=30763910
+res <- get_cites(PMID = PMID)
 res
 
 ```
 
 ## Get cites for small group
 
-<!-- Now to get results for a few PMC IDs to test the functions are working OK. -->
+Now to get results for a few PMC IDs to test the functions are working OK.
 
 ```{r,test1}
 
 PMCIDS <- c("PMC6317205", "PMC6317219", "PMC6318854", "PMC6318897", "PMC6322516", "PMC6323737", "PMC6323741", "PMC6325784", "PMC6325795", "PMC6325889", "PMC6326702", "PMC6327033",
             "PMC6327913", "PMC6328174", "PMC6328465", "PMC6328499", "PMC6329100", "PMC6329100", "PMC6329125", "PMC6329125", "PMC6329193", "PMC6329348")
 
-PMCIDS <- as.numeric(gsub("PMC","",PMCIDS))
 
-res <- lapply(X = PMCIDS, FUN = get_cites)
-mx <- do.call(rbind,res)
-mx <- apply(X = mx, MARGIN = 2, FUN = as.numeric)
-df <- as.data.frame(mx)
+PMCIDS <- gsub("PMC","",PMCIDS)
+es <- esummary(PMCIDS, "pmc",retmode = "json")
+
+es <- content(es, "parsed")
+es <- es[2]
+es <- es[[1]]
+es <- es[2:length(es)]
+
+pmid <- unlist(lapply(es,function(x){
+  x$articleids[1,2]
+}))
+
+pubdate <- unlist(lapply(es,function(x){
+  x$pubdate
+}))
+
+df <- data.frame(PMCIDS,pmid,pubdate)
+
+ncites <- t(sapply(df[,2],get_cites))
+ncites
+
+df$ncites <- ncites[,2]
+head(df)
+df <- df[,c(1,2,4,3)]
 colnames(df) <- c("PMCID","PMID","NumCites","Pubdate")
+df$PMCID <- gsub("^","PMC",df$PMCID)
+df$Pubdate <- anydate(df$Pubdate)
+df$NumCites <- as.numeric(df$NumCites)
+str(df)
 
 df %>% kbl %>% kable_paper("hover", full_width = F)
 
@@ -104,6 +121,8 @@ mylm
 
 Looks like it works :)
 
+Except reutils fails for articles with any special characters in there.
+
 ## Get cites for all 
 
 Now to get a bunch of these.
@@ -113,15 +132,36 @@ Now to get a bunch of these.
 x <- read.table("data/PMC_2019-analysis.tsv",sep="\t",header=TRUE)
 head(x)
 PMCIDS <- unique(x$Pubmed.Central.ID)
-str(PMCIDS)
 
-PMCIDS <- as.numeric(gsub("PMC","",PMCIDS))
+mycitesfunc <- function(PMCIDS) {
+  PMCIDS <- gsub("PMC","",PMCIDS)
+  es <- esummary(PMCIDS, "pmc",retmode = "json")
+  es <- content(es, "parsed")
+  es <- es[2]
+  es <- es[[1]]
+  es <- es[2:length(es)]
+  pmid <- unlist(lapply(es,function(x){
+    x$articleids[1,2]
+  }))
+  pubdate <- unlist(lapply(es,function(x){
+    x$pubdate
+  }))
+  df <- data.frame(PMCIDS,pmid,pubdate)
+  ncites <- t(sapply(df[,2],get_cites))
+  df$ncites <- ncites[,2]
+  df <- df[,c(1,2,4,3)]
+  colnames(df) <- c("PMCID","PMID","NumCites","Pubdate")
+  df$PMCID <- gsub("^","PMC",df$PMCID)
+  df$Pubdate <- anydate(df$Pubdate)
+  df$NumCites <- as.numeric(df$NumCites)
+  return(df)
+}
 
-res <- lapply(X = PMCIDS, FUN = get_cites)
-mx <- do.call(rbind,res)
-mx <- apply(X = mx, MARGIN = 2, FUN = as.numeric)
-df <- as.data.frame(mx)
-colnames(df) <- c("PMCID","PMID","NumCites","Pubdate")
+df1 <- mycitesfunc(PMCIDS[1:500])
+df2 <- mycitesfunc(PMCIDS[501:1000])
+df3 <- mycitesfunc(PMCIDS[1001:1500])
+
+df <- rbind(df1,df2,df3)
 
 df %>% kbl %>% kable_paper("hover", full_width = F)
 
