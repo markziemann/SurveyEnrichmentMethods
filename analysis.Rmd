@@ -810,27 +810,11 @@ Get the number of citations per article.
 
 if (file.exists("cites_data.rds") ) {
   cites <- readRDS("cites_data.rds")
-} else {
-  PMCIDS <- as.numeric(gsub("PMC","",x$Pubmed.Central.ID ))
-  mylink <- elink(uid=PMCIDS , dbFrom="pmc", dbTo = "pubmed")
-  PMID <- mylink[1]
-  #writeLines(PMID,"pubmedids.txt")
-  res <- sapply(X=PMID,FUN=function(x){
-      Sys.sleep(1)
-      CITES <- elink(uid = x , dbFrom = "pubmed"  , linkname = "pubmed_pubmed_citedin" ) 
-      CITES=length(CITES[1])
-      return(CITES)
-   })
-  mylink2 <- elink(uid=PMID , dbFrom="pubmed", dbTo = "pmc")
-  cites <- data.frame(mylink2[1],PMID,res)
-  colnames(cites) <- c("PMCID","PMID","cites")
-  saveRDS(cites,file="cites_data.rds")
-}
-
-cites$PMCID <- gsub("^","PMC",cites$PMCID)
+} 
 cites$PMID <- gsub("^","PMID",cites$PMID)
 xm <- merge(x,cites,by.x="Pubmed.Central.ID",by.y="PMCID")
 dim(xm)
+head(xm)
 
 ```
 
@@ -838,34 +822,34 @@ Plot the number of citations against analysis scores
 
 ```{r,citesplot}
 
-mylm2 <- lm (xm$scores ~ xm$cites)
-plot(xm$cites,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+mylm2 <- lm (xm$scores ~ xm$NumCites)
+plot(xm$NumCites,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="Num cites",ylab="score",main="Association of analysis scores with number of citations")
 abline(mylm2,col="red")
 
-cor.test(xm$scores , xm$cites, method="pearson")
+cor.test(xm$scores , xm$NumCites, method="pearson")
 
-cor.test(xm$scores , xm$cites, method="spearman")
+cor.test(xm$scores , xm$NumCites, method="spearman")
 
-mylm2 <- lm (xm$scores ~ log2(xm$cites))
-plot(log2(xm$cites),xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+mylm2 <- lm (xm$scores ~ log2(xm$NumCites+1))
+plot(log2(xm$NumCites),xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
 abline(mylm2,col="red")
 
 png("images/cites1.png",width=350,height=300)
 par(mar=c(5,5,3,1))
-plot(log2(xm$cites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+plot(log2(xm$NumCites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
 abline(mylm2,col="red")
 dev.off()
 
-cor.test(xm$scores , xm$cites, method="pearson")
+cor.test(xm$scores , xm$NumCites, method="pearson")
 
-cor.test(xm$scores , xm$cites, method="spearman")
+cor.test(xm$scores , xm$NumCites, method="spearman")
 
 pdf("images/cites1.pdf",width=3.5,height=3)
 par(mar=c(5,5,3,1))
-plot(log2(xm$cites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+plot(log2(xm$NumCites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
 abline(mylm2,col="red")
 dev.off()
