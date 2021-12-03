@@ -59,12 +59,17 @@ cites <- function(PMID) {
   
 get_cites <- function(PMID) {
   CITES <- cites(PMID)
-  N_CITES <- length(CITES[1])
+  N_CITES <- length(linkset(CITES)[1]$pubmed_pubmed_citedin)
   return(c(PMID,N_CITES))
 }
 
 # test the function
 PMID=30763910
+res <- get_cites(PMID = PMID)
+res
+
+# test a paper with 0 cites
+PMID=31148949
 res <- get_cites(PMID = PMID)
 res
 
@@ -121,7 +126,9 @@ mylm
 
 Looks like it works :)
 
-Except reutils fails for articles with any special characters in there.
+Except reutils fails for articles with any special characters in there, looks like it is causedby improper handling of non
+ASCII characters by the XML parser.
+Solution is to use JSON format.
 
 ## Get cites for all 
 
@@ -167,9 +174,9 @@ df %>% kbl %>% kable_paper("hover", full_width = F)
 
 plot(df$Pubdate,df$NumCites)
 mylm <- lm(df$NumCites ~ df$Pubdate)
-
-mylm
-
+abline(mylm,col="red")
+summary(mylm)
+cor.test(df$NumCites , as.numeric(df$Pubdate))
 saveRDS(df,"cites_data.rds")
 
 ```
