@@ -177,7 +177,7 @@ mylm <- lm(df$NumCites ~ df$Pubdate)
 abline(mylm,col="red")
 summary(mylm)
 cor.test(df$NumCites , as.numeric(df$Pubdate))
-saveRDS(df,"cites_data.rds")
+saveRDS(df,"../data/cites_data.rds")
 
 ```
 

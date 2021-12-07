@@ -1,5 +1,5 @@
 ---
-title: "Example gene set analysis: bringing it together"
+title: "Gene set analysis misuse examples"
 author: "Mark Ziemann & Kaumadi Wijesooriya"
 date: "`r Sys.Date()`"
 output:
@@ -16,7 +16,13 @@ Source: https://github.com/markziemann/SurveyEnrichmentMethods
 
 ## Intro
 
-Previously we analysed five datasets below and looked at the differences between FCS and ORA methods for gene set enrichment. 
+This script is designed to generate the results of the manuscript figure 4.
+
+Panels A-D are generated with "example1.Rmd" and "example1-7.Rmd" are required 
+for panel E.
+
+
+Here are the datasets considered.
 
 | Dataset | SRA accesion | genes in annotation set | genes detected | genes differentially expressed |
 | :---: | :---: | :---: | :---: | :---: | 
@@ -28,7 +34,7 @@ Previously we analysed five datasets below and looked at the differences between
 | 6. | SRP253951 | 39297 | 15182 | 8588 |
 | 7. | SRP068733 | 39297 | 14255 | 7365 |
 
-```{r,begin}
+```{r,begin0}
 
 suppressPackageStartupMessages({
 library("kableExtra")
@@ -37,11 +43,28 @@ library("beeswarm")
 
 ```
 
+## Execute the examples
+
+Here I'm running the scripts to analyse each of the example datasets shown in the above
+table.
+
+```{r,execute0}
+
+rmarkdown::render("example1.Rmd")
+rmarkdown::render("example2.Rmd")
+rmarkdown::render("example3.Rmd")
+rmarkdown::render("example4.Rmd")
+rmarkdown::render("example5.Rmd")
+rmarkdown::render("example6.Rmd")
+rmarkdown::render("example7.Rmd")
+
+```
+
 ## Summarise
 
 Here I'm summarising the results of the five example data sets.
 
-```{r,getdata,fig.width=7,fig.height=5}
+```{r,getdata0,fig.width=7,fig.height=5}
 
 exdat=NULL
 ex1dat <- readRDS("ex1dat.rds")
@@ -59,7 +82,7 @@ exdat %>% kbl(caption="jaccard index values across seven RNA-seq studies") %>% k
 
 ```
 
-```{r,summary_stats}
+```{r,summary_stats0}
 
 means <- colMeans(exdat)
 medians <- apply(exdat,2,median)
@@ -72,7 +95,7 @@ summstats %>% kbl(caption="summary statistics of different enrichment analysis c
 Here let's plot the jaccard scores.
 First as a boxplot and then overlay the dataset studies over the top.
 
-```{r,jacbox}
+```{r,jacbox0}
 
 cols <- c("#CC79A7","#56B4E9","#E69F00","#F0E442","#009E73","#0072B2","#D55E00")
 coll <- list(cols, cols, cols, cols, cols)
@@ -100,7 +123,7 @@ dev.off()
 
 Now plot as a simple bargraph
 
-```{r,jacbar}
+```{r,jacbar0}
 
 mymean <- colMeans(exdat)
 mysd <- apply(exdat,2,sd)
@@ -122,7 +145,7 @@ dev.off()
 
 ## Session information
 
-```{r,session}
+```{r,session0}
 
 sessionInfo()
 

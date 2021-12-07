@@ -1,0 +1,81 @@
+---
+title: "Reproduce the analysis and regenerate the manuscript"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+## Intro
+
+This script is designed to enable the complete analysis described in the article 
+to be replicated with a single command.
+
+By knitting this Rmd, it will reanalyse the data and regenerate all figures of
+the manuscript.
+
+First of all, it is a good idea to check whether all of the requisite 
+dependancies are installed.
+
+Ubuntu users may need to install `librsvg2-dev` and `libv8-dev` to get `DiagrammeR` to work.
+
+```{r,libraries}
+
+# for figure 2 and 3
+library("wordcloud")
+library("vioplot")
+library("reutils")
+library("XML")
+library("kableExtra")
+library("anytime")
+
+# for figure 4
+library("getDEE2") 
+library("DESeq2")
+library("clusterProfiler")
+library("mitch")
+library("kableExtra")
+library("eulerr")
+library("kableExtra")
+library("beeswarm")
+
+# for figure 1 / manuscript draft
+library(rmdformats)
+library(tidyverse)
+library(DiagrammeR)
+library(DiagrammeRsvg)
+library(rsvg)
+
+```
+
+## Execute the scripts
+
+Here will re-run all of the analysis and re-build the manuscript draft.
+
+```{r,run_all}
+
+# Figure 2
+rmarkdown::render("analysis_code/analysis1.Rmd")
+
+# Figure 3
+rmarkdown::render("analysis_code/analysis2.Rmd")
+
+# uncomment the below line in order to update the number of accumulated
+# citations for each article considered
+#rmarkdown::render("analysis_code/citation_fetching.Rmd")
+
+# Figure 4
+rmarkdown::render("examples/examples.Rmd")
+
+# Figure 1 and assemble a manuscript draft
+rmarkdown::render("docs/manuscript.Rmd")
+
+```
+
