@@ -24,13 +24,6 @@ The code shown here was used to generate Figure 2 of the manuscript.
 knitr::opts_chunk$set(fig.width=7, fig.height=5) 
 
 library("wordcloud")
-library("RColorBrewer")
-library("wordcloud2")
-library("reutils")
-library("XML")
-library("kableExtra")
-library("Biobase")
-library("vioplot")
 
 ```
 
