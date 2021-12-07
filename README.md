@@ -57,4 +57,4 @@ Then git clone this repository and run the Rmds in the following order:
 
 2. analysis.Rmd
 
-3. manuscript_draft.Rmd
+3. manuscript.Rmd

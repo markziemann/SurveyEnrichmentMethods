@@ -1,0 +1,129 @@
+---
+title: "Example gene set analysis: bringing it together"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+## Intro
+
+Previously we analysed five datasets below and looked at the differences between FCS and ORA methods for gene set enrichment. 
+
+| Dataset | SRA accesion | genes in annotation set | genes detected | genes differentially expressed |
+| :---: | :---: | :---: | :---: | :---: | 
+| 1. | SRP128998 | 39297 | 15635 | 3472 |
+| 2. | SRP038101 | 39297 | 13926 | 3589 | 
+| 3. | SRP096178 | 39297 | 15477 | 9488 |
+| 4. | SRP038101 | 39297 | 15607 | 5150 | 
+| 5. | SRP247621 | 39297 | 14288 | 230 |
+| 6. | SRP253951 | 39297 | 15182 | 8588 |
+| 7. | SRP068733 | 39297 | 14255 | 7365 |
+
+```{r,begin}
+
+suppressPackageStartupMessages({
+library("kableExtra")
+library("beeswarm")
+})
+
+```
+
+## Summarise
+
+Here I'm summarising the results of the five example data sets.
+
+```{r,getdata,fig.width=7,fig.height=5}
+
+exdat=NULL
+ex1dat <- readRDS("ex1dat.rds")
+ex2dat <- readRDS("ex2dat.rds")
+ex3dat <- readRDS("ex3dat.rds")
+ex4dat <- readRDS("ex4dat.rds")
+ex5dat <- readRDS("ex5dat.rds")
+ex6dat <- readRDS("ex6dat.rds")
+ex7dat <- readRDS("ex7dat.rds")
+
+exdat <- rbind(ex1dat,ex2dat,ex3dat,ex4dat,ex5dat,ex6dat,ex7dat)
+rownames(exdat) <- c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","SRP253951","SRP068733")
+
+exdat %>% kbl(caption="jaccard index values across seven RNA-seq studies") %>% kable_paper("hover", full_width = F)
+
+```
+
+```{r,summary_stats}
+
+means <- colMeans(exdat)
+medians <- apply(exdat,2,median)
+sds <- apply(exdat,2,sd)
+summstats <- rbind(means,medians,sds)
+summstats %>% kbl(caption="summary statistics of different enrichment analysis comparisons") %>% kable_paper("hover", full_width = F)
+
+```
+
+Here let's plot the jaccard scores.
+First as a boxplot and then overlay the dataset studies over the top.
+
+```{r,jacbox}
+
+cols <- c("#CC79A7","#56B4E9","#E69F00","#F0E442","#009E73","#0072B2","#D55E00")
+coll <- list(cols, cols, cols, cols, cols)
+par(mar=c(5,10,3,1))
+boxplot(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),names = rev(colnames(exdat)),horizontal = TRUE, las=1 , col="white", cex=1.5,pch=19, xlab = "Jaccard index")
+beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=1.5,pch=19, xlab = "Jaccard index",add = TRUE)
+legend("bottomright", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","SRP253951","SRP068733"), pch=19,  col=cols, cex=1,pt.cex = 1.5)
+
+pdf("images/jacbox1.pdf",width=5,height=4)
+par(mar=c(5,9,3,2))
+boxplot(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),names = rev(colnames(exdat)),horizontal = TRUE, las=1 , col="white", cex=1.5,pch=19, xlab = "Jaccard index")
+beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=1.5,pch=19, xlab = "Jaccard index",add = TRUE)
+legend("topleft", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","SRP253951","SRP068733"), pch=19,  col=cols, cex=1,pt.cex = 1.5)
+dev.off()
+
+png("images/jacbox1.png")
+par(mar=c(5,9,3,1))
+boxplot(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),names = rev(colnames(exdat)),horizontal = TRUE, las=1 , col="white", cex=1.5,pch=19, xlab = "Jaccard index")
+beeswarm(list(exdat[,5],exdat[,4],exdat[,3],exdat[,2],exdat[,1]),labels = rev(colnames(exdat)),horizontal = TRUE, las=1 , pwcol = coll,cex=1.5,pch=19, xlab = "Jaccard index",add = TRUE)
+legend("bottomright", legend=c("SRP128998", "SRP038101", "SRP096178","SRP038101","SRP247621","SRP253951","SRP068733"), pch=19,  col=cols, cex=1.2,pt.cex = 1.5)
+dev.off()
+
+
+```
+
+Now plot as a simple bargraph
+
+```{r,jacbar}
+
+mymean <- colMeans(exdat)
+mysd <- apply(exdat,2,sd)
+
+par(mar=c(5,10,3,1))
+barplot(rev(colMeans(exdat)),xlab="mean Jaccard index",horiz = TRUE, las =1, xlim=c(0,.7) )
+
+pdf("images/jacbar1.pdf",width=4,height=4)
+par(mar=c(5,10,3,1))
+barplot(rev(colMeans(exdat)),xlab="mean Jaccard index",horiz = TRUE, las =1, xlim=c(0,.7) )
+dev.off()
+
+png("images/jacbar1.png")
+par(mar=c(5,10,3,1))
+barplot(rev(colMeans(exdat)),xlab="mean Jaccard index",horiz = TRUE, las =1, xlim=c(0,.7) )
+dev.off()
+
+```
+
+## Session information
+
+```{r,session}
+
+sessionInfo()
+
+```

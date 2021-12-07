@@ -1,0 +1,344 @@
+---
+title: "Example gene set analysis: The case of LHON causing mutations"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+## Intro
+
+Here we are performing an analysis of some gene expression data to demonstrate the difference between ORA and FCS methods and to highlight the differences caused by improper background gene set use.
+
+The dataset being used is SRP247621 and we are comparing the fibroblast cells from LHON patients (case) versus healthy controls.
+
+Data are obtained from http://dee2.io/
+
+```{r,begin}
+
+suppressPackageStartupMessages({
+library("getDEE2") 
+library("DESeq2")
+library("clusterProfiler")
+library("mitch")
+library("kableExtra")
+library("eulerr")
+})
+
+```
+
+## Get expression data
+
+I'm using some RNA-seq data looking at the difference in fibroblast gene expression between control and LHON patients.
+
+```{r,getdata,fig.width=7,fig.height=7}
+
+name="SRP247621"
+mdat<-getDEE2Metadata("hsapiens")
+samplesheet <- mdat[grep("SRP247621",mdat$SRP_accession),]
+samplesheet<-samplesheet[order(samplesheet$SRR_accession),]
+samplesheet$trt<-as.factor(c(1,1,1,2,2,2,0,0,0)) # exclude carriers for simplicity
+samplesheet <- samplesheet[which(samplesheet$trt!=2),]
+s1 <- samplesheet
+
+s1 %>% kbl(caption = "sample sheet") %>% kable_paper("hover", full_width = F)
+
+w<-getDEE2("hsapiens",samplesheet$SRR_accession,metadata=mdat,legacy = TRUE)
+x<-Tx2Gene(w)
+x<-x$Tx2Gene
+
+# save the genetable for later
+gt<-w$GeneInfo[,1,drop=FALSE]
+gt$accession<-rownames(gt)
+
+# counts 
+x1<-x[,which(colnames(x) %in% samplesheet$SRR_accession)]
+
+```
+
+Here show the number of genes in the annotation set, and those detected above the detection threshold.
+
+```{r,filter}
+
+# filter out lowly expressed genes
+x1<-x1[which(rowSums(x1)/ncol(x1)>=(10)),]
+nrow(x)
+nrow(x1)
+
+```
+
+Now multidimensional scaling (MDS) plot to show the correlation between the datasets.
+If the control and case datasets are clustered separately, then it is likely that there will be many differentially expressed genes with FDR<0.05.
+
+```{r,mds}
+
+plot(cmdscale(dist(t(x1))), xlab="Coordinate 1", ylab="Coordinate 2", pch=19, col=s1$trt, main="MDS")
+
+```
+
+## Differential expression
+
+Now run DESeq2 for control vs case.
+
+```{r,deseq2}
+
+y <- DESeqDataSetFromMatrix(countData = round(x1), colData = s1, design = ~ trt)
+y <- DESeq(y)
+de <- results(y)
+de<-as.data.frame(de[order(de$pvalue),])
+rownames(de)<-sapply(strsplit(rownames(de),"\\."),"[[",1)
+head(de) %>% kbl() %>% kable_paper("hover", full_width = F)
+
+```
+
+Now let's have a look at some of the charts showing differential expression.
+In particular, an MA plot and volcano plot.
+
+```{r,deplots,fig.width=7,fig.height=7}
+
+maplot <- function(de,contrast_name) {
+  sig <-subset(de, padj < 0.05 )
+  up <-rownames(subset(de, padj < 0.05 & log2FoldChange > 0))
+  dn <-rownames(subset(de, padj < 0.05 & log2FoldChange < 0))
+  GENESUP <- length(up)
+  GENESDN <- length(dn)
+  DET=nrow(de)
+  SUBHEADER = paste(GENESUP, "up, ", GENESDN, "down", DET, "detected")
+  ns <-subset(de, padj > 0.05 )
+  plot(log2(de$baseMean),de$log2FoldChange, 
+       xlab="log2 basemean", ylab="log2 foldchange",
+       pch=19, cex=0.5, col="dark gray",
+       main=contrast_name, cex.main=0.7)
+  points(log2(sig$baseMean),sig$log2FoldChange,
+         pch=19, cex=0.5, col="red")
+  mtext(SUBHEADER,cex = 0.7)
+}
+
+make_volcano <- function(de,name) {
+    sig <- subset(de,padj<0.05)
+    N_SIG=nrow(sig)
+    N_UP=nrow(subset(sig,log2FoldChange>0))
+    N_DN=nrow(subset(sig,log2FoldChange<0))
+    DET=nrow(de)
+    HEADER=paste(N_SIG,"@5%FDR,", N_UP, "up", N_DN, "dn", DET, "detected")
+    plot(de$log2FoldChange,-log10(de$padj),cex=0.5,pch=19,col="darkgray",
+        main=name, xlab="log2 FC", ylab="-log10 pval", xlim=c(-6,6))
+    mtext(HEADER)
+    grid()
+    points(sig$log2FoldChange,-log10(sig$padj),cex=0.5,pch=19,col="red")
+}
+
+maplot(de,name)
+make_volcano(de,name)
+
+```
+
+## Gene sets from Reactome
+
+In order to perform gene set analysis, we need some gene sets. 
+
+```{r,reactome}
+
+if (! file.exists("ReactomePathways.gmt")) {
+  download.file("https://reactome.org/download/current/ReactomePathways.gmt.zip", 
+    destfile="ReactomePathways.gmt.zip")
+  unzip("ReactomePathways.gmt.zip")
+}
+genesets<-gmt_import("ReactomePathways.gmt")
+
+```
+
+## FCS with Mitch
+
+Mitch uses rank-ANOVA statistics for enrichment detection.
+
+```{r,mitch1}
+
+m <- mitch_import(de,DEtype = "DEseq2", geneTable = gt)
+mres <- mitch_calc(m,genesets = genesets)
+m_up <- subset(mres$enrichment_result,p.adjustANOVA<0.05 & s.dist > 0)[,1]
+m_dn <- subset(mres$enrichment_result,p.adjustANOVA<0.05 & s.dist < 0)[,1]
+message(paste("Number of up-regulated pathways:",length(m_up) ))
+message(paste("Number of down-regulated pathways:",length(m_dn) ))
+head(mres$enrichment_result,10)  %>% kbl() %>% kable_paper("hover", full_width = F)
+
+```
+
+## ORA with clusterprofiler
+
+Clusterprofiler uses a hypergeometric test.
+Firstly I will conduct the analysis separately for up and down regulated genes and with the correct backgound (as intended by the developers).
+
+```{r,cp1}
+
+genesets2 <- read.gmt("ReactomePathways.gmt")
+
+de_up <- rownames(subset(de,log2FoldChange>0,padj<0.05))
+de_up <- unique(gt[which(rownames(gt) %in% de_up),1])
+
+de_dn <- rownames(subset(de,log2FoldChange<0,padj<0.05))
+de_dn <- unique(gt[which(rownames(gt) %in% de_dn),1])
+
+de_bg <- rownames(de)
+de_bg <- unique(gt[which(rownames(gt) %in% de_bg),1])
+
+c_up <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2))
+c_up <- rownames(subset(c_up, p.adjust < 0.05))
+       
+c_dn <- as.data.frame(enricher(gene = de_dn, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2))
+c_dn <- rownames(subset(c_dn, p.adjust < 0.05))
+
+```
+
+Now performing ORA with clusterprofiler combining up and down.
+
+```{r,cp2}
+
+de_de <- rownames(subset(de,padj<0.05))
+de_de <- unique(gt[which(rownames(gt) %in% de_de),1])
+
+d_de <- as.data.frame(enricher(gene = de_de, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2))
+d_de <- rownames(subset(d_de, p.adjust < 0.05))
+
+```
+
+Now performing ORA with clusterprofiler with whole genome background list
+
+```{r,cp3}
+
+de_bg <- w$GeneInfo$GeneSymbol
+
+f_up <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2))
+f_up <- rownames(subset(f_up, p.adjust < 0.05))
+       
+f_dn <- as.data.frame(enricher(gene = de_dn, universe = de_bg, maxGSSize = 5000, TERM2GENE = genesets2))
+f_dn <- rownames(subset(f_dn, p.adjust < 0.05))
+
+```
+
+
+Now performing ORA (combining up and down gene lists) with clusterprofiler with whole genome background list
+
+```{r,cp4}
+
+e_de <- as.data.frame(enricher(gene = de_de, universe = de_bg, maxGSSize = 5000, TERM2GENE = genesets2))
+e_de <- rownames(subset(e_de, p.adjust < 0.05))
+
+```
+
+## Venn diagram comparison
+
+The Venn (or Euler to be more correct) diagram is useful to visualise the overlaps between sets.
+
+```{r,venn1}
+
+par(cex.main=0.5)
+
+par(mar=c(2,2,2,2))
+
+v0 <- list("ORA up"=c_up,"ORA dn"=c_dn,
+           "ORA comb" = d_de)
+
+plot(euler(v0),quantities = TRUE, edges = "gray", main="effect of combining up and down regulated genes")
+
+v1 <- list("FCS up"=m_up, "FCS dn"=m_dn,
+           "ORA up"=c_up,"ORA dn"=c_dn)
+  
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS compared to ORA")
+
+v2 <- list("ORA up"=c_up,"ORA dn"=c_dn, 
+           "ORA* up"=f_up,"ORA* dn"=f_dn )
+
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
+
+vx <- list("ORA up"=c_up,"ORA dn"=c_dn,
+           "ORA comb" = d_de, "ORA* comb" = e_de)
+
+plot(euler(vx),quantities = TRUE, edges = "gray", main="combining up and down genes and whole genome bg*")
+
+v3 <- list("ORA up"=c_up,"ORA dn"=c_dn, 
+           "ORA* up"=f_up,"ORA* dn"=f_dn ,
+           "FCS up"=m_up, "FCS dn"=m_dn)
+
+png("images/fcs_ora5.png")
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS vs ORA")
+dev.off()
+
+png("images/orabg5.png")
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
+dev.off()
+
+png("images/oracomb5.png")
+plot(euler(vx),quantities = TRUE, main="combining up and down genes and whole genome bg*")
+dev.off()
+
+pdf("images/fcs_ora5.pdf",width=4,height=4)
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS vs ORA")
+dev.off()
+
+pdf("images/orabg5.pdf",width=4,height=4)
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
+dev.off()
+
+pdf("images/oracomb5.pdf",width=4,height=4)
+plot(euler(vx),quantities = TRUE, edges = "gray", main="combining up and down genes and whole genome bg*")
+dev.off()
+
+```
+
+## Jaccard calculation
+
+```{r,jacc1}
+
+# ORA vs ORA combined
+dc <- length(intersect(d_de, c(c_up,c_dn))) / length(union(d_de, c(c_up,c_dn)))
+
+# ORA vs ORA* combined
+ec <- length(intersect(e_de, c(c_up,c_dn))) / length(union(e_de, c(c_up,c_dn)))
+
+# FCS vs ORA
+cm <- length(intersect(c(c_up,c_dn), c(m_up,m_dn))) / length(union(c(c_up,c_dn), c(m_up,m_dn)))
+
+m_up <- gsub("^","up ",m_up)
+m_dn <- gsub("^","dn ",m_dn)
+m_de <- union(m_up,m_dn)
+
+c_up <- gsub("^","up ",c_up)
+c_dn <- gsub("^","dn ",c_dn)
+c_de <- union(c_up,c_dn)
+
+f_up <- gsub("^","up ",f_up)
+f_dn <- gsub("^","dn ",f_dn)
+f_de <- union(f_up,f_dn)
+
+# ORA vs ORA*
+cf <- length(intersect(c_de, f_de )) / length(union(c_de, f_de))
+
+# FCS vs ORA*
+mf <- length(intersect(m_de, f_de )) / length(union(m_de, f_de))
+
+dat <- c("FCS vs ORA"=cm,"ORA vs ORA*"=cf,"FCS vs ORA*"=mf, "ORA vs ORA comb"=dc, "ORA vs ORA* comb"=ec)
+
+dat
+
+barplot(dat,ylab="jaccard metric")
+
+saveRDS(dat,file = "ex5dat.rds")
+
+```
+
+## Session information
+
+```{r,session}
+
+sessionInfo()
+
+```
