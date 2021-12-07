@@ -24,20 +24,16 @@ We then identify the best/worst journals, and correlate analysis scores with jou
 knitr::opts_chunk$set(fig.width=7, fig.height=5) 
 
 library("wordcloud")
-library("RColorBrewer")
-library("kableExtra")
 library("vioplot")
 
 ```
 
 ## Overview of included and excluded analyses
 
-Here we are also using the QC2 data where possible.
-
 ```{r,exclude1}
 
-x <- read.table("data/PMC_2019-analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
-y <- read.table("data/QC-analysis2.tsv",header=TRUE,fill=TRUE,sep="\t")
+x <- read.table("../data/PMC_2019-analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
+y <- read.table("../data/QC-analysis2.tsv",header=TRUE,fill=TRUE,sep="\t")
 y <- y[,1:16]
 x <- x[which(! x$Pubmed.Central.ID %in% y$Pubmed.Central.ID),]
 x <- rbind(x,y)
@@ -152,6 +148,7 @@ which(scores>0)
 
 table(scores)
 
+dir.create("images")
 png("images/hist1.png",width=300,height=200)
 par(mar=c(5,5,2,1))
 barplot(table(scores), xlab="analysis score",ylab="frequency",ylim=c(0,600))
@@ -187,12 +184,12 @@ dev.off()
 
 ```{r,journal rank}
 
-jmetrics <- read.table("scimagojr_2020.csv",sep=";",header=TRUE,dec = ",")
+jmetrics <- read.table("../data/scimagojr_2020.csv",sep=";",header=TRUE,dec = ",")
 jmetrics$Title <- toupper(jmetrics$Title)
 head(jmetrics,3)
 dim(jmetrics)
 
-nlmcat <- readLines("nlmcatalog_result.txt")
+nlmcat <- readLines("../data/nlmcatalog_result.txt")
 journaltitle <- nlmcat[grep("Title\\(s\\):",nlmcat)]
 journaltitle <- gsub("Title\\(s\\): ","",journaltitle)
 journaltitle <- gsub("\\.$","",journaltitle)
@@ -352,9 +349,11 @@ Get the number of citations per article.
 
 ```{r,cites}
 
-if (file.exists("cites_data.rds") ) {
-  cites <- readRDS("cites_data.rds")
-} 
+if (file.exists("../data/cites_data.rds") ) {
+  cites <- readRDS("../data/cites_data.rds")
+} else {
+  stop("citation data not found. Please run 'citation_fetching.Rmd' to obtain updated citation info")
+}
 cites$PMID <- gsub("^","PMID",cites$PMID)
 xm <- merge(x,cites,by.x="Pubmed.Central.ID",by.y="PMCID")
 dim(xm)

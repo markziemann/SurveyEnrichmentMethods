@@ -136,7 +136,7 @@ Now to get a bunch of these.
 
 ```{r,getcites}
 
-x <- read.table("data/PMC_2019-analysis.tsv",sep="\t",header=TRUE)
+x <- read.table("../data/PMC_2019-analysis.tsv",sep="\t",header=TRUE)
 head(x)
 PMCIDS <- unique(x$Pubmed.Central.ID)
 
