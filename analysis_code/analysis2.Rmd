@@ -1,0 +1,413 @@
+---
+title: "PMC Survey Analysis Part 2"
+author: "Mark Ziemann & Kaumadi Wijesooriya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    fig_width: 7
+    fig_height: 5
+theme: cosmo
+---
+
+Source: https://github.com/markziemann/SurveyEnrichmentMethods
+
+## Intro
+
+Here we are performing the analysis that is described in Figure 3 of the manuscript.
+This involves calculating an analysis score for a 1500 articles from 2019.
+We then identify the best/worst journals, and correlate analysis scores with journal and article level metrics.
+
+```{r,begin}
+
+knitr::opts_chunk$set(fig.width=7, fig.height=5) 
+
+library("wordcloud")
+library("RColorBrewer")
+library("wordcloud2")
+library("reutils")
+library("XML")
+library("kableExtra")
+library("vioplot")
+
+```
+
+## Overview of included and excluded analyses
+
+Here we are also using the QC2 data where possible.
+
+```{r,exclude1}
+
+x <- read.table("data/PMC_2019-analysis.tsv",header=TRUE,fill=TRUE,sep="\t")
+y <- read.table("data/QC-analysis2.tsv",header=TRUE,fill=TRUE,sep="\t")
+y <- y[,1:16]
+x <- x[which(! x$Pubmed.Central.ID %in% y$Pubmed.Central.ID),]
+x <- rbind(x,y)
+
+head(x)
+colnames(x)
+dim(x)
+
+exclude <- subset(x,x$GS.version=="EXCLUDE")
+nrow(exclude)
+length(unique(exclude$Pubmed.Central.ID))
+
+x <- subset(x,x$GS.version!="EXCLUDE")
+nrow(x)
+length(unique(x$Pubmed.Central.ID))
+
+write.table(x,file="TableS2.tsv",quote=FALSE,sep="\t",col.names = TRUE,row.names = FALSE)
+
+```
+
+## Score
+
+Here I am proposing a scoring scheme.
+If there is information missing from the article, or basic mistakes are made, then a point is deducted.
+If the article goes over and above the basic reproducibility, then they are awarded a point.
+
+Gene set library origin not stated = -1
+
+Gene set library version not stated = -1
+
+Stat test not stated = -1
+
+No stat test conducted = -1
+
+No FDR correction conducted = -1
+
+App used not stated = -1
+
+App version not stated = -1
+
+Background list not defined = -1
+
+Inappropriate background list used = -1
+
+Code availability = +1
+
+Gene lists provided = +1
+
+```{r,score}
+
+score <- function(r){
+  r[is.na(r)] <- 0
+  SCORE=0
+  # gene set lib
+  if(r["Gene.set.library"]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # GS version
+  if(r["GS.version"]=="No"){
+    SCORE=SCORE-1
+  }
+  # stat test
+  if(r["Statistical.test.used"]=="No test"){
+    SCORE=SCORE-1
+  }
+  if(r["Statistical.test.used"]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # FDR
+  if(r["FDR.Correction"]!="Yes"){
+    SCORE=SCORE-1
+  }
+  # app used
+  if(r["App.used"]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  # App version
+  if(r["App.Version"]=="No"){
+    SCORE=SCORE-1
+  }
+  # Code availability
+  if(r["Code.availability"]=="Yes"){
+    SCORE=SCORE+1
+  }
+  # Background
+  if(r["Background.gene.set"]=="Not stated"){
+    SCORE=SCORE-1
+  }
+  if(r["Background.gene.set"]=="No"){
+    SCORE=SCORE-1
+  }
+  if(r["Background.gene.set"]=="Stated, but incorrect"){
+    SCORE=SCORE-1
+  }
+  # gene list
+  if(r["Gene.lists.provided"]=="Yes"){
+    SCORE=SCORE+1
+  }
+  return(SCORE)
+}
+
+scores <- apply(X = x,MARGIN = 1, FUN = score)
+barplot(table(scores), xlab="analysis score",ylab="frequency")
+x$scores <- scores
+length(which(scores>0))
+
+mean(x$scores)
+sd(x$scores)
+median(x$scores)
+length(scores)
+which(scores>0)
+
+table(scores)
+
+png("images/hist1.png",width=300,height=200)
+par(mar=c(5,5,2,1))
+barplot(table(scores), xlab="analysis score",ylab="frequency",ylim=c(0,600))
+text(x= 1:length(table(scores))* 1.2 -0.5, y = table(scores), label = table(scores), pos = 3, cex = 1, col = "black")
+dev.off()
+
+pdf("images/hist1.pdf",width=5,height=4)
+par(mar=c(5,5,2,1))
+barplot(table(scores), xlab="analysis score",ylab="frequency",ylim=c(0,600))
+text(x= 1:length(table(scores))* 1.2 -0.5, y = table(scores), label = table(scores), pos = 3, cex = 1, col = "black")
+dev.off()
+
+scores2 <- round(table(scores)/sum(table(scores))*100,1)
+scores2
+
+
+png("images/hist2.png",width=300,height=200)
+par(mar=c(5,5,2,1))
+barplot(scores2, xlab="analysis score",ylab="frequency",ylim=c(0,50))
+text(x= 1:length(scores2)* 1.2 -0.5, y = scores2, label = scores2, pos = 3, cex = 0.9, col = "black")
+dev.off()
+
+pdf("images/hist2.pdf",width=5,height=4)
+par(mar=c(5,5,2,1))
+barplot(scores2, xlab="analysis score",ylab="frequency",ylim=c(0,40))
+text(x= 1:length(scores2)* 1.2 -0.5, y = scores2, label = scores2, pos = 3, cex = 0.9, col = "black")
+dev.off()
+
+
+```
+
+## Journal rank
+
+```{r,journal rank}
+
+jmetrics <- read.table("scimagojr_2020.csv",sep=";",header=TRUE,dec = ",")
+jmetrics$Title <- toupper(jmetrics$Title)
+head(jmetrics,3)
+dim(jmetrics)
+
+nlmcat <- readLines("nlmcatalog_result.txt")
+journaltitle <- nlmcat[grep("Title\\(s\\):",nlmcat)]
+journaltitle <- gsub("Title\\(s\\): ","",journaltitle)
+journaltitle <- gsub("\\.$","",journaltitle)
+journaltitle <- toupper(journaltitle) 
+journalabbrev <- nlmcat[grep("Title Abbreviation:",nlmcat)]
+journalabbrev <- sapply(strsplit(journalabbrev,":"),"[[",2)
+journalabbrev <- gsub(" $","",journalabbrev)
+journalabbrev <- gsub("^ ","",journalabbrev)
+jdf <- data.frame(journalabbrev,journaltitle)
+
+mjdf <- merge(jdf,jmetrics,by.x="journaltitle",by.y="Title")
+
+xm <- merge(x,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
+
+```
+
+## Analysis scores vs Journal rank
+
+```{r,scoresvsjrank1}
+
+tail(xm$Journal)
+
+hist(xm$SJR,xlab="SJR",main="SJR distribution")
+
+mylm1 <- lm (xm$scores ~ xm$SJR)
+plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19, bty="n",
+  xlab="SJR",ylab="score",main="Analysis scores vs. journal metrics")
+abline(mylm1,col="red")
+
+cor.test(xm$scores,xm$SJR,method="pearson")
+cor.test(xm$scores,xm$SJR,method="spearman")
+
+png("images/score_sjr1.png",width=350,height=300)
+par(mar=c(5,5,3,1))
+plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19,bty="n",
+  xlab="SJR",ylab="score",main="Analysis scores vs. journal metrics")
+abline(mylm1,col="red")
+grid()
+dev.off()
+
+pdf("images/score_sjr1.pdf",width=4,height=3)
+par(mar=c(4,4,3,2))
+plot(xm$SJR,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2), pch=19,bty="n",
+  xlab="SJR",ylab="score",main="Analysis scores vs. journal metrics")
+abline(mylm1,col="red")
+grid()
+dev.off()
+
+```
+
+## Best and worst journals
+
+Minimum of 5 analyses.
+
+```{r,goodbadugly,fig.height=5,fig.width=6}
+
+xmm <-xm[,c("Journal","scores")]
+tab <- table(xmm$Journal)
+tab <- tab[which(tab>=5)]
+xmm <- xmm[which(xmm$Journal %in% names(tab)),]
+dim(xmm)
+jres <- aggregate(. ~ Journal, xmm ,mean)
+jsd <- aggregate(. ~ Journal, xmm ,sd)
+jres$sd <- jsd$scores
+jres <- jres[order(jres$scores),]
+dim(jres)
+head(jres)
+
+par(mar=c(5,12,3,1))
+barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Highest scoring",xlim=c(-4,0))
+grid()
+
+png("images/score_highest1.png",width=300,height=350)
+par(mar=c(5,12,3,1))
+barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Highest scoring",xlim=c(-4,0))
+grid()
+dev.off()
+
+par(mar=c(5,12,3,1))
+barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Lowest scoring journals",xlim=c(-5,0))
+grid()
+
+png("images/score_lowest1.png",width=300,height=350)
+par(mar=c(5,12,3,1))
+barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Lowest scoring",xlim=c(-5,0))
+grid()
+dev.off()
+
+pdf("images/score_highest1.pdf",width=3,height=4.5)
+par(mar=c(5,8,3,1))
+barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Highest scoring",xlim=c(-4,0))
+grid()
+dev.off()
+
+pdf("images/score_lowest1.pdf",width=3,height=4.5)
+par(mar=c(5,8,3,1))
+barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
+        main = "Lowest scoring",xlim=c(-5,0))
+grid()
+dev.off()
+
+j <- unique(xmm$Journal)
+jscores <- sapply(j,function(jj) {
+ xmm[which(xmm$Journal == jj ),2]  
+})
+
+jscores <- jscores[order(unlist(lapply(jscores,mean)))]
+
+par(mar=c(5,12,3,1))
+vioplot(tail(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Highest scoring journals")
+
+par(mar=c(5,12,3,1))
+vioplot(head(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Lowest scoring journals")
+
+```
+
+
+## Mean analysis scores vs Journal rank
+
+```{r,scoresvsjrank2,fig.height=5,fig.width=6}
+
+jjres <- merge(jres,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
+
+mylm2 <- lm (jjres$scores ~ jjres$SJR)
+plot(jjres$SJR,jjres$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+  xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
+abline(mylm2,col="red")
+
+png("images/mean_sjr1.png",width=350,height=300)
+par(mar=c(5,5,3,1))
+plot(jjres$SJR,jjres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+  xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
+abline(mylm2,col="red")
+dev.off()
+
+cor.test(jjres$scores,jjres$SJR,method="pearson")
+
+cor.test(jjres$scores,jjres$SJR,method="spearman")
+
+pdf("images/mean_sjr1.pdf",width=3.5,height=3)
+par(mar=c(5,5,3,1))
+plot(jjres$SJR,jjres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+  xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
+abline(mylm2,col="red")
+dev.off()
+
+```
+
+## Article citations
+
+Get the number of citations per article.
+
+```{r,cites}
+
+if (file.exists("cites_data.rds") ) {
+  cites <- readRDS("cites_data.rds")
+} 
+cites$PMID <- gsub("^","PMID",cites$PMID)
+xm <- merge(x,cites,by.x="Pubmed.Central.ID",by.y="PMCID")
+dim(xm)
+head(xm)
+
+```
+
+Plot the number of citations against analysis scores
+
+```{r,citesplot}
+
+mylm2 <- lm (xm$scores ~ xm$NumCites)
+plot(xm$NumCites,xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+  xlab="Num cites",ylab="score",main="Association of analysis scores with number of citations")
+abline(mylm2,col="red")
+
+cor.test(xm$scores , xm$NumCites, method="pearson")
+
+cor.test(xm$scores , xm$NumCites, method="spearman")
+
+mylm2 <- lm (xm$scores ~ log2(xm$NumCites+1))
+plot(log2(xm$NumCites),xm$scores, col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+  xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
+abline(mylm2,col="red")
+
+png("images/cites1.png",width=350,height=300)
+par(mar=c(5,5,3,1))
+plot(log2(xm$NumCites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+  xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
+abline(mylm2,col="red")
+dev.off()
+
+cor.test(xm$scores , xm$NumCites, method="pearson")
+
+cor.test(xm$scores , xm$NumCites, method="spearman")
+
+pdf("images/cites1.pdf",width=3.5,height=3)
+par(mar=c(5,5,3,1))
+plot(log2(xm$NumCites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+  xlab="log2(citations)",ylab="score",main="Analysis scores vs. log2(citations)")
+abline(mylm2,col="red")
+dev.off()
+
+
+```
+
+## Session information
+
+```{r,session}
+
+sessionInfo()
+
+```

@@ -1,5 +1,5 @@
 ---
-title: "PMC Survey QC Analysis"
+title: "PMC Survey Analysis Part 1"
 author: "Mark Ziemann & Kaumadi Wijesooriya"
 date: "`r Sys.Date()`"
 output:
@@ -13,7 +13,11 @@ theme: cosmo
   
 ## Intro
 
-Here we are performing an analysis of 200 articles which is randomly selected from 1500 PMC articles. 
+Here we are performing an analysis of 200 articles which is randomly selected from 1500 PMC articles.
+These articles were examined independently by two team members and the results were compared.
+Any inconsistencies were resolved.
+
+The code shown here was used to generate Figure 2 of the manuscript.
 
 ```{r,begin}
 
@@ -34,7 +38,7 @@ library("vioplot")
 
 ```{r,exclude1}
 
-x <- read.table("data/QC-analysis2.tsv",header=TRUE,fill=TRUE,sep="\t")
+x <- read.table("../data/QC-analysis2.tsv",header=TRUE,fill=TRUE,sep="\t")
 head(x)
 colnames(x)
 dim(x)
@@ -663,185 +667,6 @@ barplot(t(params),horiz=TRUE,las=1,xlim=c(0,30),legend = colnames(params),
 text(y = (1:nrow(params)*1.2) - 0.8 , x = params[,1]-3, label = params[,1], pos = 3, cex = 1, col = "white")
 text(y = (1:nrow(params)*1.2) - 0.8 , x = params[,1]+2, label = params[,2], pos = 3, cex = 1, col = "black")
 dev.off()
-
-```
-
-## Score
-
-Here I am proposing a scoring scheme.
-If there is information missing from the article, or basic mistakes are made, then a point is deducted.
-If the article goes over and above the basic reproducibility, then they are awarded a point.
-
-Gene set library origin not stated = -1
-
-Gene set library version not stated = -1
-
-Stat test not stated = -1
-
-No stat test conducted = -1
-
-No FDR correction conducted = -1
-
-App used not stated = -1
-
-App version not stated = -1
-
-Background list not defined = -1
-
-Inappropriate background list used = -1
-
-Code availability = +1
-
-Gene lists provided = +1
-
-```{r,score}
-
-score <- function(r){
-  r[is.na(r)] <- 0
-  SCORE=0
-  # gene set lib
-  if(r["Gene.set.library"]=="Not stated"){
-    SCORE=SCORE-1
-  }
-  # GS version
-  if(r["GS.version"]=="No"){
-    SCORE=SCORE-1
-  }
-  # stat test
-  if(r["Statistical.test.used"]=="No test"){
-    SCORE=SCORE-1
-  }
-  if(r["Statistical.test.used"]=="Not stated"){
-    SCORE=SCORE-1
-  }
-  # FDR
-  if(r["FDR.Correction"]!="Yes"){
-    SCORE=SCORE-1
-  }
-  # app used
-  if(r["App.used"]=="Not stated"){
-    SCORE=SCORE-1
-  }
-  # App version
-  if(r["App.Version"]=="No"){
-    SCORE=SCORE-1
-  }
-  # Code availability
-  if(r["Code.availability"]=="Yes"){
-    SCORE=SCORE+1
-  }
-  # Background
-  if(r["Background.gene.set"]=="Not stated"){
-    SCORE=SCORE-1
-  }
-  if(r["Background.gene.set"]=="No"){
-    SCORE=SCORE-1
-  }
-  if(r["Background.gene.set"]=="Stated, but incorrect"){
-    SCORE=SCORE-1
-  }
-  # gene list
-  if(r["Gene.lists.provided"]=="Yes"){
-    SCORE=SCORE+1
-  }
-  return(SCORE)
-}
-
-scores <- apply(X = x,MARGIN = 1, FUN = score)
-barplot(table(scores), xlab="analysis score",ylab="frequency")
-x$scores <- scores
-length(which(scores>0))
-
-mean(x$scores)
-sd(x$scores)
-median(x$scores)
-
-
-```
-
-## Journal rank
-
-```{r,journal rank}
-
-jmetrics <- read.table("scimagojr_2020.csv",sep=";",header=TRUE,dec = ",")
-jmetrics$Title <- toupper(jmetrics$Title)
-head(jmetrics,3)
-dim(jmetrics)
-
-nlmcat <- readLines("nlmcatalog_result.txt")
-journaltitle <- nlmcat[grep("Title\\(s\\):",nlmcat)]
-journaltitle <- gsub("Title\\(s\\): ","",journaltitle)
-journaltitle <- gsub("\\.$","",journaltitle)
-journaltitle <- toupper(journaltitle) 
-journalabbrev <- nlmcat[grep("Title Abbreviation:",nlmcat)]
-journalabbrev <- sapply(strsplit(journalabbrev,":"),"[[",2)
-journalabbrev <- gsub(" $","",journalabbrev)
-journalabbrev <- gsub("^ ","",journalabbrev)
-jdf <- data.frame(journalabbrev,journaltitle)
-
-mjdf <- merge(jdf,jmetrics,by.x="journaltitle",by.y="Title")
-
-xm <- merge(x,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
-
-```
-
-## Analysis scores vs Journal rank
-
-```{r,scoresvsjrank1}
-
-tail(xm$Journal)
-
-mylm1 <- lm (xm$scores ~ xm$SJR)
-plot(xm$SJR,xm$scores, bty="n",
-  xlab="SJR",ylab="score",main="Association of analysis scores with journal metrics")
-abline(mylm1,col="red")
-
-cor.test(xm$scores,xm$SJR,method="pearson")
-
-cor.test(xm$scores,xm$SJR,method="spearman")
-
-```
-
-## Best and worst journals
-
-Minimum of 5 analyses.
-
-```{r,goodbadugly}
-
-xmm <-xm[,c("Journal","scores")]
-tab <- table(xmm$Journal)
-tab <- tab[which(tab>3)]
-xmm <- xmm[which(xmm$Journal %in% names(tab)),]
-dim(xmm)
-jres <- aggregate(. ~ Journal, xmm ,mean)
-jsd <- aggregate(. ~ Journal, xmm ,sd)
-jres$sd <- jsd$scores
-jres <- jres[order(jres$scores),]
-dim(jres)
-head(jres)
-
-par(mar=c(5,12,3,1))
-barplot(tail(jres$scores,20),names.arg = tail(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
-        main = "Highest scoring journals",xlim=c(-4,0))
-grid()
-
-par(mar=c(5,12,3,1))
-barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,cex.names = 0.7, xlab="mean score",
-        main = "Lowest scoring journals",xlim=c(-5,0))
-grid()
-
-j <- unique(xmm$Journal)
-jscores <- sapply(j,function(jj) {
- xmm[which(xmm$Journal == jj ),2]  
-})
-
-jscores <- jscores[order(unlist(lapply(jscores,mean)))]
-
-par(mar=c(5,12,3,1))
-vioplot(tail(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Highest scoring journals")
-
-par(mar=c(5,12,3,1))
-vioplot(head(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Lowest scoring journals")
 
 ```
 
