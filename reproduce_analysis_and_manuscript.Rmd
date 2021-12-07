@@ -45,11 +45,10 @@ library("eulerr")
 library("beeswarm")
 
 # for figure 1 / manuscript draft
-library(rmdformats)
-library(tidyverse)
-library(DiagrammeR)
-library(DiagrammeRsvg)
-library(rsvg)
+library("rmdformats")
+library("DiagrammeR")
+library("DiagrammeRsvg")
+library("rsvg")
 
 ```
 

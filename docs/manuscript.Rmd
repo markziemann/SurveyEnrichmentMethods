@@ -97,10 +97,9 @@ A flow diagram of the survey is provided in Fig. 1.
 
 ```{r,diagram1,echo=FALSE,fig.width=8,fig.height=4}
 
-library(tidyverse)
-library(DiagrammeR)
-library(DiagrammeRsvg)
-library(rsvg)
+library("DiagrammeR")
+library("DiagrammeRsvg")
+library("rsvg")
 suppressWarnings(dir.create("images"))
 grViz("digraph flowchart {
       # node definitions with substituted label text
