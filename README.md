@@ -72,33 +72,19 @@ It is also required to generate panel E of Figure 4.
 
 This folder contains some work relating to a pilot replication study, not part of the current manuscript.
 
-
 ## Reproducibility
 
 For the article, we used R version 4.1.
 Here is a list of packages loaded.
 If you want to rerun this analysis, you have to install the following dependancies from CRAN or Bioconductor.
 
-Biobase
-clusterProfiler
-DESeq2
-DiagrammeR
-DiagrammeRsvg
-eulerr
-getDEE2
-kableExtra
-mitch
-RColorBrewer
-reutils
-rsvg
-tidyverse
-vioplot
-wordcloud
-wordcloud2
-XML
+CRAN: wordcloud, vioplot, reutils, XML, kableExtra, anytime, eulerr, beeswarm, rmdformats, tidyverse, DiagrammeR, DiagrammeRsvg, rsvg.
 
-Then git clone this repository and knit the master Rmarkdown:
+Bioconductor: getDEE2, DESeq2, clusterProfiler, mitch.
+
+Then git clone this repository and knit the master Rmarkdown.
 
 ```
 rmarkdown::render("reproduce_analysis_and_manuscript.Rmd")
+
 ```

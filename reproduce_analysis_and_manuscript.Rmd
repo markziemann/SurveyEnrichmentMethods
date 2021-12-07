@@ -41,9 +41,7 @@ library("getDEE2")
 library("DESeq2")
 library("clusterProfiler")
 library("mitch")
-library("kableExtra")
 library("eulerr")
-library("kableExtra")
 library("beeswarm")
 
 # for figure 1 / manuscript draft
