@@ -25,6 +25,9 @@ knitr::opts_chunk$set(fig.width=7, fig.height=5)
 
 library("wordcloud")
 library("vioplot")
+library("ggplot2")
+library("ggExtra")
+library("europepmc")
 
 ```
 
@@ -164,7 +167,6 @@ dev.off()
 scores2 <- round(table(scores)/sum(table(scores))*100,1)
 scores2
 
-
 png("images/hist2.png",width=300,height=200)
 par(mar=c(5,5,2,1))
 barplot(scores2, xlab="analysis score",ylab="frequency",ylim=c(0,50))
@@ -177,10 +179,14 @@ barplot(scores2, xlab="analysis score",ylab="frequency",ylim=c(0,40))
 text(x= 1:length(scores2)* 1.2 -0.5, y = scores2, label = scores2, pos = 3, cex = 0.9, col = "black")
 dev.off()
 
-
 ```
 
 ## Journal rank
+
+There is a problem that the journal names from NLM/PUBMED CENTRAL do not exactly match those given by SciMago.
+This results in some journals being dropped from the SJR correlation analysis.
+To avoid this, I will use the ISSN numbers which should be unique and non-ambiguous identifiers.
+This is obtained with a query of Europe PMC with the europepmc package.
 
 ```{r,journal rank}
 
@@ -189,24 +195,34 @@ jmetrics$Title <- toupper(jmetrics$Title)
 head(jmetrics,3)
 dim(jmetrics)
 
-nlmcat <- readLines("../data/nlmcatalog_result.txt")
-journaltitle <- nlmcat[grep("Title\\(s\\):",nlmcat)]
-journaltitle <- gsub("Title\\(s\\): ","",journaltitle)
-journaltitle <- gsub("\\.$","",journaltitle)
-journaltitle <- toupper(journaltitle) 
-journalabbrev <- nlmcat[grep("Title Abbreviation:",nlmcat)]
-journalabbrev <- sapply(strsplit(journalabbrev,":"),"[[",2)
-journalabbrev <- gsub(" $","",journalabbrev)
-journalabbrev <- gsub("^ ","",journalabbrev)
-jdf <- data.frame(journalabbrev,journaltitle)
+getissn <- function(pmc){
+  Sys.sleep(1)
+  pmcres <- europepmc::epmc_search(pmc)
+  pmcissn <- pmcres$journalIssn
+  pmcissn <- gsub("-","",pmcissn)
+  return(pmcissn)
+}
 
-mjdf <- merge(jdf,jmetrics,by.x="journaltitle",by.y="Title")
+issn <- sapply(x$Pubmed.Central.ID,getissn)
+issn2 <- lapply(issn,function(x) { unlist(strsplit(x,"\\; ")) } )
+l <- lapply(issn2,length)
+l <- unlist(l)
+lnames <- names(l)
+pmcnames <- unlist(sapply(1:length(l), function(i) { rep(lnames[i],l[i]) }  ))
+issn2 <- unname(unlist(issn2))
+issn2 <- gsub("-","",issn2)
+pmcissn <- data.frame(pmcnames,issn2)
+xissn <- merge(x,pmcissn,by.x="Pubmed.Central.ID",by.y="pmcnames")
 
-xm <- merge(x,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
+xm <- merge(xissn,jmetrics,by.x="issn2",by.y="Issn")
 
 ```
 
 ## Analysis scores vs Journal rank
+
+Here I will be making a scatter plot of the analysis scores vs the SJR.
+
+I will also attempt to make the same scatterplot with marginal histograms according to (https://stackoverflow.com/questions/8545035/scatterplot-with-marginal-histograms-in-ggplot2)
 
 ```{r,scoresvsjrank1}
 
@@ -238,6 +254,21 @@ abline(mylm1,col="red")
 grid()
 dev.off()
 
+df <- data.frame("SJR" = xm$SJR, "score" = xm$scores )
+p <- ggplot(df, aes(SJR, score)) + 
+  geom_point(alpha=0.1, size = 3) + 
+  stat_smooth(method = lm,fullrange=TRUE) +
+  theme_classic()
+ggExtra::ggMarginal(p, type = "histogram")
+
+pdf("images/score_sjr2.pdf",width=4,height=3)
+p <- ggplot(df, aes(SJR, score)) + 
+  geom_point(alpha=0.1, size = 3) + 
+  stat_smooth(method = lm,fullrange=TRUE) +
+  theme_classic()
+ggExtra::ggMarginal(p, type = "histogram")
+dev.off()
+
 ```
 
 ## Best and worst journals
@@ -246,13 +277,13 @@ Minimum of 5 analyses.
 
 ```{r,goodbadugly,fig.height=5,fig.width=6}
 
-xmm <-xm[,c("Journal","scores")]
-tab <- table(xmm$Journal)
+x2 <-x[,c("Journal","scores")]
+tab <- table(x2$Journal)
 tab <- tab[which(tab>=5)]
-xmm <- xmm[which(xmm$Journal %in% names(tab)),]
-dim(xmm)
-jres <- aggregate(. ~ Journal, xmm ,mean)
-jsd <- aggregate(. ~ Journal, xmm ,sd)
+x2 <- x2[which(x2$Journal %in% names(tab)),]
+dim(x2)
+jres <- aggregate(scores ~ Journal, x2 ,mean)
+jsd <- aggregate(scores ~ Journal, x2 ,sd)
 jres$sd <- jsd$scores
 jres <- jres[order(jres$scores),]
 dim(jres)
@@ -296,9 +327,9 @@ barplot(head(jres$scores,20),names.arg = head(jres$Journal,20),horiz=TRUE,las=1,
 grid()
 dev.off()
 
-j <- unique(xmm$Journal)
+j <- unique(x2$Journal)
 jscores <- sapply(j,function(jj) {
- xmm[which(xmm$Journal == jj ),2]  
+ x2[which(x2$Journal == jj ),2]  
 })
 
 jscores <- jscores[order(unlist(lapply(jscores,mean)))]
@@ -314,31 +345,57 @@ vioplot(head(jscores,20),horizontal = TRUE,las=1,cex.axis=0.75,main="Lowest scor
 
 ## Mean analysis scores vs Journal rank
 
+
 ```{r,scoresvsjrank2,fig.height=5,fig.width=6}
 
-jjres <- merge(jres,mjdf,by.x="Journal",by.y="journalabbrev",all.x = TRUE)
+x2 <-xm[,c("Journal","SJR","scores")]
+tab <- table(x2$Journal)
+tab <- tab[which(tab>=5)]
+x2 <- x2[which(x2$Journal %in% names(tab)),]
+dim(x2)
+jres <- aggregate(scores ~ Journal, x2 ,mean)
+jsjr <- aggregate(SJR ~ Journal, x2 ,mean)
+jres$SJR <- jsjr$SJR
+jres <- jres[order(jres$scores),]
+dim(jres)
+head(jres)
 
-mylm2 <- lm (jjres$scores ~ jjres$SJR)
-plot(jjres$SJR,jjres$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+mylm2 <- lm (jres$scores ~ jres$SJR)
+plot(jres$SJR,jres$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
 abline(mylm2,col="red")
 
 png("images/mean_sjr1.png",width=350,height=300)
 par(mar=c(5,5,3,1))
-plot(jjres$SJR,jjres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+plot(jres$SJR,jres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
 abline(mylm2,col="red")
 dev.off()
 
-cor.test(jjres$scores,jjres$SJR,method="pearson")
+cor.test(jres$scores,jres$SJR,method="pearson")
 
-cor.test(jjres$scores,jjres$SJR,method="spearman")
+cor.test(jres$scores,jres$SJR,method="spearman")
 
 pdf("images/mean_sjr1.pdf",width=3.5,height=3)
 par(mar=c(5,5,3,1))
-plot(jjres$SJR,jjres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
+plot(jres$SJR,jres$scores,  col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch=19,bty="n",
   xlab="SJR",ylab="mean score",main="Mean analysis score vs. journal metrics")
 abline(mylm2,col="red")
+dev.off()
+
+df <- data.frame("SJR" = jres$SJR, "mean score" = jres$scores )
+p <- ggplot(df, aes(SJR, mean.score)) +
+  geom_point(alpha=0.3, size = 3) +
+  stat_smooth(method = lm,fullrange=TRUE) +
+  theme_classic()
+ggExtra::ggMarginal(p, type = "histogram")
+
+pdf("images/mean_sjr2.pdf",width=4,height=3)
+p <- ggplot(df, aes(SJR, mean.score)) +
+  geom_point(alpha=0.3, size = 3) +
+  stat_smooth(method = lm,fullrange=TRUE) +
+  theme_classic()
+ggExtra::ggMarginal(p, type = "histogram")
 dev.off()
 
 ```
@@ -386,9 +443,9 @@ plot(log2(xm$NumCites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch
 abline(mylm2,col="red")
 dev.off()
 
-cor.test(xm$scores , xm$NumCites, method="pearson")
+cor.test(xm$scores , log2(xm$NumCites+1), method="pearson")
 
-cor.test(xm$scores , xm$NumCites, method="spearman")
+cor.test(xm$scores , log2(xm$NumCites+1), method="spearman")
 
 pdf("images/cites1.pdf",width=3.5,height=3)
 par(mar=c(5,5,3,1))
@@ -397,6 +454,21 @@ plot(log2(xm$NumCites),xm$scores,col = rgb(red=0,blue=0,green=0,alpha=0.2) , pch
 abline(mylm2,col="red")
 dev.off()
 
+df <- data.frame("log2.citations" = log2(xm$NumCites+1), "score" = xm$scores )
+
+p <- ggplot(df, aes(log2.citations, score)) +
+  geom_point(alpha=0.1, size = 3) +
+  stat_smooth(method = lm,fullrange=TRUE) +
+  theme_classic()
+ggExtra::ggMarginal(p, type = "histogram")
+
+pdf("images/cites2.pdf",width=4,height=3)
+p <- ggplot(df, aes(log2.citations,score)) +
+  geom_point(alpha=0.1, size = 3) +
+  stat_smooth(method = lm,fullrange=TRUE) +
+  theme_classic()
+ggExtra::ggMarginal(p, type = "histogram")
+dev.off()
 
 ```
 
