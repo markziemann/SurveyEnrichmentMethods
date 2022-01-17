@@ -172,6 +172,9 @@ message(paste("Number of up-regulated pathways:",length(m_up) ))
 message(paste("Number of down-regulated pathways:",length(m_dn) ))
 head(mres$enrichment_result,10)  %>% kbl() %>% kable_paper("hover", full_width = F)
 
+m_up_nom <- subset(mres$enrichment_result,pANOVA<0.05 & s.dist > 0)[,1]
+m_dn_nom <- subset(mres$enrichment_result,pANOVA<0.05 & s.dist < 0)[,1]
+
 ```
 
 ## ORA with clusterprofiler
@@ -192,22 +195,28 @@ de_dn <- unique(gt[which(rownames(gt) %in% de_dn),1])
 de_bg <- rownames(de)
 de_bg <- unique(gt[which(rownames(gt) %in% de_bg),1])
 
-c_up <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2))
+c_up <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="fdr"))
 c_up <- rownames(subset(c_up, p.adjust < 0.05))
        
-c_dn <- as.data.frame(enricher(gene = de_dn, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2))
+c_dn <- as.data.frame(enricher(gene = de_dn, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="fdr"))
 c_dn <- rownames(subset(c_dn, p.adjust < 0.05))
+
+c_up_nom <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="none" ))
+c_up_nom <- rownames(subset(c_up_nom, pvalue < 0.05))
+
+c_dn_nom <- as.data.frame(enricher(gene = de_dn, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="none"))
+c_dn_nom <- rownames(subset(c_dn_nom, pvalue < 0.05))
 
 ```
 
-Now performing ORA with clusterprofiler combining up and down.
+Now performing ORA with clusterprofiler combining up and down. (Not shown in final article)
 
 ```{r,cp2}
 
 de_de <- rownames(subset(de,padj<0.05))
 de_de <- unique(gt[which(rownames(gt) %in% de_de),1])
 
-d_de <- as.data.frame(enricher(gene = de_de, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2))
+d_de <- as.data.frame(enricher(gene = de_de, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="fdr"))
 d_de <- rownames(subset(d_de, p.adjust < 0.05))
 
 ```
@@ -218,11 +227,17 @@ Now performing ORA with clusterprofiler with whole genome background list
 
 de_bg <- w$GeneInfo$GeneSymbol
 
-f_up <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2))
+f_up <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="fdr"))
 f_up <- rownames(subset(f_up, p.adjust < 0.05))
        
-f_dn <- as.data.frame(enricher(gene = de_dn, universe = de_bg, maxGSSize = 5000, TERM2GENE = genesets2))
+f_dn <- as.data.frame(enricher(gene = de_dn, universe = de_bg, maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="fdr"))
 f_dn <- rownames(subset(f_dn, p.adjust < 0.05))
+
+f_up_nom <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="none"))
+f_up_nom <- rownames(subset(f_up_nom, p.adjust < 0.05))
+
+f_dn_nom <- as.data.frame(enricher(gene = de_dn, universe = de_bg, maxGSSize = 5000, TERM2GENE = genesets2, pAdjustMethod="none"))
+f_dn_nom <- rownames(subset(f_dn_nom, p.adjust < 0.05))
 
 ```
 
@@ -233,6 +248,60 @@ Now performing ORA (combining up and down gene lists) with clusterprofiler with 
 
 e_de <- as.data.frame(enricher(gene = de_de, universe = de_bg, maxGSSize = 5000, TERM2GENE = genesets2))
 e_de <- rownames(subset(e_de, p.adjust < 0.05))
+
+```
+
+## Bar chart of significance
+
+Here the idea is to classify the pathways as 1 not significant, 2 nominally significant, or 3 FDR significant
+
+```{r,stacked1}
+
+c_up_df <- as.data.frame(enricher(gene = de_up, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, 
+  pAdjustMethod="fdr" ,qvalueCutoff=1,pvalueCutoff=1))
+
+n_c_up_ns <- nrow( subset(c_up_df,pvalue>0.05) )
+n_c_up_nom <- nrow( subset(c_up_df,pvalue<0.05 ) )
+n_c_up_fdr <- nrow( subset(c_up_df,p.adjust<0.05) )
+
+c_dn_df <- as.data.frame(enricher(gene = de_dn, universe = de_bg,  maxGSSize = 5000, TERM2GENE = genesets2, 
+  pAdjustMethod="fdr" ,qvalueCutoff=1,pvalueCutoff=1))
+
+n_c_dn_ns <- nrow( subset(c_dn_df,pvalue>0.05) )
+n_c_dn_nom <- nrow( subset(c_dn_df,pvalue<0.05 ) )
+n_c_dn_fdr <- nrow( subset(c_dn_df,p.adjust<0.05) )
+
+n_m_up <- length(m_up)
+n_m_dn <- length(m_dn)
+
+n_m_up_nom <- length(m_up_nom)
+n_m_dn_nom <- length(m_dn_nom)
+
+par(mar=c(5,10,5,2))
+
+ngenes <- c("ORA up fdr"=n_c_up_fdr,"ORA up nom"=n_c_up_nom,
+  "ORA dn fdr"=n_c_dn_fdr,"ORA dn nom"=n_c_dn_nom,
+  "FCS up fdr"=n_m_up,"FCS up nom"=n_m_up_nom,
+  "FCS dn fdr"=n_m_dn,"FCS dn nom"=n_m_dn_nom )
+
+barplot(ngenes, horiz=TRUE,las=1)
+
+n_c_fdr <- length(union(c_dn,c_up))
+n_c_nom <- length(union(c_dn_nom,c_up_nom))
+n_m_fdr <- length(subset(mres$enrichment_result,p.adjustANOVA<0.05 )[,1])
+n_m_nom <- length(subset(mres$enrichment_result,pANOVA<0.05 )[,1])
+
+par(mar=c(5,5,5,2))
+
+ngenes <- c("ORA FDR<0.05"=n_c_fdr,"ORA p<0.05"=n_c_nom,"FCS FDR<0.05"=n_m_fdr,"FCS p<0.05"=n_m_nom)
+barplot(ngenes,ylab="no. gene sets")
+text((0:3*1.2)+0.7,ngenes-50,labels=ngenes,cex=1.2)
+
+pdf("images/fdr1.pdf",width=4,height=4)
+par(mar=c(5,7,2,2))
+barplot(ngenes,xlab="no. gene sets",horiz=TRUE,las=1)
+text( ngenes - 70, (0:3*1.2)+0.7,labels=ngenes,cex=1)
+dev.off()
 
 ```
 
@@ -296,6 +365,67 @@ dev.off()
 
 ```
 
+In the next Venn I will omit combined analysis and include nominal p-value sets.
+
+```{r,venn1}
+
+par(cex.main=0.5)
+
+par(mar=c(2,2,2,2))
+
+v1 <- list("FCS up"=m_up, "FCS dn"=m_dn,
+           "ORA up"=c_up,"ORA dn"=c_dn)
+
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS compared to ORA")
+
+v0 <- list("FDR up"=m_up, "FDR dn"=m_dn,
+           "Nom up"=m_up_nom,"Nom dn"=m_dn_nom)
+
+plot(euler(v0),quantities = TRUE, edges = "gray", main="Effect of FDR correction on FCS results")
+
+v0 <- list("FDR up"=c_up, "FDR dn"=c_dn,
+           "Nom up"=c_up_nom,"Nom dn"=c_dn_nom)
+
+plot(euler(v0),quantities = TRUE, edges = "gray", main="Effect of FDR correction on ORA results")
+
+ora_nom <- union(c_up_nom,c_dn_nom)
+ora_fdr <- union(c_up,c_dn)
+fcs_nom <- union(m_up_nom,m_dn_nom)
+fcs_fdr <- union(m_up,m_dn)
+
+v3 <- list("ORA nom"=ora_nom, "ORA FDR"=ora_fdr,
+           "FCS nom"=fcs_nom,"FCS FDR"=fcs_fdr)
+
+plot(euler(v3),quantities = TRUE, edges = "gray", main="Effect of FDR correction")
+
+
+
+
+v2 <- list("ORA up"=c_up,"ORA dn"=c_dn,
+           "ORA* up"=f_up,"ORA* dn"=f_dn )
+
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
+
+
+
+png("images/fcs_ora1.png")
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS vs ORA")
+dev.off()
+
+png("images/orabg1.png")
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
+dev.off()
+
+pdf("images/fcs_ora1.pdf",width=4,height=4)
+plot(euler(v1),quantities = TRUE, edges = "gray", main="FCS vs ORA")
+dev.off()
+
+pdf("images/orabg1.pdf",width=4,height=4)
+plot(euler(v2),quantities = TRUE, edges = "gray", main="Effect of inappropriate background* (whole genome)")
+dev.off()
+
+```
+
 ## Jaccard calculation
 
 ```{r,jacc1}
@@ -332,7 +462,6 @@ dat <- c("FCS vs ORA"=cm,"ORA vs ORA*"=cf,"FCS vs ORA*"=mf, "ORA vs ORA comb"=dc
 dat
 saveRDS(dat,file = "ex1dat.rds")
 
-
 par(mar=c(5,10,3,1))
 barplot(rev(dat),xlab="Jaccard index",horiz = TRUE, las =1, xlim=c(0,.75) , main=name)
 text( x=rev(dat)+0.05 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),2))
@@ -344,6 +473,56 @@ text( x=rev(dat)+0.08 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),
 dev.off()
 
 png("images/jacbar.png")
+par(mar=c(5,10,3,1))
+barplot(rev(dat),xlab="Jaccard index",horiz = TRUE, las =1, xlim=c(0,.75) , main=name)
+text( x=rev(dat)+0.05 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),2))
+dev.off()
+
+```
+
+As per reviewer suggestion, remove the comparison of combined and separated ORA.
+
+I will include using nominal p-value.
+
+```{r,jacc2}
+
+# FCS vs ORA
+cm <- length(intersect(c(c_up,c_dn), c(m_up,m_dn))) / length(union(c(c_up,c_dn), c(m_up,m_dn)))
+
+m_up <- gsub("^","up ",m_up)
+m_dn <- gsub("^","dn ",m_dn)
+m_de <- union(m_up,m_dn)
+
+c_up <- gsub("^","up ",c_up)
+c_dn <- gsub("^","dn ",c_dn)
+c_de <- union(c_up,c_dn)
+
+f_up <- gsub("^","up ",f_up)
+f_dn <- gsub("^","dn ",f_dn)
+f_de <- union(f_up,f_dn)
+
+# ORA vs ORA*
+cf <- length(intersect(c_de, f_de )) / length(union(c_de, f_de))
+
+# FCS vs ORA*
+mf <- length(intersect(m_de, f_de )) / length(union(m_de, f_de))
+
+dat <- c("FCS vs ORA"=cm,"ORA vs ORA*"=cf,"FCS vs ORA*"=mf)
+
+dat
+saveRDS(dat,file = "ex1dat.rds")
+
+par(mar=c(5,10,3,1))
+barplot(rev(dat),xlab="Jaccard index",horiz = TRUE, las =1, xlim=c(0,.75) , main=name)
+text( x=rev(dat)+0.05 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),2))
+
+pdf("images/jacbar2.pdf",width=4,height=3)
+par(mar=c(5,9,3,1))
+barplot(rev(dat),xlab="Jaccard index",horiz = TRUE, las =1, xlim=c(0,.8) , main=name)
+text( x=rev(dat)+0.08 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),2))
+dev.off()
+
+png("images/jacbar2.png")
 par(mar=c(5,10,3,1))
 barplot(rev(dat),xlab="Jaccard index",horiz = TRUE, las =1, xlim=c(0,.75) , main=name)
 text( x=rev(dat)+0.05 , y= 1:length(rev(dat))*1.2-0.5, labels = signif(rev(dat),2))
